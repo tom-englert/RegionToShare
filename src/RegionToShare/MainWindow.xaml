@@ -1,12 +1,13 @@
-﻿<Window x:Class="WpfApp1.MainWindow"
+﻿<Window x:Class="RegionToShare.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"  
-        Title="Region to Share" Height="450" Width="800" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="Region to Share" Height="450" Width="800" 
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
   <Grid x:Name="ClientArea">
     <TextBlock Text="Click to start region capture" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" />
     <WindowsFormsHost x:Name="RenderTargetHost" Visibility="Collapsed">
-      <wf:Control x:Name="RenderTargetWindow" />
+      <wf:Control x:Name="RenderTargetWindow" Visible="False" MouseClick="RenderTargetWindow_OnMouseClick" />
     </WindowsFormsHost>
   </Grid>
 </Window>

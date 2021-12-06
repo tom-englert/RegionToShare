@@ -1,22 +1,25 @@
-﻿<Window x:Class="WpfApp1.RecordingWindow"
+﻿<Window x:Class="RegionToShare.RecordingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RegionToShare"
         mc:Ignorable="d"
         WindowStyle="None" Background="Transparent" AllowsTransparency="True" Topmost="True"
         Title="Region to Share - Source Region" Height="450" Width="800">
-  <Border BorderThickness="4" BorderBrush="Green">
-    <Grid x:Name="ClientArea">
-      <Button Width="16" Height="16" 
-              HorizontalAlignment="Right" 
-              VerticalAlignment="Top" 
-              Click="Button_Click">
-        <Path Width="12" Height="12" 
-              Data="M2,2 L10,10 M2,10 L10,2" 
-              Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" 
-              StrokeThickness="1" />
-      </Button>
-    </Grid>
-  </Border>
+  <Grid>
+    <Border BorderThickness="{x:Static local:RecordingWindow.BorderSize}" 
+            BorderBrush="Green">
+      <Grid x:Name="ClientArea" />
+    </Border>
+    <Button Width="16" Height="16" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Top" 
+            Click="Button_Click">
+      <Path Width="12" Height="12" 
+            Data="M2,2 L10,10 M2,10 L10,2" 
+            Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" 
+            StrokeThickness="1" />
+    </Button>
+  </Grid>
 </Window>

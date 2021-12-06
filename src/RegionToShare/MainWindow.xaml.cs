@@ -1,28 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 using TomsToolbox.Wpf;
 
-namespace WpfApp1
+namespace RegionToShare
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        RecordingWindow? _recordingWindow;
+        private RecordingWindow? _recordingWindow;
 
         public MainWindow()
         {
@@ -31,38 +21,54 @@ namespace WpfApp1
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (_recordingWindow == null)
+            if (_recordingWindow != null)
+                return;
+
+            SendToBack();
+
+            WindowStyle = WindowStyle.None;
+            ResizeMode = ResizeMode.NoResize;
+            RenderTargetHost.Visibility = Visibility.Visible;
+
+            _recordingWindow = new RecordingWindow(this, RenderTargetWindow.Handle);
+
+            _recordingWindow.Closed += (_, _) =>
             {
-                // WindowStyle = WindowStyle.None;
-                ResizeMode = ResizeMode.NoResize;
-                RenderTargetHost.Visibility = Visibility.Visible;
+                RenderTargetHost.Visibility = Visibility.Collapsed;
+                WindowStyle = WindowStyle.ThreeDBorderWindow;
+                ResizeMode = ResizeMode.CanResize;
 
-                _recordingWindow = new RecordingWindow(this, RenderTargetWindow.Handle)
-                {
-                    Left = Left - RecordingWindow.BorderSize.Left,
-                    Top = Top - RecordingWindow.BorderSize.Top,
-                    Width = ClientArea.ActualWidth + RecordingWindow.BorderSize.Left + RecordingWindow.BorderSize.Right,
-                    Height = ClientArea.ActualHeight + RecordingWindow.BorderSize.Top + RecordingWindow.BorderSize.Bottom,
-                };
+                _recordingWindow = null;
 
-                var left = Left;
-                var top = Top;
+                BringToFront();
+            };
 
-                Left += _recordingWindow.Width;
-
-                _recordingWindow.Closed += (_, _) =>
-                {
-                    Left = left;
-                    Top = top;
-                    RenderTargetHost.Visibility = Visibility.Collapsed;
-                    WindowStyle = WindowStyle.ThreeDBorderWindow;
-                    ResizeMode = ResizeMode.CanResize;
-
-                    _recordingWindow = null;
-                };
-
-                _recordingWindow.Show();
-            }
+            _recordingWindow.Show();
         }
+
+        private void RenderTargetWindow_OnMouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            this.BeginInvoke(DispatcherPriority.Background, SendToBack);
+        }
+
+        private void BringToFront()
+        {
+            SetWindowPos(this.GetWindowHandle(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+
+        private void SendToBack()
+        {
+            SetWindowPos(this.GetWindowHandle(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+
+        // ReSharper disable InconsistentNaming
+        // ReSharper disable IdentifierTypo
+        private static readonly IntPtr HWND_TOP = new IntPtr(0);
+        private static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+        private const int SWP_NOSIZE = 0x0001;
+        private const int SWP_NOMOVE = 0x0002;
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
     }
 }
