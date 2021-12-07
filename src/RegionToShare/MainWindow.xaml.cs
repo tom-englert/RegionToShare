@@ -26,14 +26,20 @@ namespace RegionToShare
 
             SendToBack();
 
-            WindowStyle = WindowStyle.None;
-            ResizeMode = ResizeMode.NoResize;
+            InfoArea.Visibility = Visibility.Hidden;
             RenderTargetHost.Visibility = Visibility.Visible;
 
             _recordingWindow = new RecordingWindow(this, RenderTargetWindow.Handle);
 
+            _recordingWindow.SourceInitialized += (_, _) =>
+            {
+                WindowStyle = WindowStyle.None;
+                ResizeMode = ResizeMode.NoResize;
+            };
+
             _recordingWindow.Closed += (_, _) =>
             {
+                InfoArea.Visibility = Visibility.Visible;
                 RenderTargetHost.Visibility = Visibility.Collapsed;
                 WindowStyle = WindowStyle.ThreeDBorderWindow;
                 ResizeMode = ResizeMode.CanResize;

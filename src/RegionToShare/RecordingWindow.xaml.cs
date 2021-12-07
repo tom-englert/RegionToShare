@@ -45,30 +45,21 @@ namespace RegionToShare
             var compositionTarget = ((HwndSource)PresentationSource.FromDependencyObject(mainWindow)).CompositionTarget;
             _transformFromDevice = compositionTarget.TransformFromDevice;
             _transformToDevice = compositionTarget.TransformToDevice;
-
-            Left = mainWindow.Left - BorderSize.Left;
-            Top = mainWindow.Top - BorderSize.Top;
-            Width = mainWindow.Width + BorderSize.Left + BorderSize.Right;
-            Height = mainWindow.Height + BorderSize.Top + BorderSize.Bottom;
-
-            // Workaround to get the background initialized properly
-            Top += 1;
-            this.BeginInvoke(() => Top -= 1);
         }
 
         protected override void OnSourceInitialized(EventArgs e)
         {
-            base.OnSourceInitialized(e);
-
             var messageSource = (HwndSource)PresentationSource.FromDependencyObject(this);
             messageSource.AddHook(WindowProc);
-        }
 
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            base.OnRenderSizeChanged(sizeInfo);
+            Left = _mainWindow.Left;
+            Top = _mainWindow.Top;
+            Width = _mainWindow.Width;
+            Height = _mainWindow.Height;
 
-            OnSizeOrPositionChanged();
+            this.BeginInvoke(OnSizeOrPositionChanged);
+
+            base.OnSourceInitialized(e);
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -86,7 +77,10 @@ namespace RegionToShare
                 return;
             }
 
-            if (e.Property != LeftProperty && e.Property != TopProperty)
+            if (e.Property != LeftProperty
+             && e.Property != TopProperty
+             && e.Property != ActualWidthProperty
+             && e.Property != ActualHeightProperty)
                 return;
 
             OnSizeOrPositionChanged();
@@ -95,6 +89,11 @@ namespace RegionToShare
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+
+            _mainWindow.Left = Left;
+            _mainWindow.Top = Top;
+            _mainWindow.Width = Width;
+            _mainWindow.Height = Height;
 
             _timer.Stop();
         }
@@ -112,8 +111,10 @@ namespace RegionToShare
             var clientRect = ClientArea.GetClientRect(this);
 
             var screenOffset = new Vector(Left, Top);
+            // ReSharper disable PossiblyImpureMethodCallOnReadonlyVariable
             var topLeft = _transformToDevice.Transform(clientRect.TopLeft + screenOffset);
             var bottomRight = _transformToDevice.Transform(clientRect.BottomRight + screenOffset);
+            // ReSharper restore PossiblyImpureMethodCallOnReadonlyVariable
 
             _nativeWindowRect = new Rect(topLeft, bottomRight);
         }

@@ -2,10 +2,22 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"  
-        Title="Region to Share" Height="450" Width="800" 
+        Title="Region to Share" Height="450" Width="800" Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
   <Grid x:Name="ClientArea">
-    <TextBlock Text="Click to start region capture" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" />
+    <Grid x:Name="InfoArea">
+      <Grid.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute">
+          <GradientStop Offset="0" Color="Green" />
+          <GradientStop Offset="0.25" Color="Green" />
+          <GradientStop Offset="0.25" Color="Transparent" />
+          <GradientStop Offset="1" Color="Transparent" />
+        </LinearGradientBrush>
+      </Grid.Background>
+      <Border VerticalAlignment="Center" HorizontalAlignment="Center" Padding="10,5" Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+        <TextBlock Text="Click to start region capture" FontSize="24" />
+      </Border>
+    </Grid>
     <WindowsFormsHost x:Name="RenderTargetHost" Visibility="Collapsed">
       <wf:Control x:Name="RenderTargetWindow" Visible="False" MouseClick="RenderTargetWindow_OnMouseClick" />
     </WindowsFormsHost>
