@@ -8,8 +8,15 @@
         WindowStyle="None" Background="Transparent" AllowsTransparency="True" Topmost="True"
         Title="Region to Share - Source Region" Height="450" Width="800">
   <Grid>
-    <Border BorderThickness="{x:Static local:RecordingWindow.BorderSize}" 
-            BorderBrush="Green">
+    <Border BorderThickness="{x:Static local:RecordingWindow.BorderSize}">
+      <Border.BorderBrush>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute">
+          <GradientStop Offset="0" Color="Green" />
+          <GradientStop Offset="0.5" Color="Green" />
+          <GradientStop Offset="0.5" Color="#10000000" />
+          <GradientStop Offset="1" Color="#10000000" />
+        </LinearGradientBrush>
+      </Border.BorderBrush>
       <Grid x:Name="ClientArea" />
     </Border>
     <Button Width="16" Height="16" 
