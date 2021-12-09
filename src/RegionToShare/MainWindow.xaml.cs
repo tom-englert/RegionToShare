@@ -1,16 +1,15 @@
-﻿using System.Runtime.InteropServices;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using TomsToolbox.Wpf;
 
 namespace RegionToShare;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
+    private IntPtr _separationLayerHandle;
+
     private IntPtr _windowHandle;
     private RecordingWindow? _recordingWindow;
 
@@ -24,14 +23,22 @@ public partial class MainWindow
         base.OnSourceInitialized(e);
 
         _windowHandle = this.GetWindowHandle();
+
+        var separationLayerWindow = new Window() { Background = (Brush)FindResource("HatchBrush"), WindowStyle = WindowStyle.None, ResizeMode = ResizeMode.NoResize, Title = "Region to Share - Separation Layer", ShowInTaskbar = false };
+        separationLayerWindow.SourceInitialized += (sender, args) =>
+        {
+            _separationLayerHandle = separationLayerWindow.GetWindowHandle();
+            separationLayerWindow.MouseLeftButtonDown += SeparationLayerWindow_MouseLeftButtonDown;
+        };
+        separationLayerWindow.Show();
+
+        BringToFront();
     }
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (_recordingWindow != null)
             return;
-
-        SendToBack();
 
         InfoArea.Visibility = Visibility.Collapsed;
         RenderTargetHost.Visibility = Visibility.Visible;
@@ -57,6 +64,26 @@ public partial class MainWindow
         };
 
         _recordingWindow.Show();
+        this.BeginInvoke(DispatcherPriority.Background, SendToBack);
+    }
+
+    protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (e.Property != LeftProperty
+            && e.Property != TopProperty
+            && e.Property != ActualWidthProperty
+            && e.Property != ActualHeightProperty)
+            return;
+
+        NativeMethods.GetWindowRect(_windowHandle, out var rect);
+        NativeMethods.SetWindowPos(_separationLayerHandle, IntPtr.Zero, rect.Left, rect.Top, rect.Width, rect.Height, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOZORDER);
+    }
+
+    private void SeparationLayerWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        this.BeginInvoke(DispatcherPriority.Background, SendToBack);
     }
 
     private void RenderTargetWindow_OnMouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -66,21 +93,13 @@ public partial class MainWindow
 
     private void BringToFront()
     {
-        SetWindowPos(_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        NativeMethods.SetWindowPos(_separationLayerHandle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
+        NativeMethods.SetWindowPos(_windowHandle, NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
     }
 
     private void SendToBack()
     {
-        SetWindowPos(_windowHandle, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        NativeMethods.SetWindowPos(_separationLayerHandle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_SHOWWINDOW);
+        NativeMethods.SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
     }
-
-    // ReSharper disable InconsistentNaming
-    // ReSharper disable IdentifierTypo
-    private static readonly IntPtr HWND_TOP = new(0);
-    private static readonly IntPtr HWND_BOTTOM = new(1);
-    private const int SWP_NOSIZE = 0x0001;
-    private const int SWP_NOMOVE = 0x0002;
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
 }

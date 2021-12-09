@@ -5,15 +5,7 @@
         Title="Region to Share" Height="450" Width="800" Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
   <Grid x:Name="ClientArea">
-    <Grid x:Name="InfoArea">
-      <Grid.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute">
-          <GradientStop Offset="0" Color="Green" />
-          <GradientStop Offset="0.25" Color="Green" />
-          <GradientStop Offset="0.25" Color="Transparent" />
-          <GradientStop Offset="1" Color="Transparent" />
-        </LinearGradientBrush>
-      </Grid.Background>
+    <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
       <Border VerticalAlignment="Center" HorizontalAlignment="Center" Padding="10,5" Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
         <TextBlock Text="Click to start region capture" FontSize="24" />
       </Border>

@@ -25,7 +25,7 @@ public partial class RecordingWindow
     private readonly Matrix _transformFromDevice;
     private readonly Matrix _transformToDevice;
 
-    private RECT _nativeWindowRect;
+    private NativeMethods.RECT _nativeWindowRect;
     private int _timerMutex;
 
     public RecordingWindow(Window mainWindow, IntPtr renderTargetHandle, int framesPerSecond = 15)
@@ -35,7 +35,7 @@ public partial class RecordingWindow
         _mainWindow = mainWindow;
         _mainWindowHandle = mainWindow.GetWindowHandle();
         _renderTargetHandle = renderTargetHandle;
-        _desktopWindowHandle = GetDesktopWindow();
+        _desktopWindowHandle = NativeMethods.GetDesktopWindow();
 
         _timer = new HighResolutionTimer(Timer_Tick, TimeSpan.FromSeconds(1.0 / framesPerSecond));
         _timer.Start();
@@ -51,9 +51,9 @@ public partial class RecordingWindow
         messageSource.AddHook(WindowProc);
 
         Left = _mainWindow.Left;
-        Top = _mainWindow.Top;
+        Top = _mainWindow.Top - BorderSize.Top;
         Width = _mainWindow.Width;
-        Height = _mainWindow.Height;
+        Height = _mainWindow.Height + BorderSize.Top;
 
         this.BeginInvoke(OnSizeOrPositionChanged);
 
@@ -89,9 +89,9 @@ public partial class RecordingWindow
         base.OnClosed(e);
 
         _mainWindow.Left = Left;
-        _mainWindow.Top = Top;
+        _mainWindow.Top = Top + BorderSize.Top;
         _mainWindow.Width = Width;
-        _mainWindow.Height = Height;
+        _mainWindow.Height = Height - BorderSize.Top;
 
         _timer.Stop();
     }
@@ -119,7 +119,7 @@ public partial class RecordingWindow
     {
         switch (msg)
         {
-            case WM_NCHITTEST:
+            case NativeMethods.WM_NCHITTEST:
                 handled = true;
                 return (IntPtr)NcHitTest(windowHandle, lParam);
         }
@@ -127,18 +127,18 @@ public partial class RecordingWindow
         return IntPtr.Zero;
     }
 
-    private HitTest NcHitTest(IntPtr windowHandle, IntPtr lParam)
+    private NativeMethods.HitTest NcHitTest(IntPtr windowHandle, IntPtr lParam)
     {
         if (WindowState.Normal != WindowState)
-            return HitTest.Client;
+            return NativeMethods.HitTest.Client;
 
         if ((ResizeMode != ResizeMode.CanResize) && ResizeMode != ResizeMode.CanResizeWithGrip)
-            return HitTest.Client;
+            return NativeMethods.HitTest.Client;
 
         // Arguments are absolute native coordinates
-        var hitPoint = new POINT((short)lParam, (short)((uint)lParam >> 16));
+        var hitPoint = new NativeMethods.POINT((short)lParam, (short)((uint)lParam >> 16));
 
-        GetWindowRect(windowHandle, out var windowRect);
+        NativeMethods.GetWindowRect(windowHandle, out var windowRect);
 
         var topLeft = windowRect.TopLeft;
         var bottomRight = windowRect.BottomRight;
@@ -151,7 +151,7 @@ public partial class RecordingWindow
         {
             if (element.AncestorsAndSelf().OfType<ButtonBase>().Any())
             {
-                return HitTest.Client;
+                return NativeMethods.HitTest.Client;
             }
         }
 
@@ -161,26 +161,26 @@ public partial class RecordingWindow
         var bottom = bottomRight.Y;
 
         if ((hitPoint.Y < top) || (hitPoint.Y > bottom) || (hitPoint.X < left) || (hitPoint.X > right))
-            return HitTest.Transparent;
+            return NativeMethods.HitTest.Transparent;
 
         if ((hitPoint.Y < (top + borderSize.Top)) && (hitPoint.X < (left + borderSize.Left)))
-            return HitTest.TopLeft;
+            return NativeMethods.HitTest.TopLeft;
         if ((hitPoint.Y < (top + borderSize.Top)) && (hitPoint.X > (right - borderSize.Right)))
-            return HitTest.TopRight;
+            return NativeMethods.HitTest.TopRight;
         if ((hitPoint.Y > (bottom - borderSize.Bottom)) && (hitPoint.X < (left + borderSize.Left)))
-            return HitTest.BottomLeft;
+            return NativeMethods.HitTest.BottomLeft;
         if ((hitPoint.Y > (bottom - borderSize.Bottom)) && (hitPoint.X > (right - borderSize.Right)))
-            return HitTest.BottomRight;
+            return NativeMethods.HitTest.BottomRight;
         if (hitPoint.Y < (top + borderSize.Top))
-            return HitTest.Caption;
+            return NativeMethods.HitTest.Caption;
         if (hitPoint.Y > (bottom - borderSize.Bottom))
-            return HitTest.Bottom;
+            return NativeMethods.HitTest.Bottom;
         if (hitPoint.X < (left + borderSize.Left))
-            return HitTest.Left;
+            return NativeMethods.HitTest.Left;
         if (hitPoint.X > (right - borderSize.Right))
-            return HitTest.Right;
+            return NativeMethods.HitTest.Right;
 
-        return HitTest.Client;
+        return NativeMethods.HitTest.Client;
     }
 
     private void Timer_Tick(TimeSpan elapsed)
@@ -202,27 +202,27 @@ public partial class RecordingWindow
     {
         try
         {
-            var sourceDC = GetDC(_desktopWindowHandle);
-            var targetDC = GetWindowDC(_renderTargetHandle);
+            var sourceDC = NativeMethods.GetDC(_desktopWindowHandle);
+            var targetDC = NativeMethods.GetWindowDC(_renderTargetHandle);
             var nativeRect = _nativeWindowRect;
 
-            SetWindowDisplayAffinity(_mainWindowHandle, 0x11);
-            BitBlt(targetDC, 0, 0, nativeRect.Width, nativeRect.Height, sourceDC, nativeRect.Left, nativeRect.Top, CopyPixelOperation.SourceCopy);
-            SetWindowDisplayAffinity(_mainWindowHandle, 0);
+            // SetWindowDisplayAffinity(_mainWindowHandle, 0x11);
+            NativeMethods.BitBlt(targetDC, 0, 0, nativeRect.Width, nativeRect.Height, sourceDC, nativeRect.Left, nativeRect.Top, CopyPixelOperation.SourceCopy);
+            // SetWindowDisplayAffinity(_mainWindowHandle, 0);
 
-            CURSORINFO pci = default;
-            pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+            NativeMethods.CURSORINFO pci = default;
+            pci.cbSize = Marshal.SizeOf(typeof(NativeMethods.CURSORINFO));
 
-            if (GetCursorInfo(ref pci))
+            if (NativeMethods.GetCursorInfo(ref pci))
             {
-                if (pci.flags == CURSOR_SHOWING)
+                if (pci.flags == NativeMethods.CURSOR_SHOWING)
                 {
-                    DrawIcon(targetDC, pci.ptScreenPos.X - (int)Left - 4, pci.ptScreenPos.Y - (int)Top - 16, pci.hCursor);
+                    NativeMethods.DrawIcon(targetDC, pci.ptScreenPos.X - (int)Left - 4, pci.ptScreenPos.Y - (int)Top - 16, pci.hCursor);
                 }
             }
 
-            ReleaseDC(_renderTargetHandle, targetDC);
-            ReleaseDC(_desktopWindowHandle, sourceDC);
+            NativeMethods.ReleaseDC(_renderTargetHandle, targetDC);
+            NativeMethods.ReleaseDC(_desktopWindowHandle, sourceDC);
         }
         catch
         {
@@ -237,180 +237,6 @@ public partial class RecordingWindow
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         Close();
-    }
-
-    // ReSharper disable all
-
-    private const int WM_NCHITTEST = 0x0084;
-    private const int CURSOR_SHOWING = 0x00000001;
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct CURSORINFO
-    {
-        public int cbSize;
-        public int flags;
-        public IntPtr hCursor;
-        public POINT ptScreenPos;
-    }
-
-    [DllImport("user32.dll")]
-    private static extern bool GetCursorInfo(ref CURSORINFO pci);
-
-    [DllImport("user32.dll")]
-    private static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetDC(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetDesktopWindow();
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetWindowDC(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-    [DllImport("user32.dll")]
-    static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool BitBlt(IntPtr hdc, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, CopyPixelOperation dwRop);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
-
-    [DllImport("user32.dll")]
-    private static extern bool ClientToScreen(IntPtr hWnd, ref POINT lpPoint);
-
-    [DllImport("user32.dll")]
-    private static extern bool SetWindowDisplayAffinity(IntPtr hwnd, uint affinity);
-
-    [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    private struct RECT
-    {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
-
-        public POINT TopLeft => new() { X = Left, Y = Top };
-
-        public POINT BottomRight => new() { X = Right, Y = Bottom };
-
-        public int Width => Right - Left;
-
-        public int Height => Bottom - Top;
-
-        public static implicit operator Rect(RECT r)
-        {
-            return new Rect(r.TopLeft, r.BottomRight);
-        }
-
-        public static implicit operator RECT(Rect r)
-        {
-            return new RECT { Left = (int)r.Left, Top = (int)r.Top, Right = (int)r.Right, Bottom = (int)r.Bottom };
-        }
-
-        public override string ToString()
-        {
-            return ((Rect)this).ToString();
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    private struct POINT
-    {
-        public int X;
-        public int Y;
-
-        public POINT(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public static POINT operator +(POINT p1, POINT p2)
-        {
-            return new POINT { X = p1.X + p2.X, Y = p1.Y + p2.Y };
-        }
-
-        public static POINT operator -(POINT p1, POINT p2)
-        {
-            return new POINT { X = p1.X - p2.X, Y = p1.Y - p2.Y };
-        }
-
-        public static implicit operator System.Windows.Point(POINT p)
-        {
-            return new System.Windows.Point(p.X, p.Y);
-        }
-
-        public static implicit operator POINT(System.Windows.Point p)
-        {
-            return new POINT((int)Math.Round(p.X), (int)Math.Round(p.Y));
-        }
-
-        public override string ToString()
-        {
-            return ((System.Windows.Point)this).ToString();
-        }
-    }
-
-    private enum HitTest
-    {
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Nowhere = 0,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Client = 1,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Caption = 2,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        SysMenu = 3,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        GrowBox = 4,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Size = GrowBox,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Menu = 5,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        HScroll = 6,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        VScroll = 7,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        MinButton = 8,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        MaxButton = 9,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Left = 10,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Right = 11,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Top = 12,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        TopLeft = 13,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        TopRight = 14,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Bottom = 15,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        BottomLeft = 16,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        BottomRight = 17,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Border = 18,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Object = 19,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Close = 20,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Help = 21,
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Error = (-2),
-        /// <summary>See documentation of WM_NCHITTEST</summary>
-        Transparent = (-1),
     }
 }
 

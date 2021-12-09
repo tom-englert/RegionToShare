@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RegionToShare"
         mc:Ignorable="d"
-        WindowStyle="None" Background="Transparent" AllowsTransparency="True" Topmost="True"
+        WindowStyle="None" Background="Transparent" 
+        AllowsTransparency="True" Topmost="True"
+        ShowInTaskbar="False"
         Title="Region to Share - Source Region" Height="450" Width="800">
   <Grid>
     <Border BorderThickness="{x:Static local:RecordingWindow.BorderSize}">
