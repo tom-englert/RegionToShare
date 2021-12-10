@@ -33,11 +33,11 @@ steps:
 - task: CopyFiles@2
   inputs:
     Contents: '**/bin/$(buildConfiguration)/**/*.exe*'
-    TargetFolder: '$(build.artifactstagingdirectory)/$(productName)'
+    TargetFolder: '$(build.artifactstagingdirectory)/bin'
     flattenFolders: true
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(productName)'
-    ArtifactName: 'bin'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/bin'
+    ArtifactName: '$(productName)'
     publishLocation: 'Container'
