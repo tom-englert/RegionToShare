@@ -1,14 +1,18 @@
 ﻿<Window x:Class="RegionToShare.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"  
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         Title="Region to Share" Height="450" Width="800" Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
   <Grid x:Name="ClientArea">
     <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
-      <Border VerticalAlignment="Center" HorizontalAlignment="Center" Padding="10,5" Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
-        <TextBlock Text="Click to start region capture" FontSize="24" />
-      </Border>
+      <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Ellipse Width="128" Height="128"
+                 Fill="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+        <Path Width="80" Height="80"
+              Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+              Data="M 20,0 L80,40 L20,80 Z" />
+      </Grid>
     </Grid>
     <WindowsFormsHost x:Name="RenderTargetHost" Visibility="Collapsed">
       <wf:Control x:Name="RenderTargetWindow" Visible="False" MouseClick="RenderTargetWindow_OnMouseClick" />
