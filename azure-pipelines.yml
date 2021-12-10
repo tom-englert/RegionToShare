@@ -9,14 +9,14 @@ variables:
 
 steps:
 - task: PowerShell@1
-    displayName: 'Set build version'
-    inputs:
+  displayName: 'Set build version'
+  inputs:
     scriptType: inlineScript
     inlineScript: |
         (new-object Net.WebClient).DownloadString("https://raw.github.com/tom-englert/BuildScripts/master/BuildScripts.ps1") | iex
         $version = Project-SetVersion "src\Directory.Build.props"
         $version | Build-AppendVersionToBuildNumber
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: NuGetToolInstaller@1
 
