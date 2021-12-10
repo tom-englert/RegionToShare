@@ -4,7 +4,7 @@ A helper app to share only a part of a screen via video conference apps that onl
 
 ## Installation
 
-- Download the archive with latest binaries from the [Releases](./releases).  
+- Download the archive with latest binaries from the [Releases](../../releases).  
 - Unpack the files to a location of your choice.
 - If you have used Windows Explorer to unpack the archive, unblock the app:
   - Right click the .exe and select properites
