@@ -23,6 +23,7 @@ steps:
   inputs:
     Contents: '**/bin/$(buildConfiguration)/**/*.exe*'
     TargetFolder: '$(build.artifactstagingdirectory)/bin'
+    flattenFolders: true
 
 - task: PublishBuildArtifacts@1
   inputs:
