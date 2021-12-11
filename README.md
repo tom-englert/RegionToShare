@@ -29,3 +29,6 @@ A Windows helper app to share only a part of a screen via video conference apps 
 - Close the region frame to stop showing the region without stopping to share.
 
 ![ShowRegion](./src/RegionToShare/Assets/ShowRegion.gif)
+
+## Feedback 😄
+If you like this tool, don't forget to ⭐ it. 
