@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap">
+
+  <Identity
+    Name="c2b08352-5ce6-441a-990d-de615c178970"
+    Publisher="CN=tom-englert"
+    Version="1.0.2.0" />
+
+  <Properties>
+    <DisplayName>Region to Share</DisplayName>
+    <PublisherDisplayName>tom-englert</PublisherDisplayName>
+    <Logo>Assets/50x50.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14393.0" MaxVersionTested="10.0.14393.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        DisplayName="Region to Share"
+        Description="A helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc."
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets/150x150.png"
+        Square44x44Logo="Assets/44x44.png"
+        >
+        <uap:DefaultTile/>
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
