@@ -62,7 +62,7 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>3C3E41B2176DCAE3124B0824F2C8BCF05020CF0E</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>B41FC1839075876CFB8F3D4B9DAA420CA6DEB431</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

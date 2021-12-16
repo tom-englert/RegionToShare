@@ -9,7 +9,7 @@
   <Identity
     Name="c2b08352-5ce6-441a-990d-de615c178970"
     Publisher="CN=tom-englert"
-    Version="1.0.2.0" />
+    Version="1.0.3.0" />
 
   <Properties>
     <DisplayName>Region to Share</DisplayName>

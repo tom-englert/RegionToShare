@@ -1,1 +1,0 @@
-MainPackage=C:\dev\GitHub\RegionToShare\src\Packaging\bin\AnyCPU\Debug\Packaging_1.0.2.0_AnyCPU_Debug.appx
