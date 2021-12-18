@@ -33,11 +33,11 @@
       <uap:VisualElements
         DisplayName="Region to Share"
         Description="A helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc."
-        BackgroundColor="transparent"
-        Square150x150Logo="Assets/150x150.png"
-        Square44x44Logo="Assets/44x44.png"
+        BackgroundColor="transparent" 
+        Square150x150Logo="Assets\MediumTile.png" 
+        Square44x44Logo="Assets\AppIcon.png"
         >
-        <uap:DefaultTile/>
+        <uap:DefaultTile Square71x71Logo="Assets\SmallTile.png"/>
       </uap:VisualElements>
     </Application>
   </Applications>

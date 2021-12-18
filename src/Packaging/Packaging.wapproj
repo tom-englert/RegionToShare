@@ -108,24 +108,21 @@
     <ProjectReference Include="..\RegionToShare\RegionToShare.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Assets\16x16.png">
-      <Link>Assets\16x16.png</Link>
-    </Content>
-    <Content Include="..\Assets\32x32.png">
-      <Link>Assets\32x32.png</Link>
-    </Content>
-    <Content Include="..\Assets\64x64.png">
-      <Link>Assets\64x64.png</Link>
-    </Content>
-    <Content Include="..\Assets\44x44.png">
-      <Link>Assets\44x44.png</Link>
-    </Content>
     <Content Include="..\Assets\50x50.png">
       <Link>Assets\50x50.png</Link>
     </Content>
-    <Content Include="..\Assets\150x150.png">
-      <Link>Assets\150x150.png</Link>
-    </Content>
+    <Content Include="Assets\AppIcon.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\AppIcon.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\AppIcon.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\AppIcon.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\AppIcon.scale-100.png" />
+    <Content Include="Assets\AppIcon.scale-200.png" />
+    <Content Include="Assets\AppIcon.targetsize-16.png" />
+    <Content Include="Assets\AppIcon.targetsize-48.png" />
+    <Content Include="Assets\MediumTile.scale-100.png" />
+    <Content Include="Assets\MediumTile.scale-200.png" />
+    <Content Include="Assets\SmallTile.scale-100.png" />
+    <Content Include="Assets\SmallTile.scale-200.png" />
     <None Include="Packaging_TemporaryKey.pfx" />
   </ItemGroup>
 </Project>
