@@ -14,7 +14,7 @@
   <Properties>
     <DisplayName>Region to Share</DisplayName>
     <PublisherDisplayName>tom-englert</PublisherDisplayName>
-    <Logo>Assets/50x50.png</Logo>
+    <Logo>Assets\PackageLogo.png</Logo>
   </Properties>
 
   <Dependencies>

@@ -121,6 +121,8 @@
     <Content Include="Assets\AppIcon.targetsize-48.png" />
     <Content Include="Assets\MediumTile.scale-100.png" />
     <Content Include="Assets\MediumTile.scale-200.png" />
+    <Content Include="Assets\PackageLogo.scale-100.png" />
+    <Content Include="Assets\PackageLogo.scale-200.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <None Include="Packaging_TemporaryKey.pfx" />
