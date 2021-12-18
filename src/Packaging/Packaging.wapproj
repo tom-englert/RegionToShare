@@ -108,9 +108,6 @@
     <ProjectReference Include="..\RegionToShare\RegionToShare.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Assets\50x50.png">
-      <Link>Assets\50x50.png</Link>
-    </Content>
     <Content Include="Assets\AppIcon.altform-lightunplated_targetsize-16.png" />
     <Content Include="Assets\AppIcon.altform-lightunplated_targetsize-48.png" />
     <Content Include="Assets\AppIcon.altform-unplated_targetsize-16.png" />
