@@ -6,6 +6,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   productName: 'RegionToShare'
+  appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages'
 
 steps:
 - task: PowerShell@1
@@ -32,6 +33,7 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:AppxPackageSigningEnabled=false'
 
 - task: CopyFiles@2
   inputs:
@@ -44,3 +46,10 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/bin'
     ArtifactName: '$(productName)'
     publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(appxPackageDir)'
+    ArtifactName: 'Package'
+    publishLocation: 'Container'
+
