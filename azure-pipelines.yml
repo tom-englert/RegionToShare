@@ -18,7 +18,7 @@ steps:
         $version = Project-SetVersion "src\Directory.Build.props"
         $version | Build-AppendVersionToBuildNumber
         [xml]$manifest= get-content ".\src\Packaging\Package.appxmanifest"
-        $manifest.Package.Identity.Version = $version
+        $manifest.Package.Identity.Version = $version + ".0"
         $manifest.save(".\src\Packaging\Package.appxmanifest")
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
