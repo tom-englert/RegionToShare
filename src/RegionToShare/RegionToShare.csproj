@@ -14,8 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.6.0" PrivateAssets="all" />
-    <PackageReference Include="ILMerge.Fody" Version="1.22.0" PrivateAssets="all" />
     <PackageReference Include="TomsToolbox.Wpf" Version="2.7.4" PrivateAssets="all" />
   </ItemGroup>
 
