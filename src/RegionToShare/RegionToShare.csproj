@@ -12,6 +12,10 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Company>tom-englert.de</Company>
+    <Product>Tom's Toolbox</Product>
+    <Copyright>Copyright (c) tom-englert.de and Contributors.</Copyright>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
