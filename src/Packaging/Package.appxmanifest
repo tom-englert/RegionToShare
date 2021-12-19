@@ -9,7 +9,7 @@
   <Identity
     Name="c2b08352-5ce6-441a-990d-de615c178970"
     Publisher="CN=tom-englert"
-    Version="1.0.3.0" />
+    Version="1.0.6.0" />
 
   <Properties>
     <DisplayName>Region to Share</DisplayName>
@@ -35,9 +35,13 @@
         Description="A helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc."
         BackgroundColor="transparent" 
         Square150x150Logo="Assets\MediumTile.png" 
-        Square44x44Logo="Assets\AppIcon.png"
+        Square44x44Logo="Assets\Square44x44Logo.png"
         >
-        <uap:DefaultTile Square71x71Logo="Assets\SmallTile.png"/>
+        <uap:DefaultTile Square71x71Logo="Assets\SmallTile.png" ShortName="Region to Share">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile >
       </uap:VisualElements>
     </Application>
   </Applications>
