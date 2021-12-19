@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="c2b08352-5ce6-441a-990d-de615c178970"
-    Publisher="CN=tom-englert"
+    Name="15863TomEnglert.RegionToShare"
+    Publisher="CN=4B579F23-A35F-4FE7-9C5F-239611C8EBDE"
     Version="1.0.6.0" />
 
   <Properties>
-    <DisplayName>Region to Share</DisplayName>
-    <PublisherDisplayName>tom-englert</PublisherDisplayName>
+    <DisplayName>RegionToShare</DisplayName>
+    <PublisherDisplayName>Tom Englert</PublisherDisplayName>
     <Logo>Assets\PackageLogo.png</Logo>
   </Properties>
 
@@ -31,7 +31,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Region to Share"
+        DisplayName="RegionToShare"
         Description="A helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc."
         BackgroundColor="transparent" 
         Square150x150Logo="Assets\MediumTile.png" 

@@ -28,6 +28,8 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
@@ -55,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\*.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <None Include="Packaging_TemporaryKey.pfx" />
   </ItemGroup>
 </Project>
