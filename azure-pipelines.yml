@@ -16,6 +16,9 @@ steps:
         (new-object Net.WebClient).DownloadString("https://raw.github.com/tom-englert/BuildScripts/master/BuildScripts.ps1") | iex
         $version = Project-SetVersion "src\Directory.Build.props"
         $version | Build-AppendVersionToBuildNumber
+        [xml]$manifest= get-content ".\src\Packaging\Package.appxmanifest"
+        $manifest.Package.Identity.Version = $version
+        $manifest.save(".\src\Packaging\Package.appxmanifest")
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: NuGetToolInstaller@1
