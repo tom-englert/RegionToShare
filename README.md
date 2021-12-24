@@ -4,22 +4,16 @@ A Windows helper app to share only a part of a screen via video conference apps 
 
 ## Prerequisites
 - Windows
-- DotNet 4.7.2 or newer
+- DotNet 4.6.2 or newer
 
 ## Installation
 
-- Download the archive with latest binaries from the [Releases](../../releases).  
-- Unpack the files to a location of your choice.
-- If you have used Windows Explorer to unpack the archive, unblock the app:
-  - Right click the .exe and select properites
-  - Check "Unblock" 
-
-![Unblock](./src/Assets/Properties.png)
+- Download and install this app from the [Windows Store](https://www.microsoft.com/store/productId/9N4066W2R5Q4)
 
 ## Usage
 
-- Start RegionToShare.exe.
-- Move it to the region you want to share.
+- Start the "RegionToShare" app.
+- Move the window to the region you want to share.
 - In your meeting app start sharing the window "Region to Share".
 
 ![StartSharing](./src/Assets/StartSharing.gif)
