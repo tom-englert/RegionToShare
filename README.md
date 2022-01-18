@@ -3,7 +3,7 @@
 A Windows helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc.
 
 ## Prerequisites
-- Windows
+- Windows 10
 - DotNet 4.6.2 or newer
 
 ## Installation
