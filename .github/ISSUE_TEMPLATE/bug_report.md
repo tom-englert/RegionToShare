@@ -7,15 +7,16 @@ assignees: ''
 
 ---
 
-**Important**
-Read https://github.com/dotnet/ResXResourceManager/blob/master/Documentation/Topics/Troubleshooting.md first.
-Problems listed there are bugs in Visual Studio and should be reported to Microsoft, not here.
+**Environment**
+- Operating System: (Win10/Win11)
+- Collaboration Tool: (Teams/Webex/...)
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is. (e.g. 'Does not work' is **not** a concise bug description.)
 
 **To Reproduce**
-Steps to reproduce the behavior:
+Detailed steps to reproduce the behavior: (e.g. 'Use it' is **not** a detailed description.)
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+A clear and concise description of what you expected to happen. (e.g. 'Works' is **not** a concise description)
+
