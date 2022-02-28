@@ -78,7 +78,7 @@ public partial class MainWindow
             return;
 
         NativeMethods.GetWindowRect(_windowHandle, out var rect);
-        NativeMethods.SetWindowPos(_separationLayerHandle, IntPtr.Zero, rect.Left, rect.Top, rect.Width, rect.Height, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOZORDER);
+        NativeMethods.SetWindowPos(_separationLayerHandle, IntPtr.Zero, rect.Left - 400, rect.Top - 200, rect.Width, rect.Height, NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOZORDER);
     }
 
     private void SeparationLayerWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

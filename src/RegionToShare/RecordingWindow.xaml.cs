@@ -101,8 +101,8 @@ public partial class RecordingWindow
         if (!IsLoaded)
             return;
 
-        _mainWindow.Left = Left + BorderSize.Left;
-        _mainWindow.Top = Top + BorderSize.Top;
+        _mainWindow.Left = Left + BorderSize.Left + 800;
+        _mainWindow.Top = Top + BorderSize.Top + 400;
         _mainWindow.Width = Width - BorderSize.Left - BorderSize.Right;
         _mainWindow.Height = Height - BorderSize.Top - BorderSize.Bottom;
 
