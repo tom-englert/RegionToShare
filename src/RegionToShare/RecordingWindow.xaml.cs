@@ -210,6 +210,7 @@ public partial class RecordingWindow
             NativeMethods.BitBlt(targetDC, 0, 0, nativeRect.Width, nativeRect.Height, sourceDC, nativeRect.Left, nativeRect.Top, CopyPixelOperation.SourceCopy);
             // SetWindowDisplayAffinity(_mainWindowHandle, 0);
 
+            /* Cursor is not needed when windows are stacked with no offset.
             NativeMethods.CURSORINFO pci = default;
             pci.cbSize = Marshal.SizeOf(typeof(NativeMethods.CURSORINFO));
 
@@ -220,6 +221,7 @@ public partial class RecordingWindow
                     NativeMethods.DrawIcon(targetDC, pci.ptScreenPos.X - (int)Left - 4, pci.ptScreenPos.Y - (int)Top - 16, pci.hCursor);
                 }
             }
+            */
 
             NativeMethods.ReleaseDC(_renderTargetHandle, targetDC);
             NativeMethods.ReleaseDC(_desktopWindowHandle, sourceDC);
