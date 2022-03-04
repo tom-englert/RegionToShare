@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using TomsToolbox.Wpf;
@@ -21,6 +22,9 @@ public partial class MainWindow
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
+
+        var messageSource = (HwndSource)PresentationSource.FromDependencyObject(this);
+        messageSource.AddHook(WindowProc);
 
         _windowHandle = this.GetWindowHandle();
 
@@ -101,5 +105,19 @@ public partial class MainWindow
     {
         NativeMethods.SetWindowPos(_separationLayerHandle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_SHOWWINDOW);
         NativeMethods.SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+    }
+
+    private IntPtr WindowProc(IntPtr windowHandle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        switch (msg)
+        {
+            case NativeMethods.WM_NCPAINT:
+            // case NativeMethods.WM_PAINT:
+            case NativeMethods.WM_ERASEBKGND:
+                handled = _recordingWindow != null;
+                break;
+        }
+
+        return IntPtr.Zero;
     }
 }

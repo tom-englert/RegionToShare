@@ -1,7 +1,7 @@
 ﻿<Window x:Class="RegionToShare.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:local="clr-namespace:RegionToShare"
         Title="Region to Share" Height="450" Width="800" Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
   <Grid x:Name="ClientArea">
@@ -15,7 +15,7 @@
       </Grid>
     </Grid>
     <WindowsFormsHost x:Name="RenderTargetHost" Visibility="Collapsed">
-      <wf:Control x:Name="RenderTargetWindow" Visible="False" MouseClick="RenderTargetWindow_OnMouseClick" />
+      <local:RenderTarget x:Name="RenderTargetWindow" MouseClick="RenderTargetWindow_OnMouseClick" />
     </WindowsFormsHost>
   </Grid>
 </Window>

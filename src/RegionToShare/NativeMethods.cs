@@ -20,6 +20,9 @@ internal static class NativeMethods
     [DllImport("user32.dll", SetLastError = true)]
     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
 
+    public const int WM_PAINT = 0x000F;
+    public const int WM_ERASEBKGND = 0x0014;
+    public const int WM_NCPAINT = 0x0085;
     public const int WM_NCHITTEST = 0x0084;
     public const int CURSOR_SHOWING = 0x00000001;
 
