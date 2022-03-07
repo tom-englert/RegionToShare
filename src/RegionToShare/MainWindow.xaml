@@ -1,10 +1,9 @@
 ﻿<Window x:Class="RegionToShare.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:RegionToShare"
         Title="Region to Share" Height="450" Width="800" Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-  <Grid x:Name="ClientArea">
+  <Grid>
     <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
       <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Ellipse Width="128" Height="128"
@@ -14,8 +13,6 @@
               Data="M 20,0 L80,40 L20,80 Z" />
       </Grid>
     </Grid>
-    <WindowsFormsHost x:Name="RenderTargetHost" Visibility="Collapsed">
-      <local:RenderTarget x:Name="RenderTargetWindow" MouseClick="RenderTargetWindow_OnMouseClick" />
-    </WindowsFormsHost>
+    <Image x:Name="RenderTarget" Visibility="Hidden" MouseDown="SubLayer_MouseDown" />
   </Grid>
 </Window>

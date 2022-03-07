@@ -1,12 +1,13 @@
 ﻿using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using TomsToolbox.Essentials;
 using TomsToolbox.Wpf;
+using ButtonBase = System.Windows.Controls.Primitives.ButtonBase;
+using Image = System.Windows.Controls.Image;
 
 namespace RegionToShare;
 
@@ -18,29 +19,25 @@ public partial class RecordingWindow
     public static readonly Thickness BorderSize = new(4, 16, 4, 4);
 
     private readonly HighResolutionTimer _timer;
-    private readonly Window _mainWindow;
-    private readonly IntPtr _mainWindowHandle;
-    private readonly IntPtr _renderTargetHandle;
-    private readonly IntPtr _desktopWindowHandle;
+    private readonly MainWindow _mainWindow;
+    private readonly Image _renderTarget;
     private readonly Matrix _transformFromDevice;
     private readonly Matrix _transformToDevice;
 
     private NativeMethods.RECT _nativeWindowRect;
     private int _timerMutex;
 
-    public RecordingWindow(Window mainWindow, IntPtr renderTargetHandle, int framesPerSecond = 15)
+    public RecordingWindow(Image renderTarget, int framesPerSecond = 15)
     {
         InitializeComponent();
 
-        _mainWindow = mainWindow;
-        _mainWindowHandle = mainWindow.GetWindowHandle();
-        _renderTargetHandle = renderTargetHandle;
-        _desktopWindowHandle = NativeMethods.GetDesktopWindow();
+        _mainWindow = (MainWindow)GetWindow(renderTarget);
+        _renderTarget = renderTarget;
 
         _timer = new HighResolutionTimer(Timer_Tick, TimeSpan.FromSeconds(1.0 / framesPerSecond));
         _timer.Start();
 
-        var compositionTarget = ((HwndSource)PresentationSource.FromDependencyObject(mainWindow)).CompositionTarget;
+        var compositionTarget = ((HwndSource)PresentationSource.FromDependencyObject(_mainWindow)).CompositionTarget;
         _transformFromDevice = compositionTarget.TransformFromDevice;
         _transformToDevice = compositionTarget.TransformToDevice;
     }
@@ -101,8 +98,8 @@ public partial class RecordingWindow
         if (!IsLoaded)
             return;
 
-        _mainWindow.Left = Left + BorderSize.Left + 800;
-        _mainWindow.Top = Top + BorderSize.Top + 400;
+        _mainWindow.Left = Left + BorderSize.Left + MainWindow.DebugOffset.X;
+        _mainWindow.Top = Top + BorderSize.Top + MainWindow.DebugOffset.Y;
         _mainWindow.Width = Width - BorderSize.Left - BorderSize.Right;
         _mainWindow.Height = Height - BorderSize.Top - BorderSize.Bottom;
 
@@ -202,29 +199,18 @@ public partial class RecordingWindow
     {
         try
         {
-            var sourceDC = NativeMethods.GetDC(_desktopWindowHandle);
-            var targetDC = NativeMethods.GetWindowDC(_renderTargetHandle);
             var nativeRect = _nativeWindowRect;
 
-            // SetWindowDisplayAffinity(_mainWindowHandle, 0x11);
-            NativeMethods.BitBlt(targetDC, 0, 0, nativeRect.Width, nativeRect.Height, sourceDC, nativeRect.Left, nativeRect.Top, CopyPixelOperation.SourceCopy);
-            // SetWindowDisplayAffinity(_mainWindowHandle, 0);
+            using var bitmap = new Bitmap(nativeRect.Width, nativeRect.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using var graphics = Graphics.FromImage(bitmap);
 
-            /* Cursor is not needed when windows are stacked with no offset.
-            NativeMethods.CURSORINFO pci = default;
-            pci.cbSize = Marshal.SizeOf(typeof(NativeMethods.CURSORINFO));
+            graphics.CopyFromScreen(nativeRect.Left, nativeRect.Top, 0, 0, new System.Drawing.Size(nativeRect.Width, nativeRect.Height));
+            var bitmapHandle = bitmap.GetHbitmap();
+            var imageSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            
+            NativeMethods.DeleteObject(bitmapHandle);
 
-            if (NativeMethods.GetCursorInfo(ref pci))
-            {
-                if (pci.flags == NativeMethods.CURSOR_SHOWING)
-                {
-                    NativeMethods.DrawIcon(targetDC, pci.ptScreenPos.X - (int)Left - 4, pci.ptScreenPos.Y - (int)Top - 16, pci.hCursor);
-                }
-            }
-            */
-
-            NativeMethods.ReleaseDC(_renderTargetHandle, targetDC);
-            NativeMethods.ReleaseDC(_desktopWindowHandle, sourceDC);
+            _renderTarget.Source = imageSource;
         }
         catch
         {

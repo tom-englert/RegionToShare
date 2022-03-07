@@ -1,6 +1,6 @@
-﻿// ReSharper disable All
+﻿// ReSharper disable InconsistentNaming
+// ReSharper disable IdentifierTypo
 
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -10,6 +10,7 @@ internal static class NativeMethods
 {
     public static readonly IntPtr HWND_TOP = new(0);
     public static readonly IntPtr HWND_BOTTOM = new(1);
+    
     public const int SWP_NOSIZE = 0x0001;
     public const int SWP_NOMOVE = 0x0002;
     public const int SWP_SHOWWINDOW = 0x0040;
@@ -17,56 +18,19 @@ internal static class NativeMethods
     public const int SWP_NOACTIVATE = 0x0010;
     public const int SWP_NOZORDER = 0x0004;
 
+    public const int WM_NCHITTEST = 0x0084;
+
     [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
 
-    public const int WM_PAINT = 0x000F;
-    public const int WM_ERASEBKGND = 0x0014;
-    public const int WM_NCPAINT = 0x0085;
-    public const int WM_NCHITTEST = 0x0084;
-    public const int CURSOR_SHOWING = 0x00000001;
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct CURSORINFO
-    {
-        public int cbSize;
-        public int flags;
-        public IntPtr hCursor;
-        public POINT ptScreenPos;
-    }
-
     [DllImport("user32.dll")]
-    public static extern bool GetCursorInfo(ref CURSORINFO pci);
-
-    [DllImport("user32.dll")]
-    public static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetDC(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetDesktopWindow();
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetWindowDC(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
-    [DllImport("user32.dll")]
-    public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
-
     [DllImport("gdi32.dll")]
-    public static extern bool BitBlt(IntPtr hdc, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, CopyPixelOperation dwRop);
-
-    [DllImport("user32.dll")]
-    public static extern bool ClientToScreen(IntPtr hWnd, ref POINT lpPoint);
-
-    [DllImport("user32.dll")]
-    public static extern bool SetWindowDisplayAffinity(IntPtr hwnd, uint affinity);
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool DeleteObject([In] IntPtr hObject);
 
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
     public struct RECT
@@ -122,19 +86,19 @@ internal static class NativeMethods
             return new POINT { X = p1.X - p2.X, Y = p1.Y - p2.Y };
         }
 
-        public static implicit operator System.Windows.Point(POINT p)
+        public static implicit operator Point(POINT p)
         {
-            return new System.Windows.Point(p.X, p.Y);
+            return new Point(p.X, p.Y);
         }
 
-        public static implicit operator POINT(System.Windows.Point p)
+        public static implicit operator POINT(Point p)
         {
             return new POINT((int)Math.Round(p.X), (int)Math.Round(p.Y));
         }
 
         public override string ToString()
         {
-            return ((System.Windows.Point)this).ToString();
+            return ((Point)this).ToString();
         }
     }
 
