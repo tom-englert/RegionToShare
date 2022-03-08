@@ -21,31 +21,31 @@ public partial class RecordingWindow
     private readonly HighResolutionTimer _timer;
     private readonly MainWindow _mainWindow;
     private readonly Image _renderTarget;
-    private readonly Matrix _transformFromDevice;
-    private readonly Matrix _transformToDevice;
 
     private NativeMethods.RECT _nativeWindowRect;
     private int _timerMutex;
+
+    private struct Transformations
+    {
+        public Matrix ToDevice { get; set; }
+        public Matrix FromDevice { get; set; }
+    }
 
     public RecordingWindow(Image renderTarget, int framesPerSecond = 15)
     {
         InitializeComponent();
 
-        _mainWindow = (MainWindow)GetWindow(renderTarget);
+        _mainWindow = (MainWindow)GetWindow(renderTarget)!;
         _renderTarget = renderTarget;
 
         _timer = new HighResolutionTimer(Timer_Tick, TimeSpan.FromSeconds(1.0 / framesPerSecond));
         _timer.Start();
-
-        var compositionTarget = ((HwndSource)PresentationSource.FromDependencyObject(_mainWindow)).CompositionTarget;
-        _transformFromDevice = compositionTarget.TransformFromDevice;
-        _transformToDevice = compositionTarget.TransformToDevice;
     }
 
     protected override void OnSourceInitialized(EventArgs e)
     {
-        var messageSource = (HwndSource)PresentationSource.FromDependencyObject(this);
-        messageSource.AddHook(WindowProc);
+        var hwndSource = (HwndSource?)PresentationSource.FromDependencyObject(this);
+        hwndSource?.AddHook(WindowProc);
 
         Left = _mainWindow.Left;
         Top = _mainWindow.Top - BorderSize.Top;
@@ -55,6 +55,21 @@ public partial class RecordingWindow
         this.BeginInvoke(OnSizeOrPositionChanged);
 
         base.OnSourceInitialized(e);
+    }
+
+    private Transformations DeviceTransformations
+    {
+        get
+        {
+            var hwndSource = (HwndSource?)PresentationSource.FromDependencyObject(this);
+            var compositionTarget = hwndSource?.CompositionTarget;
+
+            return new Transformations
+            {
+                FromDevice = compositionTarget?.TransformFromDevice ?? Matrix.Identity,
+                ToDevice = compositionTarget?.TransformToDevice ?? Matrix.Identity
+            };
+        }
     }
 
     protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -106,8 +121,10 @@ public partial class RecordingWindow
         var clientRect = ClientArea.GetClientRect(this);
 
         var screenOffset = new Vector(Left, Top);
-        var topLeft = _transformToDevice.Transform(clientRect.TopLeft + screenOffset);
-        var bottomRight = _transformToDevice.Transform(clientRect.BottomRight + screenOffset);
+
+        var toDevice = DeviceTransformations.ToDevice;
+        var topLeft = toDevice.Transform(clientRect.TopLeft + screenOffset);
+        var bottomRight = toDevice.Transform(clientRect.BottomRight + screenOffset);
 
         _nativeWindowRect = new Rect(topLeft, bottomRight);
     }
@@ -140,9 +157,11 @@ public partial class RecordingWindow
         var topLeft = windowRect.TopLeft;
         var bottomRight = windowRect.BottomRight;
 
-        var borderSize = _transformToDevice.Transform(BorderSize);
+        var transformations = DeviceTransformations;
 
-        var clientPoint = _transformFromDevice.Transform(hitPoint - topLeft);
+        var borderSize = transformations.ToDevice.Transform(BorderSize);
+
+        var clientPoint = transformations.FromDevice.Transform(hitPoint - topLeft);
 
         if (InputHitTest(clientPoint) is FrameworkElement element)
         {
@@ -207,7 +226,7 @@ public partial class RecordingWindow
             graphics.CopyFromScreen(nativeRect.Left, nativeRect.Top, 0, 0, new System.Drawing.Size(nativeRect.Width, nativeRect.Height));
             var bitmapHandle = bitmap.GetHbitmap();
             var imageSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            
+
             NativeMethods.DeleteObject(bitmapHandle);
 
             _renderTarget.Source = imageSource;

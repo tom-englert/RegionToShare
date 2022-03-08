@@ -13,7 +13,7 @@ public partial class MainWindow
     private IntPtr _windowHandle;
     private RecordingWindow? _recordingWindow;
 
-    internal static readonly NativeMethods.POINT DebugOffset = new (0, 0);
+    internal static readonly NativeMethods.POINT DebugOffset = new(0, 0);
 
     public MainWindow()
     {
@@ -28,10 +28,10 @@ public partial class MainWindow
 
         var separationLayerWindow = new Window()
         {
-            Background = (Brush)FindResource("HatchBrush"), 
-            WindowStyle = WindowStyle.None, 
-            ResizeMode = ResizeMode.NoResize, 
-            Title = "Region to Share - Separation Layer", 
+            Background = (Brush)FindResource("HatchBrush"),
+            WindowStyle = WindowStyle.None,
+            ResizeMode = ResizeMode.NoResize,
+            Title = "Region to Share - Separation Layer",
             ShowInTaskbar = false,
             Top = this.Top,
             Left = this.Left,
@@ -92,9 +92,9 @@ public partial class MainWindow
             return;
 
         NativeMethods.GetWindowRect(_windowHandle, out var rect);
-        NativeMethods.SetWindowPos(_separationLayerHandle, IntPtr.Zero, 
-            rect.Left - (DebugOffset.X / 2), rect.Top - (DebugOffset.Y / 2), 
-            rect.Width, rect.Height, 
+        NativeMethods.SetWindowPos(_separationLayerHandle, IntPtr.Zero,
+            rect.Left - (DebugOffset.X / 2), rect.Top - (DebugOffset.Y / 2),
+            rect.Width, rect.Height,
             NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOZORDER);
     }
 
