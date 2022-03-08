@@ -26,15 +26,27 @@ public partial class MainWindow
 
         _windowHandle = this.GetWindowHandle();
 
-        var separationLayerWindow = new Window() { Background = (Brush)FindResource("HatchBrush"), WindowStyle = WindowStyle.None, ResizeMode = ResizeMode.NoResize, Title = "Region to Share - Separation Layer", ShowInTaskbar = false };
+        var separationLayerWindow = new Window()
+        {
+            Background = (Brush)FindResource("HatchBrush"), 
+            WindowStyle = WindowStyle.None, 
+            ResizeMode = ResizeMode.NoResize, 
+            Title = "Region to Share - Separation Layer", 
+            ShowInTaskbar = false,
+            Top = this.Top,
+            Left = this.Left,
+            Width = 10,
+            Height = 10
+        };
         separationLayerWindow.SourceInitialized += (_, _) =>
         {
             _separationLayerHandle = separationLayerWindow.GetWindowHandle();
             separationLayerWindow.MouseDown += SubLayer_MouseDown;
-        };
-        separationLayerWindow.Show();
 
-        BringToFront();
+            this.BeginInvoke(BringToFront);
+        };
+
+        separationLayerWindow.Show();
     }
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
