@@ -3,12 +3,13 @@
 A Windows helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc.
 
 ## Prerequisites
-- Windows 10
+- Windows 10 or 11
 - DotNet 4.6.2 or newer
 
 ## Installation
 
 - Download and install this app from the [Windows Store](https://www.microsoft.com/store/productId/9N4066W2R5Q4)
+  or pick the latest binariers from the [release page](https://github.com/tom-englert/RegionToShare/releases) 
 
 ## Usage
 
