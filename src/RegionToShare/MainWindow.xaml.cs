@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using RegionToShare.Properties;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -33,15 +35,24 @@ public partial class MainWindow
             ResizeMode = ResizeMode.NoResize,
             Title = "Region to Share - Separation Layer",
             ShowInTaskbar = false,
-            Top = this.Top,
-            Left = this.Left,
+            Top = Top,
+            Left = Left,
             Width = 10,
             Height = 10
         };
         separationLayerWindow.SourceInitialized += (_, _) =>
         {
+            if (Keyboard.Modifiers != (ModifierKeys.Shift | ModifierKeys.Control))
+            {
+                var placement = _windowHandle.GetWindowPlacement();
+                placement.NormalPosition.DeserializeFrom(Settings.Default.WindowPlacement);
+                _windowHandle.SetWindowPlacement(ref placement);
+            }
+
             _separationLayerHandle = separationLayerWindow.GetWindowHandle();
             separationLayerWindow.MouseDown += SubLayer_MouseDown;
+
+            UpdateSizeAndPos();
 
             this.BeginInvoke(BringToFront);
         };
@@ -85,13 +96,34 @@ public partial class MainWindow
     {
         base.OnPropertyChanged(e);
 
+        if (_windowHandle == IntPtr.Zero)
+            return;
+
         if (e.Property != LeftProperty
             && e.Property != TopProperty
             && e.Property != ActualWidthProperty
             && e.Property != ActualHeightProperty)
             return;
 
+        UpdateSizeAndPos();
+    }
+
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        base.OnClosing(e);
+
+        Settings.Default.WindowPlacement = _windowHandle.GetWindowPlacement().NormalPosition.Serialize();
+        Settings.Default.Save();
+    }
+
+    private void UpdateSizeAndPos()
+    {
         NativeMethods.GetWindowRect(_windowHandle, out var rect);
+        Extend.Text = rect.Width + "x" + rect.Height;
+
+        if (_separationLayerHandle == IntPtr.Zero)
+            return;
+
         NativeMethods.SetWindowPos(_separationLayerHandle, IntPtr.Zero,
             rect.Left - (DebugOffset.X / 2), rect.Top - (DebugOffset.Y / 2),
             rect.Width, rect.Height,
@@ -105,13 +137,18 @@ public partial class MainWindow
 
     public void BringToFront()
     {
-        NativeMethods.SetWindowPos(_separationLayerHandle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
-        NativeMethods.SetWindowPos(_windowHandle, NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
+        NativeMethods.SetWindowPos(_separationLayerHandle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0,
+            NativeMethods.SWP_HIDEWINDOW);
+        NativeMethods.SetWindowPos(_windowHandle, NativeMethods.HWND_TOP, 0, 0, 0, 0,
+            NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
     }
 
     public void SendToBack()
     {
-        NativeMethods.SetWindowPos(_separationLayerHandle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_SHOWWINDOW);
-        NativeMethods.SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0, NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+        NativeMethods.SetWindowPos(_separationLayerHandle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0,
+            NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE |
+            NativeMethods.SWP_SHOWWINDOW);
+        NativeMethods.SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0,
+            NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
     }
 }

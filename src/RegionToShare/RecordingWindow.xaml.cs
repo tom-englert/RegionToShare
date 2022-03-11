@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using TomsToolbox.Essentials;
@@ -21,15 +20,10 @@ public partial class RecordingWindow
     private readonly HighResolutionTimer _timer;
     private readonly MainWindow _mainWindow;
     private readonly Image _renderTarget;
+    private HwndTarget? _compositionTarget;
 
     private NativeMethods.RECT _nativeWindowRect;
     private int _timerMutex;
-
-    private struct Transformations
-    {
-        public Matrix ToDevice { get; set; }
-        public Matrix FromDevice { get; set; }
-    }
 
     public RecordingWindow(Image renderTarget, int framesPerSecond = 15)
     {
@@ -47,6 +41,8 @@ public partial class RecordingWindow
         var hwndSource = (HwndSource?)PresentationSource.FromDependencyObject(this);
         hwndSource?.AddHook(WindowProc);
 
+        _compositionTarget = hwndSource?.CompositionTarget;
+
         Left = _mainWindow.Left;
         Top = _mainWindow.Top - BorderSize.Top;
         Width = _mainWindow.Width;
@@ -57,20 +53,7 @@ public partial class RecordingWindow
         base.OnSourceInitialized(e);
     }
 
-    private Transformations DeviceTransformations
-    {
-        get
-        {
-            var hwndSource = (HwndSource?)PresentationSource.FromDependencyObject(this);
-            var compositionTarget = hwndSource?.CompositionTarget;
-
-            return new Transformations
-            {
-                FromDevice = compositionTarget?.TransformFromDevice ?? Matrix.Identity,
-                ToDevice = compositionTarget?.TransformToDevice ?? Matrix.Identity
-            };
-        }
-    }
+    private Transformations DeviceTransformations => _compositionTarget.GetDeviceTransformations();
 
     protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
     {
@@ -244,16 +227,5 @@ public partial class RecordingWindow
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         Close();
-    }
-}
-
-internal static class ExtensionMethods
-{
-    public static Thickness Transform(this Matrix matrix, Thickness value)
-    {
-        var topLeft = matrix.Transform(new Vector(value.Left, value.Top));
-        var bottomRight = matrix.Transform(new Vector(value.Right, value.Bottom));
-
-        return new Thickness(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y);
     }
 }

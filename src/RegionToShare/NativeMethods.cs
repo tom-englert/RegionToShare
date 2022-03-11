@@ -10,7 +10,7 @@ internal static class NativeMethods
 {
     public static readonly IntPtr HWND_TOP = new(0);
     public static readonly IntPtr HWND_BOTTOM = new(1);
-    
+
     public const int SWP_NOSIZE = 0x0001;
     public const int SWP_NOMOVE = 0x0002;
     public const int SWP_SHOWWINDOW = 0x0040;
@@ -31,6 +31,14 @@ internal static class NativeMethods
     [DllImport("gdi32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool DeleteObject([In] IntPtr hObject);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SetWindowPlacement(this IntPtr hWnd, [In] ref WINDOWPLACEMENT lpwndpl);
 
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
     public struct RECT
@@ -154,5 +162,35 @@ internal static class NativeMethods
         Error = (-2),
         /// <summary>See documentation of WM_NCHITTEST</summary>
         Transparent = (-1),
+    }
+
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct WINDOWPLACEMENT
+    {
+        public int Length;
+
+        public int Flags;
+
+        public uint ShowCmd;
+
+        public POINT MinPosition;
+
+        public POINT MaxPosition;
+
+        public RECT NormalPosition;
+
+        /// <summary>
+        /// Gets the default (empty) value.
+        /// </summary>
+        public static WINDOWPLACEMENT Default
+        {
+            get
+            {
+                var result = new WINDOWPLACEMENT();
+                result.Length = Marshal.SizeOf(result);
+                return result;
+            }
+        }
     }
 }

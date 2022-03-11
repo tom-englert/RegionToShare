@@ -1,10 +1,11 @@
 ﻿<Window x:Class="RegionToShare.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Region to Share" Height="450" Width="800" Background="Black" Foreground="White"
+        Title="Region to Share" Height="1080" Width="1920" Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-  <Grid>
+  <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
     <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
+      <TextBlock x:Name="Extend" Background="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,2"/>
       <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Ellipse Width="128" Height="128"
                  Fill="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
