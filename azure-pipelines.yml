@@ -37,7 +37,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    Contents: '**/bin/$(buildConfiguration)/**/*.exe*'
+    Contents: 'RegionToShare/bin/$(buildConfiguration)/**/*.*'
     TargetFolder: '$(build.artifactstagingdirectory)/bin'
     flattenFolders: true
 
