@@ -6,7 +6,7 @@ A Windows helper app to share only a part of a screen via video conference apps 
 This tool simply mirrors the content of a screen region into a hidden window. In your meeting app you then can just share the content of this hidden window. 
 
 **Region to Share is not aware of your meeting app nor what the meeting app is doing with the content of the window.** 
-It's up to your meeting app whether it properly shares this hidden windows content or not - there is nothing Region to Share can do about this.
+It's up to your meeting app whether it properly shares this hidden windows content or not - if it's not working as expected, there is nothing Region to Share can do about this.
 
 ## Prerequisites
 - Windows 10 or 11
