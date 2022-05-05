@@ -1,19 +1,27 @@
-﻿<Window x:Class="RegionToShare.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="RegionToShare.MainWindow"
         Title="Region to Share" Height="1080" Width="1920" Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-  <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
-    <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
-      <TextBlock x:Name="Extend" Background="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,2"/>
-      <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-        <Ellipse Width="128" Height="128"
-                 Fill="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
-        <Path Width="80" Height="80"
-              Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+        <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
+            <TextBlock x:Name="Extend" Background="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,2"/>
+            <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <ListBox Grid.Row="0" x:Name="lbResolutions" ItemsSource="{Binding Resolutions}" Background="Black" Foreground="Green" BorderBrush="Black" Margin="0,0,0,25" FontSize="22" FontWeight="Bold" SelectionChanged="lbResolutions_SelectionChanged" />
+
+                <Ellipse Grid.Row="1" Width="128" Height="128"
+                 Fill="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Path Grid.Row="1" Width="80" Height="80"
+              Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
               Data="M 20,0 L80,40 L20,80 Z" />
-      </Grid>
+            </Grid>
+
+        </Grid>
+        <Image x:Name="RenderTarget" Visibility="Hidden" MouseDown="SubLayer_MouseDown" />
     </Grid>
-    <Image x:Name="RenderTarget" Visibility="Hidden" MouseDown="SubLayer_MouseDown" />
-  </Grid>
 </Window>
