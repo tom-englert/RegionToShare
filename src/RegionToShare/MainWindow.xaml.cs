@@ -1,5 +1,7 @@
 ﻿using RegionToShare.Properties;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,9 +19,19 @@ public partial class MainWindow
 
     internal static readonly NativeMethods.POINT DebugOffset = new(0, 0);
 
+    public ObservableCollection<string> Resolutions { get; set; }
+
     public MainWindow()
     {
         InitializeComponent();
+        Resolutions = new ObservableCollection<string>();
+        DataContext = this;
+
+        if (!File.Exists("resolutions.txt"))
+            return;
+
+        string[] lines = File.ReadAllLines("resolutions.txt");
+        Resolutions = new ObservableCollection<string>(lines);
     }
 
     protected override void OnSourceInitialized(EventArgs e)
@@ -105,6 +117,7 @@ public partial class MainWindow
             && e.Property != ActualHeightProperty)
             return;
 
+
         UpdateSizeAndPos();
     }
 
@@ -150,5 +163,21 @@ public partial class MainWindow
             NativeMethods.SWP_SHOWWINDOW);
         NativeMethods.SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0,
             NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE);
+    }
+
+
+    private void lbResolutions_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        var resolution = e.AddedItems[0].ToString();
+        try
+        {
+            // user can added garbage to txt file
+            Width = Convert.ToDouble(resolution.Split('x')[0]);
+            Height = Convert.ToDouble(resolution.Split('x')[1]);
+        }
+        catch (Exception)
+        {
+
+        }
     }
 }
