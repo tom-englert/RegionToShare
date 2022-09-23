@@ -27,10 +27,21 @@ public partial class MainWindow
         Resolutions = new ObservableCollection<string>();
         DataContext = this;
 
-        if (!File.Exists("resolutions.txt"))
-            return;
+        LoadResolutions();
+    }
 
-        string[] lines = File.ReadAllLines("resolutions.txt");
+    private void LoadResolutions() 
+    {
+        var userDataDirPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\RegionToShare";
+        var resolutionsFilePath = userDataDirPath + "\\resolutions.txt";
+        
+        if(!Directory.Exists(userDataDirPath))
+            Directory.CreateDirectory(userDataDirPath);
+
+        if (!File.Exists(resolutionsFilePath))
+            File.WriteAllText(resolutionsFilePath, "1024x782\r\n1280x1024\r\n1920x1080");
+
+        string[] lines = File.ReadAllLines(resolutionsFilePath);
         Resolutions = new ObservableCollection<string>(lines);
     }
 
@@ -172,8 +183,9 @@ public partial class MainWindow
         try
         {
             // user can added garbage to txt file
-            Width = Convert.ToDouble(resolution.Split('x')[0]);
-            Height = Convert.ToDouble(resolution.Split('x')[1]);
+            var wh = resolution.Split('x');
+            Width = Convert.ToDouble(wh[0]);
+            Height = Convert.ToDouble(wh[1]);
         }
         catch (Exception)
         {
