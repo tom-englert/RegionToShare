@@ -56,6 +56,28 @@ internal static class NativeMethods
 
         public int Height => Bottom - Top;
 
+        public static RECT operator +(RECT rect, Thickness borderSize)
+        {
+            return new RECT
+            {
+                Left = rect.Left - (int)borderSize.Left,
+                Top = rect.Top - (int)borderSize.Top,
+                Right = rect.Right + (int)borderSize.Right,
+                Bottom = rect.Bottom + (int)borderSize.Bottom
+            };
+        }
+
+        public static RECT operator -(RECT rect, Thickness borderSize)
+        {
+            return new RECT
+            {
+                Left = rect.Left + (int)borderSize.Left,
+                Top = rect.Top + (int)borderSize.Top,
+                Right = rect.Right - (int)borderSize.Right,
+                Bottom = rect.Bottom - (int)borderSize.Bottom
+            };
+        }
+
         public static implicit operator Rect(RECT r)
         {
             return new Rect(r.TopLeft, r.BottomRight);

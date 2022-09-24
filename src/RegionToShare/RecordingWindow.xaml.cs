@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using TomsToolbox.Essentials;
 using TomsToolbox.Wpf;
+using static RegionToShare.NativeMethods;
 using ButtonBase = System.Windows.Controls.Primitives.ButtonBase;
 using Image = System.Windows.Controls.Image;
 
@@ -22,8 +23,9 @@ public partial class RecordingWindow
     private readonly Image _renderTarget;
     private HwndTarget? _compositionTarget;
 
-    private NativeMethods.RECT _nativeWindowRect;
+    private RECT _nativeWindowRect;
     private int _timerMutex;
+    private IntPtr _windowHandle;
 
     public RecordingWindow(Image renderTarget, int framesPerSecond = 15)
     {
@@ -39,14 +41,15 @@ public partial class RecordingWindow
     protected override void OnSourceInitialized(EventArgs e)
     {
         var hwndSource = (HwndSource?)PresentationSource.FromDependencyObject(this);
-        hwndSource?.AddHook(WindowProc);
+        if (hwndSource == null)
+            return;
 
-        _compositionTarget = hwndSource?.CompositionTarget;
+        hwndSource.AddHook(WindowProc);
 
-        Left = _mainWindow.Left;
-        Top = _mainWindow.Top - BorderSize.Top;
-        Width = _mainWindow.Width;
-        Height = _mainWindow.Height + BorderSize.Top;
+        _compositionTarget = hwndSource.CompositionTarget;
+        _windowHandle = hwndSource.Handle;
+
+        NativeWindowRect = _mainWindow.NativeWindowRect + NativeBorderSize;
 
         this.BeginInvoke(OnSizeOrPositionChanged);
 
@@ -54,6 +57,24 @@ public partial class RecordingWindow
     }
 
     private Transformations DeviceTransformations => _compositionTarget.GetDeviceTransformations();
+
+    private RECT NativeWindowRect
+    {
+        get
+        {
+            GetWindowRect(_windowHandle, out var rect);
+            return rect;
+        }
+        set
+        {
+            if (_windowHandle == IntPtr.Zero)
+                return;
+            
+            SetWindowPos(_windowHandle, IntPtr.Zero, value.Left, value.Top, value.Width, value.Height, SWP_NOACTIVATE | SWP_NOZORDER);
+        }
+    }
+
+    private Thickness NativeBorderSize => DeviceTransformations.ToDevice.Transform(BorderSize);
 
     protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
     {
@@ -83,11 +104,6 @@ public partial class RecordingWindow
     {
         base.OnClosed(e);
 
-        _mainWindow.Left = Left;
-        _mainWindow.Top = Top + BorderSize.Top;
-        _mainWindow.Width = Width;
-        _mainWindow.Height = Height - BorderSize.Top;
-
         _timer.Stop();
     }
 
@@ -96,27 +112,14 @@ public partial class RecordingWindow
         if (!IsLoaded)
             return;
 
-        _mainWindow.Left = Left + BorderSize.Left + MainWindow.DebugOffset.X;
-        _mainWindow.Top = Top + BorderSize.Top + MainWindow.DebugOffset.Y;
-        _mainWindow.Width = Width - BorderSize.Left - BorderSize.Right;
-        _mainWindow.Height = Height - BorderSize.Top - BorderSize.Bottom;
-
-        var clientRect = ClientArea.GetClientRect(this);
-
-        var screenOffset = new Vector(Left, Top);
-
-        var toDevice = DeviceTransformations.ToDevice;
-        var topLeft = toDevice.Transform(clientRect.TopLeft + screenOffset);
-        var bottomRight = toDevice.Transform(clientRect.BottomRight + screenOffset);
-
-        _nativeWindowRect = new Rect(topLeft, bottomRight);
+        _mainWindow.NativeWindowRect = _nativeWindowRect = NativeWindowRect - NativeBorderSize;
     }
 
     private IntPtr WindowProc(IntPtr windowHandle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         switch (msg)
         {
-            case NativeMethods.WM_NCHITTEST:
+            case WM_NCHITTEST:
                 handled = true;
                 return (IntPtr)NcHitTest(windowHandle, lParam);
         }
@@ -124,18 +127,18 @@ public partial class RecordingWindow
         return IntPtr.Zero;
     }
 
-    private NativeMethods.HitTest NcHitTest(IntPtr windowHandle, IntPtr lParam)
+    private HitTest NcHitTest(IntPtr windowHandle, IntPtr lParam)
     {
         if (WindowState.Normal != WindowState)
-            return NativeMethods.HitTest.Client;
+            return HitTest.Client;
 
         if ((ResizeMode != ResizeMode.CanResize) && ResizeMode != ResizeMode.CanResizeWithGrip)
-            return NativeMethods.HitTest.Client;
+            return HitTest.Client;
 
         // Arguments are absolute native coordinates
-        var hitPoint = new NativeMethods.POINT((short)lParam, (short)((uint)lParam >> 16));
+        var hitPoint = new POINT((short)lParam, (short)((uint)lParam >> 16));
 
-        NativeMethods.GetWindowRect(windowHandle, out var windowRect);
+        GetWindowRect(windowHandle, out var windowRect);
 
         var topLeft = windowRect.TopLeft;
         var bottomRight = windowRect.BottomRight;
@@ -150,7 +153,7 @@ public partial class RecordingWindow
         {
             if (element.AncestorsAndSelf().OfType<ButtonBase>().Any())
             {
-                return NativeMethods.HitTest.Client;
+                return HitTest.Client;
             }
         }
 
@@ -160,26 +163,26 @@ public partial class RecordingWindow
         var bottom = bottomRight.Y;
 
         if ((hitPoint.Y < top) || (hitPoint.Y > bottom) || (hitPoint.X < left) || (hitPoint.X > right))
-            return NativeMethods.HitTest.Transparent;
+            return HitTest.Transparent;
 
         if ((hitPoint.Y < (top + borderSize.Top)) && (hitPoint.X < (left + borderSize.Left)))
-            return NativeMethods.HitTest.TopLeft;
+            return HitTest.TopLeft;
         if ((hitPoint.Y < (top + borderSize.Top)) && (hitPoint.X > (right - borderSize.Right)))
-            return NativeMethods.HitTest.TopRight;
+            return HitTest.TopRight;
         if ((hitPoint.Y > (bottom - borderSize.Bottom)) && (hitPoint.X < (left + borderSize.Left)))
-            return NativeMethods.HitTest.BottomLeft;
+            return HitTest.BottomLeft;
         if ((hitPoint.Y > (bottom - borderSize.Bottom)) && (hitPoint.X > (right - borderSize.Right)))
-            return NativeMethods.HitTest.BottomRight;
+            return HitTest.BottomRight;
         if (hitPoint.Y < (top + borderSize.Top))
-            return NativeMethods.HitTest.Caption;
+            return HitTest.Caption;
         if (hitPoint.Y > (bottom - borderSize.Bottom))
-            return NativeMethods.HitTest.Bottom;
+            return HitTest.Bottom;
         if (hitPoint.X < (left + borderSize.Left))
-            return NativeMethods.HitTest.Left;
+            return HitTest.Left;
         if (hitPoint.X > (right - borderSize.Right))
-            return NativeMethods.HitTest.Right;
+            return HitTest.Right;
 
-        return NativeMethods.HitTest.Client;
+        return HitTest.Client;
     }
 
     private void Timer_Tick(TimeSpan elapsed)
@@ -210,7 +213,7 @@ public partial class RecordingWindow
             var bitmapHandle = bitmap.GetHbitmap();
             var imageSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
-            NativeMethods.DeleteObject(bitmapHandle);
+            DeleteObject(bitmapHandle);
 
             _renderTarget.Source = imageSource;
         }
