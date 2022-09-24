@@ -186,6 +186,8 @@ public partial class MainWindow
             var wh = resolution.Split('x');
             Width = Convert.ToDouble(wh[0]);
             Height = Convert.ToDouble(wh[1]);
+
+            lbResolutions.SelectedIndex = -1;
         }
         catch (Exception)
         {
