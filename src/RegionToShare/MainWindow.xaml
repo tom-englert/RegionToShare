@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:styles="urn:TomsToolbox.Wpf.Styles"
-        Title="Region to Share" 
-        Height="1080" Width="1920" 
+        Title="Region to Share"
+        Height="1080" Width="1920"
         MinHeight="200" MinWidth="300"
         Background="Black" Foreground="White"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
@@ -34,25 +34,25 @@
     <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.DisabledBrush}" Color="#2D2D30" />
   </Window.Resources>
   <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
-        <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
-            <ComboBox Text="{Binding Extend}"
-                      Style="{StaticResource {x:Static styles:ResourceKeys.ComboBoxStyle}}"
-                      ItemsSource="{Binding Resolutions}"
-                      VerticalAlignment="Top" HorizontalAlignment="Left" 
-                      Padding="5,2" Width="90" 
-                      IsEditable="True"/>
-            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="2*" />
-                </Grid.RowDefinitions>
-                <Ellipse Grid.Row="1" Width="128" Height="128"
+    <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
+      <ComboBox Text="{Binding Extend}"
+                Style="{StaticResource {x:Static styles:ResourceKeys.ComboBoxStyle}}"
+                ItemsSource="{Binding Resolutions}"
+                VerticalAlignment="Top" HorizontalAlignment="Left"
+                Width="90" IsEditable="True" />
+      <TextBlock Text="{Binding Version}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,2" />
+      <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="1*" />
+          <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Ellipse Grid.Row="1" Width="128" Height="128"
                  Fill="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
-                <Path Grid.Row="1" Width="80" Height="80"
+        <Path Grid.Row="1" Width="80" Height="80"
               Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
               Data="M 20,0 L80,40 L20,80 Z" />
-            </Grid>
-        </Grid>
-        <Image x:Name="RenderTarget" Visibility="Hidden" MouseDown="SubLayer_MouseDown" />
+      </Grid>
     </Grid>
+    <Image x:Name="RenderTarget" Visibility="Hidden" MouseDown="SubLayer_MouseDown" />
+  </Grid>
 </Window>

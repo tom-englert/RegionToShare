@@ -1,6 +1,7 @@
 ﻿using RegionToShare.Properties;
 using System.ComponentModel;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -25,6 +26,8 @@ public partial class MainWindow
         DataContext = this;
         Resolutions = LoadResolutions();
     }
+
+    public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
     public ICollection<string> Resolutions { get; }
 
