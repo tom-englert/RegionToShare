@@ -1,8 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace RegionToShare;
 
@@ -88,6 +91,16 @@ internal static class NativeMethods
             return new RECT { Left = (int)r.Left, Top = (int)r.Top, Right = (int)r.Right, Bottom = (int)r.Bottom };
         }
 
+        public static implicit operator Rectangle(RECT r)
+        {
+            return new Rectangle(r.Left, r.Top, r.Width, r.Height);
+        }
+
+        public static implicit operator RECT(Rectangle r)
+        {
+            return new RECT { Left = r.Left, Top = r.Top, Right = r.Right, Bottom = r.Bottom };
+        }
+
         public override string ToString()
         {
             return ((Rect)this).ToString();
@@ -129,6 +142,34 @@ internal static class NativeMethods
         public override string ToString()
         {
             return ((Point)this).ToString();
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    public struct SIZE
+    {
+        public int Width;
+        public int Height;
+
+        public SIZE(int width, int height)
+        {
+            Width = width;
+            Height = height;
+        }
+
+        public static implicit operator Size(SIZE p)
+        {
+            return new Size(p.Width, p.Height);
+        }
+
+        public static implicit operator SIZE(Size p)
+        {
+            return new SIZE((int)Math.Round(p.Width), (int)Math.Round(p.Height));
+        }
+
+        public override string ToString()
+        {
+            return ((Size)this).ToString();
         }
     }
 

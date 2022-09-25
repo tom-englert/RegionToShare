@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -49,7 +50,11 @@ public partial class RecordingWindow
         _compositionTarget = hwndSource.CompositionTarget;
         _windowHandle = hwndSource.Handle;
 
-        NativeWindowRect = _mainWindow.NativeWindowRect + NativeBorderSize;
+        var rect = Screen.FromHandle(_windowHandle).Bounds;
+
+        rect.Intersect(_mainWindow.NativeWindowRect + NativeBorderSize);
+
+        NativeWindowRect = rect;
 
         this.BeginInvoke(OnSizeOrPositionChanged);
 

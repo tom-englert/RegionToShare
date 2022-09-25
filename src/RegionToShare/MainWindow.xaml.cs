@@ -1,5 +1,6 @@
 ﻿using RegionToShare.Properties;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -43,7 +44,7 @@ public partial class MainWindow
     {
         if (TryParseSize(newValue, out var size))
         {
-            SetWindowPos(_windowHandle, IntPtr.Zero, 0, 0, (int)size.Width, (int)size.Height, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
+            SetWindowPos(_windowHandle, IntPtr.Zero, 0, 0, size.Width, size.Height, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
         }
     }
 
@@ -76,7 +77,7 @@ public partial class MainWindow
 
             if (!File.Exists(resolutionsFilePath))
             {
-                File.WriteAllText(resolutionsFilePath, string.Join("\r\n", defaultResolutions));
+                File.WriteAllLines(resolutionsFilePath, defaultResolutions);
                 return defaultResolutions;
             }
 
@@ -217,17 +218,20 @@ public partial class MainWindow
         SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
-    private bool TryParseSize(string value, out Size size)
+    private bool TryParseSize(string value, out SIZE size)
     {
         size = Size.Empty;
 
         try
         {
             var parts = value.Split('x');
-            if (parts.Length != 2)
+
+            if (parts.Length != 2 
+                || !int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var width) 
+                || !int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var height))
                 return false;
 
-            size = new Size(double.Parse(parts[0]), double.Parse(parts[1]));
+            size = new SIZE(width, height);
 
             return size.Width >= MinWidth && size.Height >= MinHeight;
         }
