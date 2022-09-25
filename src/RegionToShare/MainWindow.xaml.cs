@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using TomsToolbox.Wpf;
+using TomsToolbox.Wpf.Styles;
 using static RegionToShare.NativeMethods;
 
 namespace RegionToShare;
@@ -26,6 +27,7 @@ public partial class MainWindow
         InitializeComponent();
         DataContext = this;
         Resolutions = LoadResolutions();
+        Resources.RegisterDefaultStyles();
     }
 
     public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();

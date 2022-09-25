@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnMainWindowClose"
              StartupUri="MainWindow.xaml">
-    <Application.Resources>
-      <LinearGradientBrush x:Key="HatchBrush" StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute">
-        <GradientStop Offset="0" Color="Green" />
-        <GradientStop Offset="0.25" Color="Green" />
-        <GradientStop Offset="0.25" Color="Transparent" />
-        <GradientStop Offset="1" Color="Transparent" />
-      </LinearGradientBrush>
-</Application.Resources>
+  <Application.Resources>
+    <LinearGradientBrush x:Key="HatchBrush" StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute">
+      <GradientStop Offset="0" Color="Green" />
+      <GradientStop Offset="0.25" Color="Green" />
+      <GradientStop Offset="0.25" Color="Transparent" />
+      <GradientStop Offset="1" Color="Transparent" />
+    </LinearGradientBrush>
+  </Application.Resources>
 </Application>

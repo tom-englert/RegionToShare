@@ -27,7 +27,7 @@
             Click="Button_Click">
       <Path Width="12" Height="12" 
             Data="M2,2 L10,10 M2,10 L10,2" 
-            Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" 
+            Stroke="Black" 
             StrokeThickness="1" />
     </Button>
   </Grid>
