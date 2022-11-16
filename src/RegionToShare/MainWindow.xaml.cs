@@ -20,7 +20,7 @@ public partial class MainWindow
     private IntPtr _windowHandle;
     private RecordingWindow? _recordingWindow;
 
-    internal static readonly POINT DebugOffset = new(0, 0);
+    private POINT _debugOffset;
 
     public MainWindow()
     {
@@ -135,6 +135,10 @@ public partial class MainWindow
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        _debugOffset = Keyboard.Modifiers == (ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift)
+            ? new(300, 200)
+            : new();
+
         if (_recordingWindow != null)
             return;
 
@@ -200,7 +204,7 @@ public partial class MainWindow
         if (_separationLayerHandle == IntPtr.Zero)
             return;
 
-        SetWindowPos(_separationLayerHandle, IntPtr.Zero, rect.Left - DebugOffset.X, rect.Top - DebugOffset.Y, rect.Width, rect.Height, SWP_NOACTIVATE | SWP_NOZORDER);
+        SetWindowPos(_separationLayerHandle, IntPtr.Zero, rect.Left - _debugOffset.X, rect.Top - _debugOffset.Y, rect.Width, rect.Height, SWP_NOACTIVATE | SWP_NOZORDER);
     }
 
     private void SubLayer_MouseDown(object sender, MouseButtonEventArgs e)
@@ -228,8 +232,8 @@ public partial class MainWindow
         {
             var parts = value.Split('x');
 
-            if (parts.Length != 2 
-                || !int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var width) 
+            if (parts.Length != 2
+                || !int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var width)
                 || !int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var height))
                 return false;
 
