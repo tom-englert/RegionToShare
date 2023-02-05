@@ -1,3 +1,6 @@
+1.3
+- Fix #41: Region of secondary monitor not shareable
+
 1.2
 - Fix #34: Incorrect pixel resolution 
 - Fix #33: Window size can be selected from list
