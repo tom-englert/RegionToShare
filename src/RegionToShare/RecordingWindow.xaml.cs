@@ -50,9 +50,7 @@ public partial class RecordingWindow
         _compositionTarget = hwndSource.CompositionTarget;
         _windowHandle = hwndSource.Handle;
 
-        var rect = Screen.FromHandle(_windowHandle).Bounds;
-
-        rect.Intersect(_mainWindow.NativeWindowRect + NativeBorderSize);
+        var rect = _mainWindow.NativeWindowRect + NativeBorderSize;
 
         NativeWindowRect = rect;
 
