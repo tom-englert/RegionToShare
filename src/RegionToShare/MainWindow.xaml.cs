@@ -201,10 +201,7 @@ public partial class MainWindow
 
         Extend = rect.Width + "x" + rect.Height;
 
-        if (_separationLayerHandle == IntPtr.Zero)
-            return;
-
-        SetWindowPos(_separationLayerHandle, IntPtr.Zero, rect.Left - _debugOffset.X, rect.Top - _debugOffset.Y, rect.Width, rect.Height, SWP_NOACTIVATE | SWP_NOZORDER);
+        SetSeparationLayerPos(SWP_NOACTIVATE | SWP_NOZORDER);
     }
 
     private void SubLayer_MouseDown(object sender, MouseButtonEventArgs e)
@@ -214,14 +211,24 @@ public partial class MainWindow
 
     public void BringToFront()
     {
-        SetWindowPos(_separationLayerHandle, HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW);
+        SetSeparationLayerPos(SWP_HIDEWINDOW);
         SetWindowPos(_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     }
 
     public void SendToBack()
     {
-        SetWindowPos(_separationLayerHandle, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+        SetSeparationLayerPos(SWP_NOACTIVATE | SWP_SHOWWINDOW);
         SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    }
+
+    private void SetSeparationLayerPos(uint flags)
+    {
+        if (_separationLayerHandle == IntPtr.Zero)
+            return;
+
+        var rect = NativeWindowRect;
+
+        SetWindowPos(_separationLayerHandle, HWND_BOTTOM, rect.Left - _debugOffset.X, rect.Top - _debugOffset.Y, rect.Width, rect.Height, flags);
     }
 
     private bool TryParseSize(string value, out SIZE size)

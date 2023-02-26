@@ -14,12 +14,12 @@ internal static class NativeMethods
     public static readonly IntPtr HWND_TOP = new(0);
     public static readonly IntPtr HWND_BOTTOM = new(1);
 
-    public const int SWP_NOSIZE = 0x0001;
-    public const int SWP_NOMOVE = 0x0002;
-    public const int SWP_SHOWWINDOW = 0x0040;
-    public const int SWP_HIDEWINDOW = 0x0080;
-    public const int SWP_NOACTIVATE = 0x0010;
-    public const int SWP_NOZORDER = 0x0004;
+    public const uint SWP_NOSIZE = 0x0001;
+    public const uint SWP_NOMOVE = 0x0002;
+    public const uint SWP_SHOWWINDOW = 0x0040;
+    public const uint SWP_HIDEWINDOW = 0x0080;
+    public const uint SWP_NOACTIVATE = 0x0010;
+    public const uint SWP_NOZORDER = 0x0004;
 
     public const int WM_NCHITTEST = 0x0084;
 
