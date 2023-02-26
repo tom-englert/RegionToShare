@@ -1,7 +1,7 @@
 1.4
 - Fix #44: Theme color is configurable, backgound image is less distracting
-- Fix #46: close button is now partially visible when maximized
-- Fix #48: optionally draw shadow cursor
+- Fix #46: Close button is now partially visible when maximized
+- Fix #48: Optionally draw a shadow cursor
 - FPS is now configurable
 - Fix: Separation layer sometimes not visible
 
