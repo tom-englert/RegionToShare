@@ -1,15 +1,17 @@
-﻿using RegionToShare.Properties;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using RegionToShare.Properties;
 using TomsToolbox.Wpf;
 using TomsToolbox.Wpf.Styles;
 using static RegionToShare.NativeMethods;
+using static RegionToShare.ExtensionMethods;
 
 namespace RegionToShare;
 
@@ -46,8 +48,18 @@ public partial class MainWindow
         get => (string?)GetValue(ExtendProperty);
         set => SetValue(ExtendProperty, value);
     }
-    public static readonly DependencyProperty ExtendProperty = DependencyProperty.Register("Extend", typeof(string), typeof(MainWindow),
-        new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, args) => ((MainWindow)d).OnExtendChanged((string)args.NewValue)));
+    public static readonly DependencyProperty ExtendProperty = DependencyProperty.Register("Extend", typeof(string),
+        typeof(MainWindow),
+        new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+            (d, args) => ((MainWindow)d).OnExtendChanged((string)args.NewValue)));
+
+    public Brush BackgroundPattern
+    {
+        get => (Brush)GetValue(BackgroundPatternProperty);
+        set => SetValue(BackgroundPatternProperty, value);
+    }
+    public static readonly DependencyProperty BackgroundPatternProperty = DependencyProperty.Register(
+        "BackgroundPattern", typeof(Brush), typeof(MainWindow), new PropertyMetadata(default(Brush)));
 
     private void OnExtendChanged(string newValue)
     {
@@ -110,7 +122,6 @@ public partial class MainWindow
 
         var separationLayerWindow = new Window()
         {
-            Background = (Brush)FindResource("HatchBrush"),
             WindowStyle = WindowStyle.None,
             ResizeMode = ResizeMode.NoResize,
             Title = "Region to Share - Separation Layer",
@@ -120,6 +131,9 @@ public partial class MainWindow
             Width = 10,
             Height = 10
         };
+
+        BindingOperations.SetBinding(separationLayerWindow, BackgroundProperty, new Binding(nameof(BackgroundPattern)) { Source = this });
+
         separationLayerWindow.SourceInitialized += (_, _) =>
         {
             if (Keyboard.Modifiers != (ModifierKeys.Shift | ModifierKeys.Control))
@@ -204,7 +218,9 @@ public partial class MainWindow
     {
         try
         {
-            Application.Current.Resources["ThemeColor"] = ColorConverter.ConvertFromString(Settings.ThemeColor);
+            var themeColor = (Color)ColorConverter.ConvertFromString(Settings.ThemeColor);
+            Application.Current.Resources["ThemeColor"] = themeColor;
+            BackgroundPattern = GenerateRandomBrush(themeColor);
         }
         catch
         {

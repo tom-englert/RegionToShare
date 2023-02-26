@@ -35,15 +35,9 @@
     <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.BorderBrush}" Color="#3F3F46" />
     <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.AccentDarkBrush}" Color="{DynamicResource ThemeColor}" />
     <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.DisabledBrush}" Color="#2D2D30" />
-    <LinearGradientBrush x:Key="HatchBrush" StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute" Opacity=".4">
-      <GradientStop Offset="0" Color="{DynamicResource ThemeColor}" />
-      <GradientStop Offset="0.2" Color="{DynamicResource ThemeColor}" />
-      <GradientStop Offset="0.2" Color="Transparent" />
-      <GradientStop Offset="1" Color="Transparent" />
-    </LinearGradientBrush>
   </Window.Resources>
   <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
-    <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
+    <Grid x:Name="InfoArea" Background="{Binding BackgroundPattern}">
       <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal">
         <StackPanel.Resources>
           <Style TargetType="Decorator" x:Key="Padding">

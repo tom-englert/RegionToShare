@@ -4,7 +4,10 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using static RegionToShare.NativeMethods;
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
 using Point = System.Drawing.Point;
 
 namespace RegionToShare
@@ -82,6 +85,39 @@ namespace RegionToShare
                 cursor.HotSpot.Y + pci.ptScreenPos.Y - nativeRect.Top);
 
             cursor?.Draw(graphics, new Rectangle(location, cursor.Size));
+        }
+
+        private const int PatternSize = 128;
+
+        public static Brush GenerateRandomBrush(Color themeColor) =>
+            new ImageBrush(GenerateColoredDots(PatternSize, PatternSize, themeColor))
+            {
+                Opacity = 0.4,
+                Viewport = new Rect(0, 0, PatternSize, PatternSize),
+                ViewportUnits = BrushMappingMode.Absolute,
+                TileMode = TileMode.Tile,
+                Stretch = Stretch.None,
+            };
+
+        private static BitmapSource GenerateColoredDots(int resX, int resY, Color color)
+        {
+            var random = new Random(0);
+
+            var bytesPerRow = resX * 3; // Rgb24
+
+            var pixels = new byte[bytesPerRow * resY];
+
+            for (var i = 0; i < bytesPerRow * resY; i += 3)
+            {
+                var factor = random.NextDouble();
+                pixels[i] = (byte)(color.R * factor);
+                pixels[i + 1] = (byte)(color.G * factor);
+                pixels[i + 2] = (byte)(color.B * factor);
+            }
+
+            var wb = new WriteableBitmap(resX, resY, 96.0, 96.0, PixelFormats.Rgb24, null);
+            wb.WritePixels(new Int32Rect(0, 0, resX, resY), pixels, bytesPerRow, 0);
+            return wb;
         }
     }
 }
