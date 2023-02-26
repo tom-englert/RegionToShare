@@ -1,6 +1,11 @@
-﻿using System.Windows;
+﻿using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using static RegionToShare.NativeMethods;
+using Point = System.Drawing.Point;
 
 namespace RegionToShare
 {
@@ -29,19 +34,19 @@ namespace RegionToShare
             };
         }
 
-        public static NativeMethods.WINDOWPLACEMENT GetWindowPlacement(this IntPtr hWnd)
+        public static WINDOWPLACEMENT GetWindowPlacement(this IntPtr hWnd)
         {
-            var value = NativeMethods.WINDOWPLACEMENT.Default;
+            var value = WINDOWPLACEMENT.Default;
             NativeMethods.GetWindowPlacement(hWnd, ref value);
             return value;
         }
 
-        public static string Serialize(this NativeMethods.RECT rect)
+        public static string Serialize(this RECT rect)
         {
             return $"{rect.Left}\t{rect.Top}\t{rect.Right}\t{rect.Bottom}";
         }
 
-        public static void DeserializeFrom(this ref NativeMethods.RECT rect, string value)
+        public static void DeserializeFrom(this ref RECT rect, string value)
         {
             try
             {
@@ -58,6 +63,25 @@ namespace RegionToShare
             {
                 // invalid, just go with input;
             }
+        }
+
+        public static void DrawCursor(this Graphics graphics, RECT nativeRect)
+        {
+            CURSORINFO pci = default;
+            pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+
+            if (!GetCursorInfo(ref pci) || (pci.flags != CURSOR_SHOWING))
+                return;
+
+            var cursor = Cursor.Current;
+            if (cursor == null)
+                return;
+
+            var location = new Point(
+                cursor.HotSpot.X + pci.ptScreenPos.X - nativeRect.Left,
+                cursor.HotSpot.Y + pci.ptScreenPos.Y - nativeRect.Top);
+
+            cursor?.Draw(graphics, new Rectangle(location, cursor.Size));
         }
     }
 }

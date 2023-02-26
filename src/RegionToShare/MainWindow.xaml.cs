@@ -28,11 +28,16 @@ public partial class MainWindow
         DataContext = this;
         Resolutions = LoadResolutions();
         Resources.RegisterDefaultStyles();
+        ValidateSettings();
     }
 
     public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
     public ICollection<string> Resolutions { get; }
+
+    public ICollection<int> FramesPerSecondSource { get; } = new[] { 5, 10, 15, 20, 30, 60 };
+
+    internal Settings Settings => Settings.Default;
 
     public string? Extend
     {
@@ -118,7 +123,7 @@ public partial class MainWindow
             if (Keyboard.Modifiers != (ModifierKeys.Shift | ModifierKeys.Control))
             {
                 var placement = _windowHandle.GetWindowPlacement();
-                placement.NormalPosition.DeserializeFrom(Settings.Default.WindowPlacement);
+                placement.NormalPosition.DeserializeFrom(Settings.WindowPlacement);
                 _windowHandle.SetWindowPlacement(ref placement);
             }
 
@@ -145,7 +150,9 @@ public partial class MainWindow
         InfoArea.Visibility = Visibility.Collapsed;
         RenderTarget.Visibility = Visibility.Visible;
 
-        _recordingWindow = new RecordingWindow(RenderTarget);
+        ValidateSettings();
+
+        _recordingWindow = new RecordingWindow(RenderTarget, Settings.DrawShadowCursor, Settings.FramesPerSecond);
 
         _recordingWindow.SourceInitialized += (_, _) =>
         {
@@ -170,6 +177,11 @@ public partial class MainWindow
         this.BeginInvoke(DispatcherPriority.Background, SendToBack);
     }
 
+    private void ValidateSettings()
+    {
+        Settings.FramesPerSecond = FramesPerSecondSource.Contains(Settings.FramesPerSecond) ? Settings.FramesPerSecond : 15;
+    }
+
     protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
@@ -183,7 +195,6 @@ public partial class MainWindow
             && e.Property != ActualHeightProperty)
             return;
 
-
         UpdateSizeAndPos();
     }
 
@@ -191,8 +202,8 @@ public partial class MainWindow
     {
         base.OnClosing(e);
 
-        Settings.Default.WindowPlacement = _windowHandle.GetWindowPlacement().NormalPosition.Serialize();
-        Settings.Default.Save();
+        Settings.WindowPlacement = _windowHandle.GetWindowPlacement().NormalPosition.Serialize();
+        Settings.Save();
     }
 
     private void UpdateSizeAndPos()

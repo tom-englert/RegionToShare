@@ -1,14 +1,15 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using TomsToolbox.Essentials;
 using TomsToolbox.Wpf;
 using static RegionToShare.NativeMethods;
-using ButtonBase = System.Windows.Controls.Primitives.ButtonBase;
 using Image = System.Windows.Controls.Image;
+using Size = System.Drawing.Size;
 
 namespace RegionToShare;
 
@@ -17,23 +18,25 @@ namespace RegionToShare;
 /// </summary>
 public partial class RecordingWindow
 {
-    public static readonly Thickness BorderSize = new(4, 16, 4, 4);
+    public static readonly Thickness BorderSize = new(4);
 
     private readonly HighResolutionTimer _timer;
     private readonly MainWindow _mainWindow;
     private readonly Image _renderTarget;
+    private readonly bool _drawShadowCursor;
     private HwndTarget? _compositionTarget;
 
-    private RECT _nativeWindowRect;
+    private RECT _nativeMainWindowRect;
     private int _timerMutex;
     private IntPtr _windowHandle;
 
-    public RecordingWindow(Image renderTarget, int framesPerSecond = 15)
+    public RecordingWindow(Image renderTarget, bool drawShadowCursor = false, int framesPerSecond = 15)
     {
         InitializeComponent();
 
         _mainWindow = (MainWindow)GetWindow(renderTarget)!;
         _renderTarget = renderTarget;
+        _drawShadowCursor = drawShadowCursor;
 
         _timer = new HighResolutionTimer(Timer_Tick, TimeSpan.FromSeconds(1.0 / framesPerSecond));
         _timer.Start();
@@ -72,7 +75,7 @@ public partial class RecordingWindow
         {
             if (_windowHandle == IntPtr.Zero)
                 return;
-            
+
             SetWindowPos(_windowHandle, IntPtr.Zero, value.Left, value.Top, value.Width, value.Height, SWP_NOACTIVATE | SWP_NOZORDER);
         }
     }
@@ -115,7 +118,7 @@ public partial class RecordingWindow
         if (!IsLoaded)
             return;
 
-        _mainWindow.NativeWindowRect = _nativeWindowRect = NativeWindowRect - NativeBorderSize;
+        _mainWindow.NativeWindowRect = _nativeMainWindowRect = NativeWindowRect - NativeBorderSize;
     }
 
     private IntPtr WindowProc(IntPtr windowHandle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -207,12 +210,18 @@ public partial class RecordingWindow
     {
         try
         {
-            var nativeRect = _nativeWindowRect;
+            var nativeRect = _nativeMainWindowRect;
 
-            using var bitmap = new Bitmap(nativeRect.Width, nativeRect.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using var bitmap = new Bitmap(nativeRect.Width, nativeRect.Height, PixelFormat.Format32bppArgb);
             using var graphics = Graphics.FromImage(bitmap);
 
-            graphics.CopyFromScreen(nativeRect.Left, nativeRect.Top, 0, 0, new System.Drawing.Size(nativeRect.Width, nativeRect.Height));
+            graphics.CopyFromScreen(nativeRect.Left, nativeRect.Top, 0, 0, new Size(nativeRect.Width, nativeRect.Height));
+
+            if (_drawShadowCursor)
+            {
+                graphics.DrawCursor(nativeRect);
+            }
+
             var bitmapHandle = bitmap.GetHbitmap();
             var imageSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
