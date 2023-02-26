@@ -58,5 +58,17 @@ namespace RegionToShare.Properties {
                 this["DrawShadowCursor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SteelBlue")]
+        public string ThemeColor {
+            get {
+                return ((string)(this["ThemeColor"]));
+            }
+            set {
+                this["ThemeColor"] = value;
+            }
+        }
     }
 }

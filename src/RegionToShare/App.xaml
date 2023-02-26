@@ -4,11 +4,6 @@
              ShutdownMode="OnMainWindowClose"
              StartupUri="MainWindow.xaml">
   <Application.Resources>
-    <LinearGradientBrush x:Key="HatchBrush" StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute">
-      <GradientStop Offset="0" Color="Green" />
-      <GradientStop Offset="0.25" Color="Green" />
-      <GradientStop Offset="0.25" Color="Transparent" />
-      <GradientStop Offset="1" Color="Transparent" />
-    </LinearGradientBrush>
+    <Color x:Key="ThemeColor">SteelBlue</Color>
   </Application.Resources>
 </Application>

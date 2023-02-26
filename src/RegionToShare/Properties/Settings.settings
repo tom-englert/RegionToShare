@@ -11,5 +11,8 @@
     <Setting Name="DrawShadowCursor" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="ThemeColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SteelBlue</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

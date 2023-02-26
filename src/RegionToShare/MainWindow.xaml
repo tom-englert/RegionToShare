@@ -16,9 +16,9 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkDarkBrushKey}" Color="#9E9E9E" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#F1F1F1" />
     <SolidColorBrush x:Key="{x:Static SystemColors.GrayTextBrushKey}" Color="#999999" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Green" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource ThemeColor}" />
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.HotTrackBrushKey}" Color="Green" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.HotTrackBrushKey}" Color="{DynamicResource ThemeColor}" />
     <SolidColorBrush x:Key="{x:Static SystemColors.InfoTextBrushKey}" Color="#F1F1F1" />
     <SolidColorBrush x:Key="{x:Static SystemColors.InfoBrushKey}" Color="#252526" />
     <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}" Color="#1B1B1C" />
@@ -27,27 +27,41 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#333337" />
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#F1F1F1" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ActiveCaptionBrushKey}" Color="#2D2D30" />
-    <SolidColorBrush x:Key="{x:Static SystemColors.ActiveBorderBrushKey}" Color="Green" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.ActiveBorderBrushKey}" Color="{DynamicResource ThemeColor}" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ActiveCaptionTextBrushKey}" Color="#F1F1F1" />
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveCaptionBrushKey}" Color="#2D2D30" />
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveBorderBrushKey}" Color="#434346" />
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveCaptionTextBrushKey}" Color="#808080" />
     <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.BorderBrush}" Color="#3F3F46" />
-    <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.AccentDarkBrush}" Color="Green" />
+    <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.AccentDarkBrush}" Color="{DynamicResource ThemeColor}" />
     <SolidColorBrush x:Key="{x:Static styles:ResourceKeys.DisabledBrush}" Color="#2D2D30" />
+    <LinearGradientBrush x:Key="HatchBrush" StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute" Opacity=".4">
+      <GradientStop Offset="0" Color="{DynamicResource ThemeColor}" />
+      <GradientStop Offset="0.2" Color="{DynamicResource ThemeColor}" />
+      <GradientStop Offset="0.2" Color="Transparent" />
+      <GradientStop Offset="1" Color="Transparent" />
+    </LinearGradientBrush>
   </Window.Resources>
   <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
     <Grid x:Name="InfoArea" Background="{StaticResource HatchBrush}">
       <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal">
+        <StackPanel.Resources>
+          <Style TargetType="Decorator" x:Key="Padding">
+            <Setter Property="Width" Value="10" />
+          </Style>
+        </StackPanel.Resources>
         <ComboBox Text="{Binding Extend}"
                   ItemsSource="{Binding Resolutions}"
                   Width="90" IsEditable="True" />
-        <Decorator Height="5" Width="10"/>
+        <Decorator Style="{StaticResource Padding}"/>
+        <TextBox Text="{Binding ThemeColor, Source={x:Static properties:Settings.Default}, UpdateSourceTrigger=PropertyChanged}"
+                 Width="90" />
+        <Decorator Style="{StaticResource Padding}"/>
         <ComboBox SelectedItem="{Binding FramesPerSecond, Source={x:Static properties:Settings.Default}}"
                   ItemStringFormat="{}{0} FPS"
                   ItemsSource="{Binding FramesPerSecondSource}"
                   Width="65" />
-        <Decorator Height="5" Width="10"/>
+        <Decorator Style="{StaticResource Padding}"/>
         <CheckBox Content="Draw shadow cursor"
                   VerticalAlignment="Center"
                   IsChecked="{Binding DrawShadowCursor, Source={x:Static properties:Settings.Default}}" />

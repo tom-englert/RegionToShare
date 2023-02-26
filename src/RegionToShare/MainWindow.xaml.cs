@@ -29,6 +29,8 @@ public partial class MainWindow
         Resolutions = LoadResolutions();
         Resources.RegisterDefaultStyles();
         ValidateSettings();
+        SetThemeColor();
+        Settings.PropertyChanged += Settings_PropertyChanged;
     }
 
     public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -180,6 +182,34 @@ public partial class MainWindow
     private void ValidateSettings()
     {
         Settings.FramesPerSecond = FramesPerSecondSource.Contains(Settings.FramesPerSecond) ? Settings.FramesPerSecond : 15;
+        try
+        {
+            ColorConverter.ConvertFromString(Settings.ThemeColor);
+        }
+        catch
+        {
+            Settings.ThemeColor = nameof(Colors.SteelBlue);
+        }
+    }
+
+    private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Settings.ThemeColor))
+        {
+            SetThemeColor();
+        }
+    }
+
+    private void SetThemeColor()
+    {
+        try
+        {
+            Application.Current.Resources["ThemeColor"] = ColorConverter.ConvertFromString(Settings.ThemeColor);
+        }
+        catch
+        {
+            // Invalid color, ignore.
+        }
     }
 
     protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
