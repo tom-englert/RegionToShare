@@ -148,17 +148,45 @@ public partial class MainWindow
 
             UpdateSizeAndPos();
 
-            this.BeginInvoke(BringToFront);
+            if (Settings.StartActivated)
+            {
+                SetActive();
+            }
+            else
+            {
+                this.BeginInvoke(BringToFront);
+            }
         };
 
         separationLayerWindow.Show();
     }
 
-    private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void SetActive()
     {
-        _debugOffset = Keyboard.Modifiers == (ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift)
-            ? new(300, 200)
-            : new();
+        OnMouseLeftButtonDown();
+
+        var timer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, Dispatcher.CurrentDispatcher);
+
+        void TimerTick(object sender, EventArgs e)
+        {
+            SendToBack();
+            timer.Stop();
+        }
+
+        timer.Interval = TimeSpan.FromSeconds(1);
+        timer.Tick += TimerTick;
+        timer.Start();
+    }
+
+    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    {
+        base.OnMouseLeftButtonDown(e);
+        OnMouseLeftButtonDown();
+    }
+
+    private void OnMouseLeftButtonDown()
+    {
+        _debugOffset = Keyboard.Modifiers == (ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift) ? new POINT(300, 200) : new POINT();
 
         if (_recordingWindow != null)
             return;

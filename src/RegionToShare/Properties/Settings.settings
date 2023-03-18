@@ -14,5 +14,8 @@
     <Setting Name="ThemeColor" Type="System.String" Scope="User">
       <Value Profile="(Default)">SteelBlue</Value>
     </Setting>
+    <Setting Name="StartActivated" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

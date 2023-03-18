@@ -70,5 +70,17 @@ namespace RegionToShare.Properties {
                 this["ThemeColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool StartActivated {
+            get {
+                return ((bool)(this["StartActivated"]));
+            }
+            set {
+                this["StartActivated"] = value;
+            }
+        }
     }
 }

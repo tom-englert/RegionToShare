@@ -6,8 +6,7 @@
         Title="Region to Share"
         Height="1080" Width="1920"
         MinHeight="200" MinWidth="300"
-        Background="Black" Foreground="White"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Background="Black" Foreground="White">
   <Window.Resources>
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightLightBrushKey}" Color="#333337" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}" Color="#464646" />
@@ -59,6 +58,10 @@
         <CheckBox Content="Draw shadow cursor"
                   VerticalAlignment="Center"
                   IsChecked="{Binding DrawShadowCursor, Source={x:Static properties:Settings.Default}}" />
+        <Decorator Style="{StaticResource Padding}"/>
+        <CheckBox Content="Start activated"
+                  VerticalAlignment="Center"
+                  IsChecked="{Binding StartActivated, Source={x:Static properties:Settings.Default}}" />
       </StackPanel>
       <TextBlock Text="{Binding Version}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,2" />
       <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
