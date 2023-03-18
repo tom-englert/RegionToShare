@@ -1,3 +1,6 @@
+1.5
+- Allow to start in activated mode
+
 1.4
 - Fix #44: Theme color is configurable, backgound image is less distracting
 - Fix #46: Close button is now partially visible when maximized
