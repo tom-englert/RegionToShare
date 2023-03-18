@@ -169,7 +169,10 @@ public partial class MainWindow
 
         void TimerTick(object sender, EventArgs e)
         {
-            SendToBack();
+            if (_recordingWindow != null)
+            {
+                SendToBack();
+            }
             timer.Stop();
         }
 
