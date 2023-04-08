@@ -1,3 +1,6 @@
+1.6
+- Increase version to fix broken appstore upload
+
 1.5
 - Allow to start in activated mode
 
