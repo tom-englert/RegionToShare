@@ -24,23 +24,32 @@ public partial class RecordingWindow
     private readonly MainWindow _mainWindow;
     private readonly Image _renderTarget;
     private readonly bool _drawShadowCursor;
+    private readonly POINT _debugOffset;
     private HwndTarget? _compositionTarget;
 
     private RECT _nativeMainWindowRect;
     private int _timerMutex;
     private IntPtr _windowHandle;
 
-    public RecordingWindow(Image renderTarget, bool drawShadowCursor = false, int framesPerSecond = 15)
+    public RecordingWindow(Image renderTarget, bool drawShadowCursor, int framesPerSecond, POINT debugOffset)
     {
         InitializeComponent();
 
         _mainWindow = (MainWindow)GetWindow(renderTarget)!;
         _renderTarget = renderTarget;
         _drawShadowCursor = drawShadowCursor;
+        _debugOffset = debugOffset;
 
         _timer = new HighResolutionTimer(Timer_Tick, TimeSpan.FromSeconds(1.0 / framesPerSecond));
         _timer.Start();
     }
+
+    public void UpdateSizeAndPos(RECT mainWindowRect)
+    {
+        _nativeMainWindowRect = mainWindowRect;
+        NativeWindowRect = _nativeMainWindowRect + NativeBorderSize;
+    }
+
 
     protected override void OnSourceInitialized(EventArgs e)
     {
@@ -210,7 +219,7 @@ public partial class RecordingWindow
     {
         try
         {
-            var nativeRect = _nativeMainWindowRect;
+            var nativeRect = _nativeMainWindowRect - _debugOffset;
 
             using var bitmap = new Bitmap(nativeRect.Width, nativeRect.Height, PixelFormat.Format32bppArgb);
             using var graphics = Graphics.FromImage(bitmap);

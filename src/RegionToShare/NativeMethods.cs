@@ -9,7 +9,7 @@ using Size = System.Windows.Size;
 
 namespace RegionToShare;
 
-internal static class NativeMethods
+public static class NativeMethods
 {
     public static readonly IntPtr HWND_TOP = new(0);
     public static readonly IntPtr HWND_BOTTOM = new(1);
@@ -78,6 +78,28 @@ internal static class NativeMethods
                 Top = rect.Top + (int)borderSize.Top,
                 Right = rect.Right - (int)borderSize.Right,
                 Bottom = rect.Bottom - (int)borderSize.Bottom
+            };
+        }
+
+        public static RECT operator +(RECT rect, POINT offset)
+        {
+            return new RECT
+            {
+                Left = rect.Left + offset.X,
+                Top = rect.Top += offset.Y,
+                Right = rect.Right + offset.X,
+                Bottom = rect.Bottom + offset.Y
+            };
+        }
+
+        public static RECT operator -(RECT rect, POINT offset)
+        {
+            return new RECT
+            {
+                Left = rect.Left - offset.X,
+                Top = rect.Top -= offset.Y,
+                Right = rect.Right - offset.X,
+                Bottom = rect.Bottom - offset.Y
             };
         }
 
@@ -167,6 +189,22 @@ internal static class NativeMethods
             return new SIZE((int)Math.Round(p.Width), (int)Math.Round(p.Height));
         }
 
+        public static SIZE operator +(SIZE size, Thickness thickness)
+        {
+            return new SIZE(
+                size.Width + (int)(thickness.Left + thickness.Right),
+                size.Height + (int)(thickness.Top + thickness.Bottom)
+            );
+        }
+
+        public static SIZE operator -(SIZE size, Thickness thickness)
+        {
+            return new SIZE(
+                size.Width - (int)(thickness.Left + thickness.Right),
+                size.Height - (int)(thickness.Top + thickness.Bottom)
+            );
+        }
+
         public override string ToString()
         {
             return ((Size)this).ToString();
@@ -229,7 +267,7 @@ internal static class NativeMethods
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    internal struct WINDOWPLACEMENT
+    public struct WINDOWPLACEMENT
     {
         public int Length;
 
@@ -270,4 +308,27 @@ internal static class NativeMethods
 
     [DllImport("user32.dll")]
     public static extern bool GetCursorInfo(ref CURSORINFO pci);
+
+    private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
+
+    [DllImport("dwmapi.dll", EntryPoint = "DwmGetWindowAttribute")]
+    private static extern int DwmGetWindowAttributeRect(IntPtr hWnd, int dwAttribute, ref RECT pvAttribute, int cbAttribute);
+
+    public static Thickness DwmGetExtendedFrameBounds(IntPtr hWnd)
+    {
+        GetWindowRect(hWnd, out var windowRect);
+        RECT frameRect = new();
+
+        if (0 != DwmGetWindowAttributeRect(hWnd, DWMWA_EXTENDED_FRAME_BOUNDS, ref frameRect, Marshal.SizeOf<RECT>()))
+            return new Thickness();
+        
+        var bounds = new Thickness(
+            frameRect.Left - windowRect.Left,
+            frameRect.Top - windowRect.Top,
+            windowRect.Right - frameRect.Right,
+            windowRect.Bottom - frameRect.Bottom
+        );
+
+        return bounds;
+    }
 }

@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TomsToolbox.Wpf.Styles" Version="2.8.1" PrivateAssets="all" />
+    <PackageReference Include="TomsToolbox.Wpf.Styles" Version="2.8.10" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

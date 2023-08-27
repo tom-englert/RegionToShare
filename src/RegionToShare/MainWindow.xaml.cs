@@ -48,10 +48,10 @@ public partial class MainWindow
         get => (string?)GetValue(ExtendProperty);
         set => SetValue(ExtendProperty, value);
     }
-    public static readonly DependencyProperty ExtendProperty = DependencyProperty.Register("Extend", typeof(string),
+    public static readonly DependencyProperty ExtendProperty = DependencyProperty.Register(nameof(Extend), typeof(string),
         typeof(MainWindow),
         new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-            (d, args) => ((MainWindow)d).OnExtendChanged((string)args.NewValue)));
+            (d, args) => ((MainWindow)d).OnExtendChanged(args.NewValue as string)));
 
     public Brush BackgroundPattern
     {
@@ -59,15 +59,18 @@ public partial class MainWindow
         set => SetValue(BackgroundPatternProperty, value);
     }
     public static readonly DependencyProperty BackgroundPatternProperty = DependencyProperty.Register(
-        "BackgroundPattern", typeof(Brush), typeof(MainWindow), new PropertyMetadata(default(Brush)));
+        nameof(BackgroundPattern), typeof(Brush), typeof(MainWindow), new PropertyMetadata(default(Brush)));
 
-    private void OnExtendChanged(string newValue)
+    private void OnExtendChanged(string? newValue)
     {
-        if (TryParseSize(newValue, out var size))
-        {
-            SetWindowPos(_windowHandle, IntPtr.Zero, 0, 0, size.Width, size.Height, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
-        }
+        if (newValue is null || !TryParseSize(newValue, out var size))
+            return;
+
+        size += GlassFrameThickness;
+        SetWindowPos(_windowHandle, IntPtr.Zero, 0, 0, size.Width, size.Height, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
     }
+
+    internal Thickness GlassFrameThickness => DwmGetExtendedFrameBounds(_windowHandle);
 
     internal RECT NativeWindowRect
     {
@@ -132,30 +135,33 @@ public partial class MainWindow
             Height = 10
         };
 
+        separationLayerWindow.MouseDown += SubLayer_MouseDown;
         BindingOperations.SetBinding(separationLayerWindow, BackgroundProperty, new Binding(nameof(BackgroundPattern)) { Source = this });
 
         separationLayerWindow.SourceInitialized += (_, _) =>
         {
-            if (Keyboard.Modifiers != (ModifierKeys.Shift | ModifierKeys.Control))
-            {
-                var placement = _windowHandle.GetWindowPlacement();
-                placement.NormalPosition.DeserializeFrom(Settings.WindowPlacement);
-                _windowHandle.SetWindowPlacement(ref placement);
-            }
-
             _separationLayerHandle = separationLayerWindow.GetWindowHandle();
-            separationLayerWindow.MouseDown += SubLayer_MouseDown;
 
-            UpdateSizeAndPos();
+            this.BeginInvoke(DispatcherPriority.ApplicationIdle, () =>
+            {
+                if (Keyboard.Modifiers != (ModifierKeys.Alt | ModifierKeys.Control))
+                {
+                    var placement = _windowHandle.GetWindowPlacement();
+                    placement.NormalPosition.DeserializeFrom(Settings.WindowPlacement);
+                    _windowHandle.SetWindowPlacement(ref placement);
+                }
 
-            if (Settings.StartActivated)
-            {
-                SetActive();
-            }
-            else
-            {
-                this.BeginInvoke(BringToFront);
-            }
+                UpdateSizeAndPos();
+
+                if (Settings.StartActivated)
+                {
+                    SetActive();
+                }
+                else
+                {
+                    this.BeginInvoke(BringToFront);
+                }
+            });
         };
 
         separationLayerWindow.Show();
@@ -189,7 +195,7 @@ public partial class MainWindow
 
     private void OnMouseLeftButtonDown()
     {
-        _debugOffset = Keyboard.Modifiers == (ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift) ? new POINT(300, 200) : new POINT();
+        _debugOffset = Keyboard.Modifiers == (ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift) ? new POINT(600, 300) : new POINT();
 
         if (_recordingWindow != null)
             return;
@@ -199,7 +205,9 @@ public partial class MainWindow
 
         ValidateSettings();
 
-        _recordingWindow = new RecordingWindow(RenderTarget, Settings.DrawShadowCursor, Settings.FramesPerSecond);
+        _recordingWindow = new RecordingWindow(RenderTarget, Settings.DrawShadowCursor, Settings.FramesPerSecond, _debugOffset);
+
+        NativeWindowRect -= GlassFrameThickness;
 
         _recordingWindow.SourceInitialized += (_, _) =>
         {
@@ -215,6 +223,8 @@ public partial class MainWindow
             ResizeMode = ResizeMode.CanResize;
 
             _recordingWindow = null;
+
+            NativeWindowRect += GlassFrameThickness;
 
             BringToFront();
         };
@@ -285,8 +295,9 @@ public partial class MainWindow
 
     private void UpdateSizeAndPos()
     {
-        var rect = NativeWindowRect;
+        _recordingWindow?.UpdateSizeAndPos(NativeWindowRect);
 
+        var rect = NativeWindowRect - GlassFrameThickness;
         Extend = rect.Width + "x" + rect.Height;
 
         SetSeparationLayerPos(SWP_NOACTIVATE | SWP_NOZORDER);
@@ -314,9 +325,9 @@ public partial class MainWindow
         if (_separationLayerHandle == IntPtr.Zero)
             return;
 
-        var rect = NativeWindowRect;
+        var rect = NativeWindowRect - _debugOffset;
 
-        SetWindowPos(_separationLayerHandle, HWND_BOTTOM, rect.Left - _debugOffset.X, rect.Top - _debugOffset.Y, rect.Width, rect.Height, flags);
+        SetWindowPos(_separationLayerHandle, HWND_BOTTOM, rect.Left, rect.Top, rect.Width, rect.Height, flags);
     }
 
     private bool TryParseSize(string value, out SIZE size)
