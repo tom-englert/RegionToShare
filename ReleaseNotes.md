@@ -1,3 +1,6 @@
+1.7
+- Fix #62: adjust window by the glass frame size to work better with FancyZones
+
 1.6
 - Increase version to fix broken appstore upload
 
