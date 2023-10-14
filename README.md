@@ -3,12 +3,14 @@
 A Windows helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc.
 
 ## How it works
-This tool simply mirrors the content of a screen region into a hidden window. In your meeting app you then can just share the content of this hidden window. 
+
+This tool simply mirrors the content of a screen region into a hidden window. In your meeting app you then can just share the content of this hidden window.
 
 **Region to Share is not aware of your meeting app nor what the meeting app is doing with the content of the window.** 
 It's up to your meeting app whether it properly shares this hidden windows content or not - if it's not working as expected, there is nothing Region to Share can do about this.
 
 ## Prerequisites
+
 - Windows 10 or 11
 - DotNet 4.6.2 or newer
 
@@ -18,6 +20,14 @@ It's up to your meeting app whether it properly shares this hidden windows conte
   or pick the latest binariers from the [release page](https://github.com/tom-englert/RegionToShare/releases) 
 
 ## Usage
+
+### Tutorial
+
+Watch this great tutorial by @jamesmontemagno
+
+[![Watch the tutorial](https://img.youtube.com/vi/4WVY-mFPFNI/hqdefault.jpg)](https://www.youtube.com/embed/4WVY-mFPFNI)
+
+### Quick Start
 
 - Start the "RegionToShare" app.
 - Move the window to the region you want to share.
@@ -32,4 +42,5 @@ It's up to your meeting app whether it properly shares this hidden windows conte
 ![ShowRegion](./src/Assets/ShowRegion.gif)
 
 ## Feedback 😄
+
 If you like this tool, don't forget to ⭐ it. 
