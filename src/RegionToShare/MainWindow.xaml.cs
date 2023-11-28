@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using RegionToShare.Properties;
+using Throttle;
 using TomsToolbox.Wpf;
 using TomsToolbox.Wpf.Styles;
 using static RegionToShare.NativeMethods;
@@ -48,8 +49,7 @@ public partial class MainWindow
         get => (string?)GetValue(ExtendProperty);
         set => SetValue(ExtendProperty, value);
     }
-    public static readonly DependencyProperty ExtendProperty = DependencyProperty.Register(nameof(Extend), typeof(string),
-        typeof(MainWindow),
+    public static readonly DependencyProperty ExtendProperty = DependencyProperty.Register(nameof(Extend), typeof(string), typeof(MainWindow),
         new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
             (d, args) => ((MainWindow)d).OnExtendChanged(args.NewValue as string)));
 
@@ -279,7 +279,8 @@ public partial class MainWindow
         if (e.Property != LeftProperty
             && e.Property != TopProperty
             && e.Property != ActualWidthProperty
-            && e.Property != ActualHeightProperty)
+            && e.Property != ActualHeightProperty
+            && e.Property != WindowStateProperty)
             return;
 
         UpdateSizeAndPos();
@@ -293,8 +294,12 @@ public partial class MainWindow
         Settings.Save();
     }
 
+    [Throttled(typeof(DispatcherThrottle), (int)DispatcherPriority.Normal)]
     private void UpdateSizeAndPos()
     {
+        if (WindowState == WindowState.Minimized)
+            return;
+
         _recordingWindow?.UpdateSizeAndPos(NativeWindowRect);
 
         var rect = NativeWindowRect - GlassFrameThickness;
