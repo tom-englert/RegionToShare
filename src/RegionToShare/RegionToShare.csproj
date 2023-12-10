@@ -16,6 +16,7 @@
     <Product>Tom's Toolbox</Product>
     <Copyright>Copyright (c) tom-englert.de and Contributors.</Copyright>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <IsDeploymentTarget>true</IsDeploymentTarget>
   </PropertyGroup>
 
   <ItemGroup>
