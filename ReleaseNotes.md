@@ -1,3 +1,6 @@
+1.8
+- Fix: Resolution not updated after restore from minimized state.
+
 1.7
 - Fix #62: adjust window by the glass frame size to work better with FancyZones
 
