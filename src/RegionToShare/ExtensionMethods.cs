@@ -49,23 +49,26 @@ namespace RegionToShare
             return $"{rect.Left}\t{rect.Top}\t{rect.Right}\t{rect.Bottom}";
         }
 
-        public static void DeserializeFrom(this ref RECT rect, string value)
+        public static bool DeserializeFrom(this ref RECT rect, string value)
         {
             try
             {
                 var parts = value.Split('\t').Select(int.Parse).ToArray();
                 if (parts.Length != 4)
-                    return;
+                    return false;
 
                 rect.Left = parts[0];
                 rect.Top = parts[1];
                 rect.Right = Math.Max(rect.Left + 200, parts[2]);
                 rect.Bottom = Math.Max(rect.Top + 200, parts[3]);
+                return true;
             }
             catch
             {
                 // invalid, just go with input;
             }
+
+            return false;
         }
 
         public static void DrawCursor(this Graphics graphics, RECT nativeRect)

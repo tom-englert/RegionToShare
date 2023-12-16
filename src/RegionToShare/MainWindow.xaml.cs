@@ -147,8 +147,11 @@ public partial class MainWindow
                 if (Keyboard.Modifiers != (ModifierKeys.Alt | ModifierKeys.Control))
                 {
                     var placement = _windowHandle.GetWindowPlacement();
-                    placement.NormalPosition.DeserializeFrom(Settings.WindowPlacement);
-                    _windowHandle.SetWindowPlacement(ref placement);
+                    if (placement.NormalPosition.DeserializeFrom(Settings.WindowPlacement))
+                    {
+                        placement.NormalPosition += GlassFrameThickness;
+                        _windowHandle.SetWindowPlacement(ref placement);
+                    }
                 }
 
                 UpdateSizeAndPos();
@@ -290,7 +293,8 @@ public partial class MainWindow
     {
         base.OnClosing(e);
 
-        Settings.WindowPlacement = _windowHandle.GetWindowPlacement().NormalPosition.Serialize();
+        var normalPosition = _windowHandle.GetWindowPlacement().NormalPosition - GlassFrameThickness;
+        Settings.WindowPlacement = normalPosition.Serialize();
         Settings.Save();
     }
 
