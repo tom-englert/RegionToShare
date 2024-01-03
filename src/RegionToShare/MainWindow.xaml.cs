@@ -151,6 +151,8 @@ public partial class MainWindow
                     {
                         placement.NormalPosition += GlassFrameThickness;
                         _windowHandle.SetWindowPlacement(ref placement);
+                        // need to set it twice, if the first call has moved the window to another screen with a different dpi, the size might be incorrect.
+                        _windowHandle.SetWindowPlacement(ref placement);
                     }
                 }
 

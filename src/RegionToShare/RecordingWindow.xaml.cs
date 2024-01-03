@@ -112,7 +112,7 @@ public partial class RecordingWindow
             && e.Property != ActualHeightProperty)
             return;
 
-        OnSizeOrPositionChanged();
+        this.BeginInvoke(DispatcherPriority.Background, OnSizeOrPositionChanged);
     }
 
     protected override void OnClosed(EventArgs e)
