@@ -1,3 +1,9 @@
+1.10
+- Fix #60: Issues when restoring the window position on the secondary screen with different DPI settings
+
+1.9
+- Fix #69: restore windows position is not always correct, since glass frame thickness is not constant.
+ 
 1.8
 - Fix: Resolution not updated after restore from minimized state.
 
