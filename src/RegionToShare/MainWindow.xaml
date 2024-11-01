@@ -4,7 +4,7 @@
         xmlns:styles="urn:TomsToolbox.Wpf.Styles"
         xmlns:properties="clr-namespace:RegionToShare.Properties"
         Title="Region to Share"
-        Height="1080" Width="1920"
+        Height="782" Width="1024"
         MinHeight="200" MinWidth="300"
         Background="Black" Foreground="White">
   <Window.Resources>
@@ -52,7 +52,7 @@
         <Decorator Style="{StaticResource Padding}"/>
         <ComboBox SelectedItem="{Binding FramesPerSecond, Source={x:Static properties:Settings.Default}}"
                   ItemStringFormat="{}{0} FPS"
-                  ItemsSource="{Binding FramesPerSecondSource}"
+                  ItemsSource="{Binding SupportedFramesPerSecond}"
                   Width="65" />
         <Decorator Style="{StaticResource Padding}"/>
         <CheckBox Content="Draw shadow cursor"

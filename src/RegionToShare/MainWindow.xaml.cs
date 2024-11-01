@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -9,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using RegionToShare.Properties;
 using Throttle;
+using TomsToolbox.Essentials;
 using TomsToolbox.Wpf;
 using TomsToolbox.Wpf.Styles;
 using static RegionToShare.NativeMethods;
@@ -28,10 +30,10 @@ public partial class MainWindow
     public MainWindow()
     {
         InitializeComponent();
+
         DataContext = this;
         Resolutions = LoadResolutions();
         Resources.RegisterDefaultStyles();
-        ValidateSettings();
         SetThemeColor();
         Settings.PropertyChanged += Settings_PropertyChanged;
     }
@@ -40,7 +42,7 @@ public partial class MainWindow
 
     public ICollection<string> Resolutions { get; }
 
-    public ICollection<int> FramesPerSecondSource { get; } = new[] { 5, 10, 15, 20, 30, 60 };
+    public static ICollection<int> SupportedFramesPerSecond { get; } = new[] { 5, 10, 15, 20, 30, 60 };
 
     internal Settings Settings => Settings.Default;
 
@@ -147,13 +149,13 @@ public partial class MainWindow
                 if (Keyboard.Modifiers != (ModifierKeys.Alt | ModifierKeys.Control))
                 {
                     var placement = _windowHandle.GetWindowPlacement();
-                    if (placement.NormalPosition.DeserializeFrom(Settings.WindowPlacement))
-                    {
-                        placement.NormalPosition += GlassFrameThickness;
-                        _windowHandle.SetWindowPlacement(ref placement);
-                        // need to set it twice, if the first call has moved the window to another screen with a different dpi, the size might be incorrect.
-                        _windowHandle.SetWindowPlacement(ref placement);
-                    }
+
+                    placement.NormalPosition.DeserializeFrom(Settings.WindowPlacement);
+
+                    placement.NormalPosition += GlassFrameThickness;
+                    _windowHandle.SetWindowPlacement(ref placement);
+                    // need to set it twice, if the first call has moved the window to another screen with a different dpi, the size might be incorrect.
+                    _windowHandle.SetWindowPlacement(ref placement);
                 }
 
                 UpdateSizeAndPos();
@@ -239,17 +241,37 @@ public partial class MainWindow
         this.BeginInvoke(DispatcherPriority.Background, SendToBack);
     }
 
-    private void ValidateSettings()
+    public static bool ValidateSettings()
     {
-        Settings.FramesPerSecond = FramesPerSecondSource.Contains(Settings.FramesPerSecond) ? Settings.FramesPerSecond : 15;
         try
         {
-            ColorConverter.ConvertFromString(Settings.ThemeColor);
+            var settings = Settings.Default;
+
+            settings.FramesPerSecond = SupportedFramesPerSecond.Contains(settings.FramesPerSecond) ? settings.FramesPerSecond : 15;
+
+            try
+            {
+                ColorConverter.ConvertFromString(settings.ThemeColor);
+            }
+            catch
+            {
+                settings.ThemeColor = nameof(Colors.SteelBlue);
+            }
+
+            return true;
         }
-        catch
+        catch (ConfigurationException ex)
         {
-            Settings.ThemeColor = nameof(Colors.SteelBlue);
+            var inner = ex.ExceptionChain().OfType<ConfigurationException>().FirstOrDefault(item => !item.Filename.IsNullOrEmpty());
+            if (inner == null)
+                throw;
+
+            var message = $"The settings file '{inner.Filename}' is corrupt. It will be reset to default values.";
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
+            File.Delete(inner.Filename);
         }
+
+        return false;
     }
 
     private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
