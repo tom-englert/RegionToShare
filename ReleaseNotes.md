@@ -1,3 +1,8 @@
+1.11
+- Fix #80: Support native ARM64, contributed by Stefan Forstenlechner <stefan@forstenlechner.dev>
+- Fix #79: Do not default to start activated
+- Fix #72: automatically recover from corrupt settings file.
+
 1.10
 - Fix #60: Issues when restoring the window position on the secondary screen with different DPI settings
 
