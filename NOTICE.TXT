@@ -2,46 +2,11 @@ This product bundles the following components under the described licenses:
 
 --------------------------------------------------------------------------------
 
-Microsoft.Xaml.Behaviors.Wpf
-
-Id:      Microsoft.Xaml.Behaviors.Wpf
-Version: 1.1.39
-Project: https://github.com/Microsoft/XamlBehaviorsWpf
-License: MIT
-
---------------------------------------------------------------------------------
-
-Tom's Toolbox Essentials Module
-
-Id:      TomsToolbox.Essentials
-Version: 2.10.0
-Project: https://github.com/tom-englert/TomsToolbox
-License: MIT
-
---------------------------------------------------------------------------------
-
-Tom's Toolbox ObservableCollections Module
-
-Id:      TomsToolbox.ObservableCollections
-Version: 2.10.0
-Project: https://github.com/tom-englert/TomsToolbox
-License: MIT
-
---------------------------------------------------------------------------------
-
-Tom's Toolbox WPF Module
-
-Id:      TomsToolbox.Wpf
-Version: 2.10.0
-Project: https://github.com/tom-englert/TomsToolbox
-License: MIT
-
---------------------------------------------------------------------------------
-
 Tom's Toolbox WPF Styles Module
 
-Id:      TomsToolbox.Wpf.Styles
-Version: 2.10.0
-Project: https://github.com/tom-englert/TomsToolbox
-License: MIT
+Id:        TomsToolbox.Wpf.Styles
+Version:   2.20.0
+Project:   https://github.com/tom-englert/TomsToolbox
+Copyright: © 2012-2024 tom-englert.de
+License:   MIT
 
