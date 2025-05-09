@@ -1,6 +1,5 @@
 # ![Icon](./src/Assets/32.png) Region to Share 
 [![Build Status](https://dev.azure.com/tom-englert/Open%20Source/_apis/build/status/tom-englert.RegionToShare?branchName=main)](https://dev.azure.com/tom-englert/Open%20Source/_build/latest?definitionId=48&branchName=main)  [![Sponsor](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/tom-englert)
-[<img src="https://api.gitsponsors.com/api/badge/img?id=435219615" height="20">](https://api.gitsponsors.com/api/badge/link?p=fQnA3Y6BvgVvbUoP1p4tr3iZwJsAXUwCAOZLAfaGhaAmob6HD0aYaYRG8+wnSEiXDFhLz8VC2oAVIJT9Xtcv/ZTagRG0SOFimKA37/sCk1S3nrkwi2IHTWq8uR9RQRgumLaF3vN4dWT9nxHLRyXVUQ==)
 
 A Windows helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc.
 
