@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>10.0</LangVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
@@ -12,9 +13,9 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Company>tom-englert.de</Company>
-    <Product>Tom's Toolbox</Product>
-    <Copyright>Copyright (c) tom-englert.de and Contributors.</Copyright>
+    <Company>RegionToShare</Company>
+    <Product>RegionToShare</Product>
+    <Copyright>Copyright (c) Craig Pinto and Contributors.</Copyright>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <IsDeploymentTarget>true</IsDeploymentTarget>
   </PropertyGroup>
@@ -30,8 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="WindowsFormsIntegration" />
+    <!-- UseWindowsForms implicitly adds these two global usings, which collide with the
+         WPF types of the same name (Binding, ButtonBase, MessageBox, Color, etc.) used
+         throughout this project. Every namespace this project actually needs is already
+         imported explicitly, so these implicit ones just cause ambiguity. -->
+    <Using Remove="System.Drawing" />
+    <Using Remove="System.Windows.Forms" />
   </ItemGroup>
 
   <ItemGroup>

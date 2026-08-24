@@ -1,5 +1,5 @@
 # ![Icon](./src/Assets/32.png) Region to Share 
-[![Build Status](https://dev.azure.com/tom-englert/Open%20Source/_apis/build/status/tom-englert.RegionToShare?branchName=main)](https://dev.azure.com/tom-englert/Open%20Source/_build/latest?definitionId=48&branchName=main)  [![Sponsor](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/tom-englert)
+[![Donate](https://img.shields.io/badge/-Donate-fafbfc?logo=PayPal)](https://paypal.me/PintoCraig)
 
 A Windows helper app to share only a part of a screen via video conference apps that only support either full screen or single window like e.g. Teams, WebEx, etc.
 
@@ -17,8 +17,7 @@ It's up to your meeting app whether it properly shares this hidden windows conte
 
 ## Installation
 
-- Download and install this app from the [Windows Store](https://www.microsoft.com/store/productId/9N4066W2R5Q4)
-  or pick the latest binaries from the [release page](https://github.com/tom-englert/RegionToShare/releases)
+- Pick the latest binaries from the [release page](https://github.com/PintoCraig/RegionToShare_v2/releases)
 
 ## Usage
 

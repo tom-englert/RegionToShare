@@ -1,1 +1,0 @@
-wingetcreate update TomEnglert.RegionToShare -v 1.11.6454 -i

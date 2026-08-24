@@ -15,6 +15,7 @@ using TomsToolbox.Wpf;
 using TomsToolbox.Wpf.Styles;
 using static RegionToShare.NativeMethods;
 using static RegionToShare.ExtensionMethods;
+using Brush = System.Windows.Media.Brush;
 
 namespace RegionToShare;
 
