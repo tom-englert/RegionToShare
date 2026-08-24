@@ -1,0 +1,92 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore src/RegionToShare/RegionToShare.csproj
+
+      - name: Build app
+        run: dotnet build src/RegionToShare/RegionToShare.csproj -c Release --no-restore
+
+      - name: Test
+        run: dotnet test src/RegionToShare.Tests/RegionToShare.Tests.csproj -c Release --logger "trx;LogFileName=test-results.trx" --results-directory TestResults
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/*.trx
+
+      - name: Publish self-contained single-file exe
+        run: >
+          dotnet publish src/RegionToShare/RegionToShare.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          -o publish/win-x64
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RegionToShare-win-x64
+          path: publish/win-x64/RegionToShare.exe
+
+  release:
+    needs: build-and-test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Determine version from tag
+        id: version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          if ($tag -match '^v(\d+\.\d+\.\d+.*)$') {
+            "version=$($matches[1])" >> $env:GITHUB_OUTPUT
+          } else {
+            throw "Tag '$tag' does not match the expected vX.Y.Z pattern"
+          }
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: RegionToShare-win-x64
+          path: publish
+
+      - name: Rename release asset
+        shell: pwsh
+        run: >
+          Rename-Item
+          -Path publish/RegionToShare.exe
+          -NewName "RegionToShare-${{ steps.version.outputs.version }}-win-x64.exe"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: RegionToShare ${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          files: publish/RegionToShare-${{ steps.version.outputs.version }}-win-x64.exe
