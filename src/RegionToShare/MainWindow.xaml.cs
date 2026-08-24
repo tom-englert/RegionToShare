@@ -247,13 +247,9 @@ public partial class MainWindow
         {
             var settings = Settings.Default;
 
-            settings.FramesPerSecond = SupportedFramesPerSecond.Contains(settings.FramesPerSecond) ? settings.FramesPerSecond : 15;
+            settings.FramesPerSecond = ClampFramesPerSecond(settings.FramesPerSecond);
 
-            try
-            {
-                ColorConverter.ConvertFromString(settings.ThemeColor);
-            }
-            catch
+            if (!IsValidThemeColor(settings.ThemeColor))
             {
                 settings.ThemeColor = nameof(Colors.SteelBlue);
             }
@@ -365,6 +361,11 @@ public partial class MainWindow
 
     private bool TryParseSize(string value, out SIZE size)
     {
+        return TryParseSize(value, MinWidth, MinHeight, out size);
+    }
+
+    internal static bool TryParseSize(string value, double minWidth, double minHeight, out SIZE size)
+    {
         size = Size.Empty;
 
         try
@@ -378,7 +379,25 @@ public partial class MainWindow
 
             size = new SIZE(width, height);
 
-            return size.Width >= MinWidth && size.Height >= MinHeight;
+            return size.Width >= minWidth && size.Height >= minHeight;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    internal static int ClampFramesPerSecond(int value)
+    {
+        return SupportedFramesPerSecond.Contains(value) ? value : 15;
+    }
+
+    internal static bool IsValidThemeColor(string? value)
+    {
+        try
+        {
+            ColorConverter.ConvertFromString(value);
+            return true;
         }
         catch
         {
