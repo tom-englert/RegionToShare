@@ -5,13 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RegionToShare" 
         xmlns:properties="clr-namespace:RegionToShare.Properties"
+        xmlns:toms="urn:TomsToolbox"
         mc:Ignorable="d"
         WindowStyle="None" Background="Transparent" 
         AllowsTransparency="True" Topmost="True"
         Title="Region to Share" Height="450" Width="800">
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </Window.Resources>
     <Grid>
     <Border BorderThickness="{x:Static local:RecordingWindow.BorderSize}">
       <Border.BorderBrush>
@@ -27,7 +25,7 @@
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Top" 
                 Click="Button_Click"
-                Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ShowCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ShowCloseButton, Converter={toms:BooleanToVisibilityConverter}}">
           <Path Width="12" Height="12" 
                 Data="M2,2 L10,10 M2,10 L10,2" 
                 Stroke="Black" 
