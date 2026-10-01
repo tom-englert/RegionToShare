@@ -62,6 +62,10 @@
         <CheckBox Content="Start activated"
                   VerticalAlignment="Center"
                   IsChecked="{Binding StartActivated, Source={x:Static properties:Settings.Default}}" />
+        <Decorator Style="{StaticResource Padding}"/>
+        <CheckBox Content="Show close button"
+                  VerticalAlignment="Center"
+                  IsChecked="{Binding ShowCloseButton, Source={x:Static properties:Settings.Default}}" />
       </StackPanel>
       <TextBlock Text="{Binding Version}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,2" />
       <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
