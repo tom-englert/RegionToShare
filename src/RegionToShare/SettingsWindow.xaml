@@ -1,8 +1,9 @@
-﻿<Window x:Class="RegionToShare.SettingsWindow"
+<Window x:Class="RegionToShare.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:RegionToShare"
         xmlns:properties="clr-namespace:RegionToShare.Properties"
+        xmlns:toms="urn:TomsToolbox"
         Title="{x:Static properties:Resources.Settings_Title}"
         Width="520" SizeToContent="Height"
         ResizeMode="NoResize" Topmost="True"
@@ -17,89 +18,77 @@
         <Setter Property="Margin" Value="0,0,0,10" />
         <Setter Property="Padding" Value="5" />
       </Style>
-      <Style TargetType="TextBlock" x:Key="Label">
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0,3,10,3" />
+      <Style TargetType="toms:SharedWidthHeaderedContentControl">
+        <Setter Property="Margin" Value="0,3" />
       </Style>
       <Style TargetType="TextBlock" x:Key="Hint">
         <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="Foreground" Value="#999999" />
-        <Setter Property="Margin" Value="0,2,0,3" />
+        <Setter Property="Foreground" Value="LightGray" />
+        <Setter Property="Margin" Value="0,3" />
       </Style>
     </StackPanel.Resources>
 
     <GroupBox Header="{x:Static properties:Resources.Settings_General}">
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+      <StackPanel Grid.IsSharedSizeScope="True">
+        <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_ThemeColor}">
+          <local:ColorBox VerticalAlignment="Center" HorizontalAlignment="Left" Color="{Binding ThemeColor}" />
+        </toms:SharedWidthHeaderedContentControl>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_ThemeColor}" />
-        <local:ColorBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Color="{Binding ThemeColor}" />
+        <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_FramesPerSecond}">
+          <ComboBox Width="80" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    SelectedItem="{Binding FramesPerSecond}"
+                    ItemStringFormat="{x:Static properties:Resources.FramesPerSecondFormat}"
+                    ItemsSource="{x:Static local:MainWindow.SupportedFramesPerSecond}" />
+        </toms:SharedWidthHeaderedContentControl>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_FramesPerSecond}" />
-        <ComboBox Grid.Row="1" Grid.Column="1" Width="80" HorizontalAlignment="Left" VerticalAlignment="Center"
-                  SelectedItem="{Binding FramesPerSecond}"
-                  ItemStringFormat="{x:Static properties:Resources.FramesPerSecondFormat}"
-                  ItemsSource="{x:Static local:MainWindow.SupportedFramesPerSecond}" />
+        <toms:SharedWidthHeaderedContentControl>
+          <CheckBox Content="{x:Static properties:Resources.Settings_DrawShadowCursor}"
+                    IsChecked="{Binding DrawShadowCursor}" />
+        </toms:SharedWidthHeaderedContentControl>
 
-        <CheckBox Grid.Row="2" Grid.Column="1" Margin="0,3"
-                  Content="{x:Static properties:Resources.Settings_DrawShadowCursor}"
-                  IsChecked="{Binding DrawShadowCursor}" />
+        <toms:SharedWidthHeaderedContentControl>
+          <CheckBox Content="{x:Static properties:Resources.Settings_StartActivated}"
+                    IsChecked="{Binding StartActivated}" />
+        </toms:SharedWidthHeaderedContentControl>
 
-        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,3"
-                  Content="{x:Static properties:Resources.Settings_StartActivated}"
-                  IsChecked="{Binding StartActivated}" />
+        <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_Language}">
+          <ComboBox Width="160" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    ItemsSource="{x:Static local:SettingsWindow.Languages}"
+                    DisplayMemberPath="Value" SelectedValuePath="Key"
+                    SelectedValue="{Binding Language}" />
+        </toms:SharedWidthHeaderedContentControl>
 
-        <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,3"
-                  Content="{x:Static properties:Resources.Settings_ShowWindowButtons}"
-                  IsChecked="{Binding ShowWindowButtons}" />
+        <toms:SharedWidthHeaderedContentControl>
+          <TextBlock Style="{StaticResource Hint}"
+                     Text="{x:Static properties:Resources.Settings_LanguageRestart}"
+                     Visibility="{Binding IsRestartRequired, RelativeSource={RelativeSource AncestorType=Window}, Converter={x:Static local:SettingsWindow.BooleanToVisibility}}" />
+        </toms:SharedWidthHeaderedContentControl>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_Language}" />
-        <ComboBox Grid.Row="4" Grid.Column="1" Width="160" HorizontalAlignment="Left" VerticalAlignment="Center"
-                  ItemsSource="{x:Static local:SettingsWindow.Languages}"
-                  DisplayMemberPath="Value" SelectedValuePath="Key"
-                  SelectedValue="{Binding Language}" />
-        <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource Hint}"
-                   Text="{x:Static properties:Resources.Settings_LanguageRestart}"
-                   Visibility="{Binding IsRestartRequired, RelativeSource={RelativeSource AncestorType=Window}, Converter={x:Static local:SettingsWindow.BooleanToVisibility}}" />
-      </Grid>
+        <toms:SharedWidthHeaderedContentControl>
+          <CheckBox Content="{x:Static properties:Resources.Settings_ShowWindowButtons}"
+                    IsChecked="{Binding ShowWindowButtons}" />
+        </toms:SharedWidthHeaderedContentControl>
+      </StackPanel>
     </GroupBox>
 
     <GroupBox Header="{x:Static properties:Resources.Settings_Hotkeys}">
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_FitWindowHotkey}" />
-        <local:HotkeyBox Grid.Row="0" Grid.Column="1" x:Name="FitWindowHotkeyBox" VerticalAlignment="Center"
-                         Hotkey="{Binding FitWindowHotkey}"
-                         NoneText="{x:Static properties:Resources.Hotkey_None}"
-                         GotKeyboardFocus="HotkeyBox_GotKeyboardFocus"
-                         LostKeyboardFocus="HotkeyBox_LostKeyboardFocus" />
-        <StackPanel Grid.Row="1" Grid.Column="1">
-          <TextBlock Style="{StaticResource Hint}" Foreground="#FF6060"
-                     Text="{x:Static properties:Resources.Settings_HotkeyInUse}"
-                     Visibility="{Binding IsFitWindowHotkeyInUse, RelativeSource={RelativeSource AncestorType=Window}, Converter={x:Static local:SettingsWindow.BooleanToVisibility}}" />
-          <TextBlock Style="{StaticResource Hint}" Text="{x:Static properties:Resources.Settings_HotkeyHint}" />
-        </StackPanel>
-      </Grid>
+      <StackPanel Grid.IsSharedSizeScope="True">
+        <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_FitWindowHotkey}">
+          <local:HotkeyBox x:Name="FitWindowHotkeyBox" VerticalAlignment="Center"
+                           Hotkey="{Binding FitWindowHotkey}"
+                           NoneText="{x:Static properties:Resources.Hotkey_None}"
+                           GotKeyboardFocus="HotkeyBox_GotKeyboardFocus"
+                           LostKeyboardFocus="HotkeyBox_LostKeyboardFocus" />
+        </toms:SharedWidthHeaderedContentControl>
+        <toms:SharedWidthHeaderedContentControl>
+          <StackPanel>
+            <TextBlock Style="{StaticResource Hint}" Foreground="#FF6060"
+                       Text="{x:Static properties:Resources.Settings_HotkeyInUse}"
+                       Visibility="{Binding IsFitWindowHotkeyInUse, RelativeSource={RelativeSource AncestorType=Window}, Converter={x:Static local:SettingsWindow.BooleanToVisibility}}" />
+            <TextBlock Style="{StaticResource Hint}" Text="{x:Static properties:Resources.Settings_HotkeyHint}" />
+          </StackPanel>
+        </toms:SharedWidthHeaderedContentControl>
+      </StackPanel>
     </GroupBox>
 
     <GroupBox Header="{x:Static properties:Resources.Settings_Highlighter}">
@@ -107,26 +96,8 @@
         <CheckBox Margin="0,3"
                   Content="{x:Static properties:Resources.Settings_HighlighterEnabled}"
                   IsChecked="{Binding HighlighterEnabled}" />
-        <Grid IsEnabled="{Binding HighlighterEnabled}" Margin="0,3,0,0">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-          <Grid.Resources>
+        <StackPanel IsEnabled="{Binding HighlighterEnabled}" Margin="0,3,0,0" Grid.IsSharedSizeScope="True">
+          <StackPanel.Resources>
             <Style TargetType="Slider" BasedOn="{StaticResource {x:Type Slider}}">
               <Setter Property="Width" Value="180" />
               <Setter Property="VerticalAlignment" Value="Center" />
@@ -136,69 +107,82 @@
               <Setter Property="VerticalAlignment" Value="Center" />
               <Setter Property="Margin" Value="8,0,0,0" />
             </Style>
-          </Grid.Resources>
+          </StackPanel.Resources>
 
-          <CheckBox Grid.Row="0" Grid.Column="1" Margin="0,3"
-                    Content="{x:Static properties:Resources.Settings_HighlighterOnScreen}"
-                    IsChecked="{Binding HighlighterOnScreen}" />
-          <CheckBox Grid.Row="1" Grid.Column="1" Margin="0,3"
-                    Content="{x:Static properties:Resources.Settings_HighlighterInShare}"
-                    IsChecked="{Binding HighlighterInShare}" />
+          <toms:SharedWidthHeaderedContentControl>
+            <CheckBox Content="{x:Static properties:Resources.Settings_HighlighterOnScreen}"
+                      IsChecked="{Binding HighlighterOnScreen}" />
+          </toms:SharedWidthHeaderedContentControl>
+          <toms:SharedWidthHeaderedContentControl>
+            <CheckBox Content="{x:Static properties:Resources.Settings_HighlighterInShare}"
+                      IsChecked="{Binding HighlighterInShare}" />
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterColor}" />
-          <local:ColorBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Color="{Binding HighlighterColor}" />
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterColor}">
+            <local:ColorBox VerticalAlignment="Center" HorizontalAlignment="Left" Color="{Binding HighlighterColor}" />
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterOpacity}" />
-          <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
-            <Slider Minimum="10" Maximum="100" TickFrequency="5" Value="{Binding HighlighterOpacity}" />
-            <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterOpacity, StringFormat={}{0} %}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterOpacity}">
+            <StackPanel Orientation="Horizontal">
+              <Slider Minimum="10" Maximum="100" TickFrequency="5" Value="{Binding HighlighterOpacity}" />
+              <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterOpacity, StringFormat={}{0} %}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterDiameter}" />
-          <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
-            <Slider Minimum="10" Maximum="200" TickFrequency="2" Value="{Binding HighlighterDiameter}" />
-            <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterDiameter, StringFormat={}{0} px}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterDiameter}">
+            <StackPanel Orientation="Horizontal">
+              <Slider Minimum="10" Maximum="200" TickFrequency="2" Value="{Binding HighlighterDiameter}" />
+              <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterDiameter, StringFormat={}{0} px}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterOuterThickness}" />
-          <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
-            <Slider Minimum="1" Maximum="20" TickFrequency="1" Value="{Binding HighlighterOuterThickness}" />
-            <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterOuterThickness, StringFormat={}{0} px}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterOuterThickness}">
+            <StackPanel Orientation="Horizontal">
+              <Slider Minimum="1" Maximum="20" TickFrequency="1" Value="{Binding HighlighterOuterThickness}" />
+              <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterOuterThickness, StringFormat={}{0} px}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterThickness}" />
-          <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
-            <Slider Minimum="1" Maximum="20" TickFrequency="1" Value="{Binding HighlighterThickness}" />
-            <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterThickness, StringFormat={}{0} px}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterThickness}">
+            <StackPanel Orientation="Horizontal">
+              <Slider Minimum="1" Maximum="20" TickFrequency="1" Value="{Binding HighlighterThickness}" />
+              <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterThickness, StringFormat={}{0} px}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="7" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterLeftClick}" />
-          <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,2">
-            <local:ColorBox VerticalAlignment="Center" Margin="0,0,10,0" Color="{Binding HighlighterLeftClickColor}" />
-            <local:SoundSelector Sound="{Binding HighlighterLeftClickSound}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterLeftClick}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <local:ColorBox VerticalAlignment="Center" Margin="0,0,10,0" Color="{Binding HighlighterLeftClickColor}" />
+              <local:SoundSelector Sound="{Binding HighlighterLeftClickSound}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="8" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterRightClick}" />
-          <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,2">
-            <local:ColorBox VerticalAlignment="Center" Margin="0,0,10,0" Color="{Binding HighlighterRightClickColor}" />
-            <local:SoundSelector Sound="{Binding HighlighterRightClickSound}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterRightClick}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <local:ColorBox VerticalAlignment="Center" Margin="0,0,10,0" Color="{Binding HighlighterRightClickColor}" />
+              <local:SoundSelector Sound="{Binding HighlighterRightClickSound}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterClickDuration}" />
-          <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
-            <Slider Minimum="50" Maximum="2000" TickFrequency="50" Value="{Binding HighlighterClickDuration}" />
-            <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterClickDuration, StringFormat={}{0} ms}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterClickDuration}">
+            <StackPanel Orientation="Horizontal">
+              <Slider Minimum="50" Maximum="2000" TickFrequency="50" Value="{Binding HighlighterClickDuration}" />
+              <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterClickDuration, StringFormat={}{0} ms}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="10" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_HighlighterVolume}" />
-          <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
-            <Slider Minimum="0" Maximum="100" TickFrequency="5" Value="{Binding HighlighterVolume}" />
-            <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterVolume, StringFormat={}{0} %}" />
-          </StackPanel>
+          <toms:SharedWidthHeaderedContentControl Header="{x:Static properties:Resources.Settings_HighlighterVolume}">
+            <StackPanel Orientation="Horizontal">
+              <Slider Minimum="0" Maximum="100" TickFrequency="5" Value="{Binding HighlighterVolume}" />
+              <TextBlock Style="{StaticResource SliderValue}" Text="{Binding HighlighterVolume, StringFormat={}{0} %}" />
+            </StackPanel>
+          </toms:SharedWidthHeaderedContentControl>
 
-          <TextBlock Grid.Row="11" Grid.Column="1" Style="{StaticResource Hint}"
-                     Text="{x:Static properties:Resources.Settings_HighlighterSoundHint}" />
-        </Grid>
+          <toms:SharedWidthHeaderedContentControl>
+            <TextBlock Style="{StaticResource Hint}"
+                       Text="{x:Static properties:Resources.Settings_HighlighterSoundHint}" />
+          </toms:SharedWidthHeaderedContentControl>
+        </StackPanel>
       </StackPanel>
     </GroupBox>
 
