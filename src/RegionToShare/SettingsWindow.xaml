@@ -4,6 +4,7 @@
         xmlns:local="clr-namespace:RegionToShare"
         xmlns:properties="clr-namespace:RegionToShare.Properties"
         xmlns:toms="urn:TomsToolbox"
+        xmlns:styles="urn:TomsToolbox.Wpf.Styles"
         Title="{x:Static properties:Resources.Settings_Title}"
         Width="520" SizeToContent="Height"
         ResizeMode="NoResize" Topmost="True"
@@ -14,7 +15,7 @@
   </Window.Resources>
   <StackPanel Margin="10" DataContext="{x:Static properties:Settings.Default}">
     <StackPanel.Resources>
-      <Style TargetType="GroupBox" BasedOn="{StaticResource {x:Type GroupBox}}">
+      <Style TargetType="GroupBox" BasedOn="{StaticResource {x:Static styles:ResourceKeys.GroupBoxStyle}}">
         <Setter Property="Margin" Value="0,0,0,10" />
         <Setter Property="Padding" Value="5" />
       </Style>
@@ -98,7 +99,7 @@
                   IsChecked="{Binding HighlighterEnabled}" />
         <StackPanel IsEnabled="{Binding HighlighterEnabled}" Margin="0,3,0,0" Grid.IsSharedSizeScope="True">
           <StackPanel.Resources>
-            <Style TargetType="Slider" BasedOn="{StaticResource {x:Type Slider}}">
+            <Style TargetType="Slider">
               <Setter Property="Width" Value="180" />
               <Setter Property="VerticalAlignment" Value="Center" />
               <Setter Property="IsSnapToTickEnabled" Value="True" />
