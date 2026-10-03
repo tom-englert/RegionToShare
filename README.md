@@ -42,6 +42,29 @@ Watch this great tutorial by James Montemagno
 
 ![ShowRegion](./src/Assets/ShowRegion.gif)
 
+### Aspect ratio
+
+Pick an aspect ratio (4:3, 5:4, 16:10, 16:9) in the toolbar, or while sharing from the menu button (▾) of the region frame.
+The width is kept and the height is adjusted; while a ratio is selected, resizing keeps it. Choose "Free" to resize freely again.
+The list of ratios can be changed in `%APPDATA%\RegionToShare\aspectratios.txt`, one ratio like `21:9` per line.
+
+### Fit a window into the region
+
+Press **Win+Ctrl+W** to move and resize the active window so it exactly fills the shared region.
+The hotkey can be changed in the settings.
+
+### Mouse highlighter
+
+A double ring around the mouse cursor shows where you are pointing; the inner ring is more transparent than the outer one.
+Left and right clicks briefly change the color of the ring and play a sound. The highlighter is off by default; once turned on
+in the settings, it is active all the time, not only while sharing. Color, opacity, size, click colors, sounds and volume can be
+adjusted in the settings. The ring can be shown on your own screen, in the shared region, or both.
+
+### Settings
+
+Open the settings with the gear button in the toolbar, or from the menu button of the region frame.
+Changes apply immediately. The app is available in English and German, and follows the Windows display language by default.
+
 ## Feedback 😄
 
 If you like this tool, don't forget to ⭐ it.

@@ -61,7 +61,7 @@ namespace RegionToShare.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("SteelBlue")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#4682B4")]
         public string ThemeColor {
             get {
                 return ((string)(this["ThemeColor"]));
@@ -85,13 +85,217 @@ namespace RegionToShare.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowCloseButton {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AspectRatio {
             get {
-                return ((bool)(this["ShowCloseButton"]));
+                return ((string)(this["AspectRatio"]));
             }
             set {
-                this["ShowCloseButton"] = value;
+                this["AspectRatio"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Language {
+            get {
+                return ((string)(this["Language"]));
+            }
+            set {
+                this["Language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Ctrl+Win+W")]
+        public string FitWindowHotkey {
+            get {
+                return ((string)(this["FitWindowHotkey"]));
+            }
+            set {
+                this["FitWindowHotkey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HighlighterEnabled {
+            get {
+                return ((bool)(this["HighlighterEnabled"]));
+            }
+            set {
+                this["HighlighterEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HighlighterOnScreen {
+            get {
+                return ((bool)(this["HighlighterOnScreen"]));
+            }
+            set {
+                this["HighlighterOnScreen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HighlighterInShare {
+            get {
+                return ((bool)(this["HighlighterInShare"]));
+            }
+            set {
+                this["HighlighterInShare"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFF00")]
+        public string HighlighterColor {
+            get {
+                return ((string)(this["HighlighterColor"]));
+            }
+            set {
+                this["HighlighterColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int HighlighterOpacity {
+            get {
+                return ((int)(this["HighlighterOpacity"]));
+            }
+            set {
+                this["HighlighterOpacity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public int HighlighterDiameter {
+            get {
+                return ((int)(this["HighlighterDiameter"]));
+            }
+            set {
+                this["HighlighterDiameter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int HighlighterThickness {
+            get {
+                return ((int)(this["HighlighterThickness"]));
+            }
+            set {
+                this["HighlighterThickness"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int HighlighterOuterThickness {
+            get {
+                return ((int)(this["HighlighterOuterThickness"]));
+            }
+            set {
+                this["HighlighterOuterThickness"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF0000")]
+        public string HighlighterLeftClickColor {
+            get {
+                return ((string)(this["HighlighterLeftClickColor"]));
+            }
+            set {
+                this["HighlighterLeftClickColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#0000FF")]
+        public string HighlighterRightClickColor {
+            get {
+                return ((string)(this["HighlighterRightClickColor"]));
+            }
+            set {
+                this["HighlighterRightClickColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public int HighlighterClickDuration {
+            get {
+                return ((int)(this["HighlighterClickDuration"]));
+            }
+            set {
+                this["HighlighterClickDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("High")]
+        public string HighlighterLeftClickSound {
+            get {
+                return ((string)(this["HighlighterLeftClickSound"]));
+            }
+            set {
+                this["HighlighterLeftClickSound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Low")]
+        public string HighlighterRightClickSound {
+            get {
+                return ((string)(this["HighlighterRightClickSound"]));
+            }
+            set {
+                this["HighlighterRightClickSound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int HighlighterVolume {
+            get {
+                return ((int)(this["HighlighterVolume"]));
+            }
+            set {
+                this["HighlighterVolume"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowWindowButtons {
+            get {
+                return ((bool)(this["ShowWindowButtons"]));
+            }
+            set {
+                this["ShowWindowButtons"] = value;
             }
         }
     }

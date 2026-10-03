@@ -12,12 +12,63 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ThemeColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">SteelBlue</Value>
+      <Value Profile="(Default)">#4682B4</Value>
     </Setting>
     <Setting Name="StartActivated" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ShowCloseButton" Type="System.Boolean" Scope="User">
+    <Setting Name="AspectRatio" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Language" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FitWindowHotkey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Ctrl+Win+W</Value>
+    </Setting>
+    <Setting Name="HighlighterEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="HighlighterOnScreen" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="HighlighterInShare" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="HighlighterColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FFFF00</Value>
+    </Setting>
+    <Setting Name="HighlighterOpacity" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="HighlighterDiameter" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">40</Value>
+    </Setting>
+    <Setting Name="HighlighterThickness" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="HighlighterOuterThickness" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="HighlighterLeftClickColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FF0000</Value>
+    </Setting>
+    <Setting Name="HighlighterRightClickColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#0000FF</Value>
+    </Setting>
+    <Setting Name="HighlighterClickDuration" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="HighlighterLeftClickSound" Type="System.String" Scope="User">
+      <Value Profile="(Default)">High</Value>
+    </Setting>
+    <Setting Name="HighlighterRightClickSound" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Low</Value>
+    </Setting>
+    <Setting Name="HighlighterVolume" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="ShowWindowButtons" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

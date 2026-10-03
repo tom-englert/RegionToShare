@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AspectRatio_Free" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="ToolTip_Resolution" xml:space="preserve">
+    <value>Resolution</value>
+  </data>
+  <data name="ToolTip_AspectRatio" xml:space="preserve">
+    <value>Aspect ratio</value>
+  </data>
+  <data name="ToolTip_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Menu_Settings" xml:space="preserve">
+    <value>Settings...</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Region to Share - Settings</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_ThemeColor" xml:space="preserve">
+    <value>Theme color</value>
+  </data>
+  <data name="Settings_ColorHint" xml:space="preserve">
+    <value>Hex color, e.g. #4682B4</value>
+  </data>
+  <data name="Settings_FramesPerSecond" xml:space="preserve">
+    <value>Frames per second</value>
+  </data>
+  <data name="Settings_DrawShadowCursor" xml:space="preserve">
+    <value>Draw shadow cursor</value>
+  </data>
+  <data name="Settings_ShowWindowButtons" xml:space="preserve">
+    <value>Show window buttons in active view</value>
+  </data>
+  <data name="Settings_StartActivated" xml:space="preserve">
+    <value>Start activated</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>System default</value>
+  </data>
+  <data name="Settings_LanguageRestart" xml:space="preserve">
+    <value>Restart the app to apply the language change.</value>
+  </data>
+  <data name="Settings_Hotkeys" xml:space="preserve">
+    <value>Hotkeys</value>
+  </data>
+  <data name="Settings_FitWindowHotkey" xml:space="preserve">
+    <value>Fit active window to region</value>
+  </data>
+  <data name="Settings_HotkeyHint" xml:space="preserve">
+    <value>Click and press a key combination. Delete or Backspace removes the hotkey.</value>
+  </data>
+  <data name="Settings_HotkeyInUse" xml:space="preserve">
+    <value>This hotkey is already in use by another application.</value>
+  </data>
+  <data name="Settings_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Hotkey_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Key_Ctrl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="Key_Alt" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="Key_Shift" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="Key_Win" xml:space="preserve">
+    <value>Win</value>
+  </data>
+  <data name="FramesPerSecondFormat" xml:space="preserve">
+    <value>{0} FPS</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Error_CorruptSettings" xml:space="preserve">
+    <value>The settings file '{0}' is corrupt. It will be reset to default values.</value>
+  </data>
+  <data name="Settings_Highlighter" xml:space="preserve">
+    <value>Mouse highlighter</value>
+  </data>
+  <data name="Settings_HighlighterEnabled" xml:space="preserve">
+    <value>Highlight the mouse cursor</value>
+  </data>
+  <data name="Settings_HighlighterOnScreen" xml:space="preserve">
+    <value>Show on my screen</value>
+  </data>
+  <data name="Settings_HighlighterInShare" xml:space="preserve">
+    <value>Show in the shared region</value>
+  </data>
+  <data name="Settings_HighlighterColor" xml:space="preserve">
+    <value>Ring color</value>
+  </data>
+  <data name="Settings_HighlighterOpacity" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="Settings_HighlighterDiameter" xml:space="preserve">
+    <value>Diameter</value>
+  </data>
+  <data name="Settings_HighlighterThickness" xml:space="preserve">
+    <value>Inner line width</value>
+  </data>
+  <data name="Settings_HighlighterLeftClick" xml:space="preserve">
+    <value>Left click</value>
+  </data>
+  <data name="Settings_HighlighterRightClick" xml:space="preserve">
+    <value>Right click</value>
+  </data>
+  <data name="Settings_HighlighterClickDuration" xml:space="preserve">
+    <value>Click color duration</value>
+  </data>
+  <data name="Settings_HighlighterVolume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="Settings_HighlighterSoundHint" xml:space="preserve">
+    <value>Sounds are only played locally. Others hear them only if your meeting app shares the computer sound.</value>
+  </data>
+  <data name="Sound_None" xml:space="preserve">
+    <value>No sound</value>
+  </data>
+  <data name="Sound_High" xml:space="preserve">
+    <value>Click high</value>
+  </data>
+  <data name="Sound_Low" xml:space="preserve">
+    <value>Click low</value>
+  </data>
+  <data name="Sound_Pop" xml:space="preserve">
+    <value>Pop</value>
+  </data>
+  <data name="Sound_File" xml:space="preserve">
+    <value>Wave file...</value>
+  </data>
+  <data name="Sound_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="Sound_FileFilter" xml:space="preserve">
+    <value>Wave files (*.wav)|*.wav</value>
+  </data>
+  <data name="Settings_HighlighterOuterThickness" xml:space="preserve">
+    <value>Outer line width</value>
+  </data>
+  <data name="Settings_ChooseColor" xml:space="preserve">
+    <value>Choose color...</value>
+  </data>
+</root>
