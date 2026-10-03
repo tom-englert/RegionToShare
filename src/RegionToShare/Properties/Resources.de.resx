@@ -91,6 +91,9 @@
   <data name="Settings_DrawShadowCursor" xml:space="preserve">
     <value>Schattencursor zeichnen</value>
   </data>
+  <data name="Settings_ShowCloseButton" xml:space="preserve">
+    <value>Schließen-Schaltfläche anzeigen</value>
+  </data>
   <data name="Settings_StartActivated" xml:space="preserve">
     <value>Aktiviert starten</value>
   </data>

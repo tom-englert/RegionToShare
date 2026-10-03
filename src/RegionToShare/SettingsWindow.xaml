@@ -41,6 +41,7 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_ThemeColor}" />
@@ -59,6 +60,10 @@
         <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,3"
                   Content="{x:Static properties:Resources.Settings_StartActivated}"
                   IsChecked="{Binding StartActivated}" />
+
+        <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,3"
+                  Content="{x:Static properties:Resources.Settings_ShowCloseButton}"
+                  IsChecked="{Binding ShowCloseButton}" />
 
         <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_Language}" />
         <ComboBox Grid.Row="4" Grid.Column="1" Width="160" HorizontalAlignment="Left" VerticalAlignment="Center"

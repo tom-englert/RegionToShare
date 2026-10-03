@@ -338,6 +338,7 @@ public partial class MainWindow
 
             NativeWindowRect += GlassFrameThickness;
 
+            ShowInTaskbar = true;
             BringToFront();
         };
 
@@ -512,6 +513,7 @@ public partial class MainWindow
     {
         SetSeparationLayerPos(SWP_NOACTIVATE | SWP_SHOWWINDOW);
         SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        ShowInTaskbar = false;
     }
 
     private void SetSeparationLayerPos(uint flags)

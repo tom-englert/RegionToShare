@@ -91,6 +91,9 @@
   <data name="Settings_DrawShadowCursor" xml:space="preserve">
     <value>Draw shadow cursor</value>
   </data>
+  <data name="Settings_ShowCloseButton" xml:space="preserve">
+    <value>Show close button</value>
+  </data>
   <data name="Settings_StartActivated" xml:space="preserve">
     <value>Start activated</value>
   </data>

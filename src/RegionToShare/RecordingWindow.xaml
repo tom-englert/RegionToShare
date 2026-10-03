@@ -3,13 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RegionToShare"
+        xmlns:local="clr-namespace:RegionToShare" 
+        xmlns:properties="clr-namespace:RegionToShare.Properties"
+        xmlns:toms="urn:TomsToolbox"
         mc:Ignorable="d"
         WindowStyle="None" Background="Transparent" 
         AllowsTransparency="True" Topmost="True"
-        ShowInTaskbar="False"
-        Title="Region to Share - Source Region" Height="450" Width="800">
-  <Grid>
+        Title="Region to Share" Height="450" Width="800">
+    <Grid>
     <Border BorderThickness="{x:Static local:RecordingWindow.BorderSize}">
       <Border.BorderBrush>
         <LinearGradientBrush StartPoint="0,0" EndPoint="8,8" SpreadMethod="Repeat" MappingMode="Absolute">
@@ -31,7 +32,8 @@
                   Fill="Black" />
           </Button>
           <Button Width="16" Height="16"
-                  Click="Button_Click">
+                  Click="Button_Click"
+                  Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ShowCloseButton, Converter={toms:BooleanToVisibilityConverter}}">
             <Path Width="12" Height="12"
                   Data="M2,2 L10,10 M2,10 L10,2"
                   Stroke="Black"

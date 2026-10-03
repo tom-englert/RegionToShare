@@ -389,6 +389,14 @@ namespace RegionToShare.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show close button.
+        /// </summary>
+        public static string Settings_ShowCloseButton {
+            get {
+                return ResourceManager.GetString("Settings_ShowCloseButton", resourceCulture);
+            }
+        }
+                /// <summary>
         ///   Looks up a localized string similar to Start activated.
         /// </summary>
         public static string Settings_StartActivated {
