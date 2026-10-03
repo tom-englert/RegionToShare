@@ -290,12 +290,12 @@ namespace RegionToShare.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowCloseButton {
+        public bool ShowWindowButtons {
             get {
-                return ((bool)(this["ShowCloseButton"]));
+                return ((bool)(this["ShowWindowButtons"]));
             }
             set {
-                this["ShowCloseButton"] = value;
+                this["ShowWindowButtons"] = value;
             }
         }
     }

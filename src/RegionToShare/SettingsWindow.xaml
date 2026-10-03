@@ -62,8 +62,8 @@
                   IsChecked="{Binding StartActivated}" />
 
         <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,3"
-                  Content="{x:Static properties:Resources.Settings_ShowCloseButton}"
-                  IsChecked="{Binding ShowCloseButton}" />
+                  Content="{x:Static properties:Resources.Settings_ShowWindowButtons}"
+                  IsChecked="{Binding ShowWindowButtons}" />
 
         <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource Label}" Text="{x:Static properties:Resources.Settings_Language}" />
         <ComboBox Grid.Row="4" Grid.Column="1" Width="160" HorizontalAlignment="Left" VerticalAlignment="Center"

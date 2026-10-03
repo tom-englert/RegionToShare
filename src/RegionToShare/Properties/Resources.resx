@@ -91,8 +91,8 @@
   <data name="Settings_DrawShadowCursor" xml:space="preserve">
     <value>Draw shadow cursor</value>
   </data>
-  <data name="Settings_ShowCloseButton" xml:space="preserve">
-    <value>Show close button</value>
+  <data name="Settings_ShowWindowButtons" xml:space="preserve">
+    <value>Show window buttons in active view</value>
   </data>
   <data name="Settings_StartActivated" xml:space="preserve">
     <value>Start activated</value>
@@ -143,7 +143,7 @@
     <value>Error</value>
   </data>
   <data name="Error_CorruptSettings" xml:space="preserve">
-    <value>The settings file &apos;{0}&apos; is corrupt. It will be reset to default values.</value>
+    <value>The settings file '{0}' is corrupt. It will be reset to default values.</value>
   </data>
   <data name="Settings_Highlighter" xml:space="preserve">
     <value>Mouse highlighter</value>

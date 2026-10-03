@@ -91,8 +91,8 @@
   <data name="Settings_DrawShadowCursor" xml:space="preserve">
     <value>Schattencursor zeichnen</value>
   </data>
-  <data name="Settings_ShowCloseButton" xml:space="preserve">
-    <value>Schließen-Schaltfläche anzeigen</value>
+  <data name="Settings_ShowWindowButtons" xml:space="preserve">
+    <value>Fensterschaltflächen im aktiven Modus  anzeigen</value>
   </data>
   <data name="Settings_StartActivated" xml:space="preserve">
     <value>Aktiviert starten</value>
@@ -143,7 +143,7 @@
     <value>Fehler</value>
   </data>
   <data name="Error_CorruptSettings" xml:space="preserve">
-    <value>Die Einstellungsdatei &apos;{0}&apos; ist beschädigt. Sie wird auf die Standardwerte zurückgesetzt.</value>
+    <value>Die Einstellungsdatei '{0}' ist beschädigt. Sie wird auf die Standardwerte zurückgesetzt.</value>
   </data>
   <data name="Settings_Highlighter" xml:space="preserve">
     <value>Maus-Highlighter</value>
