@@ -37,7 +37,7 @@ jobs:
         run: |
           $appx = "$env:RUNNER_TEMP\AppxPackages"
           $args = @("publish", "src\RegionToShare\RegionToShare.csproj", "-c", $env:BUILD_CONFIGURATION,
-            "-p:GenerateAppxPackageOnBuild=true", "-p:AppxPackageDir=$appx\")
+            "-p:GenerateAppxPackageOnBuild=true", "-p:AppxPackageDir=$appx\", "-p:AppxPackageTestDir=$appx\")
           if ($env:VERSION) { $args += "-p:Version=$env:VERSION" }
           dotnet @args
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
