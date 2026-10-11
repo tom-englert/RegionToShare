@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31912.275
+# Visual Studio Version 18
+VisualStudioVersion = 18.11.12224.323 insiders
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegionToShare", "RegionToShare\RegionToShare.csproj", "{87B94C98-CE53-480C-8CF1-8529D6AA10E3}"
 EndProject
@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "Packaging", "Packaging\Packaging.wapproj", "{108D1A5E-EC8A-494D-B300-1832E363FBAA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagePadding", "ImagePadding\ImagePadding.csproj", "{3065F7A1-22D1-42C2-8ECE-2EE386318CA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +32,6 @@ Global
 		{108D1A5E-EC8A-494D-B300-1832E363FBAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{108D1A5E-EC8A-494D-B300-1832E363FBAA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{108D1A5E-EC8A-494D-B300-1832E363FBAA}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{3065F7A1-22D1-42C2-8ECE-2EE386318CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3065F7A1-22D1-42C2-8ECE-2EE386318CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3065F7A1-22D1-42C2-8ECE-2EE386318CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3065F7A1-22D1-42C2-8ECE-2EE386318CA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

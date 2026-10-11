@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 using System.Windows.Interop;
 using ColorDialog = System.Windows.Forms.ColorDialog;
 using DialogResult = System.Windows.Forms.DialogResult;

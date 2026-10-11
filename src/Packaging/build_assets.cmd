@@ -1,5 +1,6 @@
 setlocal
 
+dotnet build ..\ImagePadding\ImagePadding.csproj -c Debug -f net10.0
 set pad="..\ImagePadding\bin\debug\net10.0\ImagePadding.exe"
 
 for %%a in (16,24,32,48,256) do copy "..\Assets\%%a.png" "Assets\Square44x44Logo.targetsize-%%a.png"
