@@ -14,10 +14,19 @@ public partial class ColorBox
     // Keep the custom colors of the color dialog for the session.
     private static int[]? _customColors;
 
+    public static IReadOnlyList<NamedColor> NamedColors { get; } = typeof(System.Windows.Media.Colors)
+        .GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+        .Where(p => p.PropertyType == typeof(System.Windows.Media.Color))
+        .Select(p => new NamedColor(p.Name, (System.Windows.Media.Color)p.GetValue(null)!))
+        .OrderBy(c => c.Name, StringComparer.Ordinal)
+        .ToList();
+
     public ColorBox()
     {
         InitializeComponent();
     }
+
+    public IReadOnlyList<NamedColor> Names => NamedColors;
 
     /// <summary>
     /// The color as hex string, e.g. "#4682B4".
@@ -61,6 +70,8 @@ public partial class ColorBox
         public IntPtr Handle { get; }
     }
 }
+
+public sealed record NamedColor(string Name, System.Windows.Media.Color Color);
 
 public sealed class ColorValidationRule : System.Windows.Controls.ValidationRule
 {

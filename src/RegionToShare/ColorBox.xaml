@@ -4,22 +4,36 @@
              xmlns:local="clr-namespace:RegionToShare"
              xmlns:properties="clr-namespace:RegionToShare.Properties">
   <StackPanel Orientation="Horizontal">
-    <TextBox x:Name="ColorTextBox"
-             Width="90" VerticalAlignment="Center"
-             ToolTip="{x:Static properties:Resources.Settings_ColorHint}"
-             >
-      <TextBox.Text>
+    <ComboBox Width="120" VerticalAlignment="Center" IsEditable="True"
+              ItemsSource="{Binding Names, RelativeSource={RelativeSource AncestorType=local:ColorBox}}"
+              TextSearch.TextPath="Name"
+              ToolTip="{x:Static properties:Resources.Settings_ColorHint}">
+      <ComboBox.ItemTemplate>
+        <DataTemplate DataType="{x:Type local:NamedColor}">
+          <StackPanel Orientation="Horizontal">
+            <Border Width="12" Height="12" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
+              <Border.Background>
+                <SolidColorBrush Color="{Binding Color}" />
+              </Border.Background>
+            </Border>
+            <Decorator Width="8" />
+            <TextBlock Text="{Binding Name}" />
+          </StackPanel>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+      <ComboBox.Text>
         <Binding Path="Color" RelativeSource="{RelativeSource AncestorType=local:ColorBox}" UpdateSourceTrigger="PropertyChanged">
           <Binding.ValidationRules>
             <local:ColorValidationRule />
           </Binding.ValidationRules>
         </Binding>
-      </TextBox.Text>
-    </TextBox>
-    <Button Margin="5,0,0,0" Padding="2" VerticalAlignment="Center"
+      </ComboBox.Text>
+    </ComboBox>
+    <Decorator Width="8" />
+    <Button Padding="2" VerticalAlignment="Center"
             ToolTip="{x:Static properties:Resources.Settings_ChooseColor}"
             Click="PickButton_Click">
-      <Border Width="18" Height="16" BorderThickness="1" BorderBrush="#686868"
+      <Border Width="16" Height="16" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
               Background="{Binding Color, RelativeSource={RelativeSource AncestorType=local:ColorBox}, Converter={x:Static local:ColorBrushConverter.Default}}" />
     </Button>
   </StackPanel>
