@@ -14,13 +14,16 @@ steps:
   inputs:
     scriptType: inlineScript
     inlineScript: |
-        (new-object Net.WebClient).DownloadString("https://raw.github.com/tom-englert/BuildScripts/master/BuildScripts.ps1") | iex
-        $version = Project-SetVersion "src\Directory.Build.props"
-        $version | Build-AppendVersionToBuildNumber
+        [xml]$props = Get-Content "src\Directory.Build.props"
+        $propertyGroup = $props.Project.PropertyGroup | Select-Object -First 1
+        $buildNumber = [int]$env:BUILD_BUILDID % [uint16]::MaxValue
+        [Version]$current = $propertyGroup.Version
+        $version = [Version]::new($current.Major, $current.Minor, $buildNumber)
+        Write-Host "##vso[task.setvariable variable=version]$version"
+        Write-Host "##vso[build.updatebuildnumber]$($env:BUILD_BUILDNUMBER)-$version"
         [xml]$manifest= get-content ".\src\Packaging\Package.appxmanifest"
-        $manifest.Package.Identity.Version = $version + ".0"
-        $manifest.save(".\src\Packaging\Package.appxmanifest")
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+        $manifest.Package.Identity.Version = ([Version]::new($version.Major, $version.Minor, $version.Build, 0)).ToString()
+        $manifest.save((Resolve-Path ".\src\Packaging\Package.appxmanifest"))
 
 - task: NuGetToolInstaller@1
 
@@ -33,7 +36,7 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArgs: /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:AppxPackageSigningEnabled=false'
+    msbuildArgs: /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:AppxPackageSigningEnabled=false /p:Version=$(version)
 
 - task: CopyFiles@2
   inputs:

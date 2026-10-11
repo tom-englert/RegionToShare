@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  BUILD_CONFIGURATION: Release
+  PRODUCT_NAME: RegionToShare
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set build version
+        shell: pwsh
+        run: |
+          [xml]$props = Get-Content "src\Directory.Build.props"
+          $propertyGroup = $props.Project.PropertyGroup | Select-Object -First 1
+          $buildNumber = [int]$env:GITHUB_RUN_NUMBER % [uint16]::MaxValue
+          [Version]$current = $propertyGroup.Version
+          $version = if ($env:GITHUB_EVENT_NAME -eq 'pull_request') { $current } else { [Version]::new($current.Major, $current.Minor, $buildNumber) }
+          "VERSION=$version" >> $env:GITHUB_ENV
+          [xml]$manifest = Get-Content ".\src\Packaging\Package.appxmanifest"
+          $manifest.Package.Identity.Version = ([Version]::new($version.Major, $version.Minor, $version.Build, 0)).ToString()
+          $manifest.Save((Resolve-Path ".\src\Packaging\Package.appxmanifest"))
+
+      - uses: NuGet/setup-nuget@v4
+
+      - uses: microsoft/setup-msbuild@v3
+
+      - name: Restore
+        run: nuget restore src\RegionToShare.sln
+
+      - name: Build
+        shell: pwsh
+        run: |
+          $appx = "$env:RUNNER_TEMP\AppxPackages"
+          $args = @("src\RegionToShare.sln", "/p:Platform=Any CPU", "/p:Configuration=$env:BUILD_CONFIGURATION",
+            "/p:AppxPackageDir=$appx\", "/p:AppxBundle=Always", "/p:UapAppxPackageBuildMode=StoreUpload",
+            "/p:AppxPackageSigningEnabled=false")
+          if ($env:VERSION) { $args += "/p:Version=$env:VERSION" }
+          msbuild @args
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          "APPX_DIR=$appx" >> $env:GITHUB_ENV
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.PRODUCT_NAME }}
+          path: src/RegionToShare/bin/${{ env.BUILD_CONFIGURATION }}/net462/*.*
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Package
+          path: ${{ env.APPX_DIR }}
+          if-no-files-found: warn
