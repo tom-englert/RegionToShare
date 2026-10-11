@@ -15,7 +15,6 @@ It's up to your meeting app whether it properly shares this hidden windows conte
 ## Prerequisites
 
 - Windows 10 or 11
-- DotNet 4.6.2 or newer
 
 ## Installation
 
@@ -44,11 +43,17 @@ Watch this great tutorial by James Montemagno
 
 ![ShowRegion](./src/Assets/ShowRegion.gif)
 
+### Frame size
+
+The region frame can be resized by dragging the edges or corners. The size of the region is shown in the toolbar.
+A set of predefined sizes can be selected from the toolbar. 
+The list of selectable sizes can be changed in the settings.
+
 ### Aspect ratio
 
-Pick an aspect ratio (4:3, 5:4, 16:10, 16:9) in the toolbar, or while sharing from the menu button (▾) of the region frame.
+Pick an aspect ratio (4:3, 5:4, 16:9, 16:10) in the toolbar, or while sharing from the menu button (▾) of the region frame.
 The width is kept and the height is adjusted; while a ratio is selected, resizing keeps it. Choose "Free" to resize freely again.
-The list of ratios can be changed in `%APPDATA%\RegionToShare\aspectratios.txt`, one ratio like `21:9` per line.
+The list of selectable aspect ratios can be changed in the settings.
 
 ### Fit a window into the region
 
