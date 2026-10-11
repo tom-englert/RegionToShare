@@ -19,7 +19,8 @@ It's up to your meeting app whether it properly shares this hidden windows conte
 ## Installation
 
 - Download and install this app from the [Windows Store](https://www.microsoft.com/store/productId/9N4066W2R5Q4)
-  or pick the latest binaries from the [release page](https://github.com/tom-englert/RegionToShare/releases)
+- Install via WinGet: `winget install TomEnglert.RegionToShare`
+- Pick the latest binaries from the [release page](https://github.com/tom-englert/RegionToShare/releases)
 
 ## Usage
 

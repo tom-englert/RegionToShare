@@ -33,3 +33,5 @@ packages/
 FodyWeavers.xsd
 /src/Packaging/AppPackages/
 BundleArtifacts/
+
+winget-manifest/

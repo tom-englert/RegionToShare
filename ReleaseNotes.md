@@ -1,6 +1,6 @@
 1.12
-- Aspect ratios: lock the region to 4:3, 5:4, 16:10, 16:9 or custom ratios from %APPDATA%\RegionToShare\aspectratios.txt
 - New settings dialog, all settings except resolution and aspect ratio moved there
+- Aspect ratios: lock the aspect ratio while resizing, or choose "Free" to resize freely again
 - Hotkey (default Win+Ctrl+W) to move and resize the active window to exactly fit the shared region
 - Mouse highlighter: double ring around the cursor on the screen and/or in the shared region, click colors and click sounds
 - German translation, the language can be chosen in the settings
