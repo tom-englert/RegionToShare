@@ -28,6 +28,9 @@ public partial class SettingsWindow
 
         Settings.Default.PropertyChanged += Settings_PropertyChanged;
         UpdateIsRestartRequired();
+
+        ResolutionsBox.Text = CustomList.ToText(mainWindow.Resolutions);
+        AspectRatiosBox.Text = CustomList.ToText(mainWindow.AspectRatios.Where(item => !item.IsFree).Select(item => item.Name));
     }
 
     public static ICollection<KeyValuePair<string, string>> Languages { get; } = new[]
@@ -130,5 +133,21 @@ public partial class SettingsWindow
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
         Close();
+    }
+
+    private void Resolutions_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (!Resolution.Save(ResolutionsBox.Text)) 
+            return;
+
+        ResolutionsBox.Text = CustomList.ToText(_mainWindow.Resolutions);
+    }
+
+    private void AspectRatios_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (!AspectRatio.Save(AspectRatiosBox.Text)) 
+            return;
+
+        AspectRatiosBox.Text = CustomList.ToText(_mainWindow.AspectRatios.Where(item => !item.IsFree).Select(item => item.Name));
     }
 }

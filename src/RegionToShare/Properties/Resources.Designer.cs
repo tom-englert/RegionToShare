@@ -151,6 +151,15 @@ namespace RegionToShare.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aspect ratios.
+        /// </summary>
+        public static string Settings_AspectRatios {
+            get {
+                return ResourceManager.GetString("Settings_AspectRatios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose color....
         /// </summary>
         public static string Settings_ChooseColor {
@@ -390,6 +399,33 @@ namespace RegionToShare.Properties {
         public static string Settings_LanguageSystem {
             get {
                 return ResourceManager.GetString("Settings_LanguageSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolutions and aspect ratios.
+        /// </summary>
+        public static string Settings_Lists {
+            get {
+                return ResourceManager.GetString("Settings_Lists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One entry per line, e.g. 1920x1080 or 16:9. Clear a list to restore the defaults..
+        /// </summary>
+        public static string Settings_ListsHint {
+            get {
+                return ResourceManager.GetString("Settings_ListsHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolutions.
+        /// </summary>
+        public static string Settings_Resolutions {
+            get {
+                return ResourceManager.GetString("Settings_Resolutions", resourceCulture);
             }
         }
         

@@ -211,4 +211,16 @@
   <data name="Settings_ChooseColor" xml:space="preserve">
     <value>Choose color...</value>
   </data>
+  <data name="Settings_AspectRatios" xml:space="preserve">
+    <value>Aspect ratios</value>
+  </data>
+  <data name="Settings_Lists" xml:space="preserve">
+    <value>Resolutions and aspect ratios</value>
+  </data>
+  <data name="Settings_ListsHint" xml:space="preserve">
+    <value>One entry per line, e.g. 1920x1080 or 16:9. Clear a list to restore the defaults.</value>
+  </data>
+  <data name="Settings_Resolutions" xml:space="preserve">
+    <value>Resolutions</value>
+  </data>
 </root>

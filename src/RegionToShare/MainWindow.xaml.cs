@@ -1,4 +1,5 @@
 ﻿using RegionToShare.Properties;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
@@ -37,8 +38,8 @@ public partial class MainWindow
         InitializeComponent();
 
         DataContext = this;
-        Resolutions = LoadResolutions();
-        AspectRatios = LoadAspectRatios();
+        Resolutions = new ObservableCollection<string>(Resolution.Load());
+        AspectRatios = new ObservableCollection<AspectRatio>(AspectRatio.Load());
         AspectRatio = AspectRatios.FirstOrDefault(item => item.Name == Settings.AspectRatio) ?? AspectRatio.Free;
         Resources.RegisterDefaultStyles();
         SetThemeColor();
@@ -47,13 +48,13 @@ public partial class MainWindow
 
     public string? Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
 
-    public ICollection<string> Resolutions { get; }
+    public ObservableCollection<string> Resolutions { get; }
 
-    public ICollection<AspectRatio> AspectRatios { get; }
+    public ObservableCollection<AspectRatio> AspectRatios { get; }
 
-    public static ICollection<int> SupportedFramesPerSecond { get; } = new[] { 5, 10, 15, 20, 30, 60 };
+    public static ICollection<int> SupportedFramesPerSecond { get; } = [5, 10, 15, 20, 30, 60];
 
-    internal Settings Settings => Settings.Default;
+    internal static Settings Settings => Settings.Default;
 
     internal MouseHighlighter MouseHighlighter { get; } = new();
 
@@ -125,15 +126,26 @@ public partial class MainWindow
 
     private void OnExtendChanged(string? newValue)
     {
-        if (_isUpdatingExtend || newValue is null || !TryParseSize(newValue, out var size))
+        if (_isUpdatingExtend || newValue is null || !Resolution.TryParse(newValue, out var size) || !IsSizeValid(size))
             return;
 
-        if (!AspectRatio.IsFree)
+        if (!AspectRatio.IsFree && (size.Height != AspectRatio.HeightFromWidth(size.Width)))
         {
-            size.Height = AspectRatio.HeightFromWidth(size.Width);
+            var ratio = (double)size.Width / size.Height;
+
+            AspectRatio = AspectRatios.FirstOrDefault(ar => Math.Abs(ar.Value - ratio) < 1e-3) ?? AspectRatio.Free;
         }
 
         SetRegionSize(size);
+    }
+
+    private void ReloadAspectRatios()
+    {
+        var name = AspectRatio.Name;
+
+        CustomList.Replace(AspectRatios, AspectRatio.Load());
+
+        AspectRatio = AspectRatios.FirstOrDefault(item => item.Name == name) ?? AspectRatio.Free;
     }
 
     private void OnAspectRatioChanged(AspectRatio aspectRatio)
@@ -175,51 +187,6 @@ public partial class MainWindow
                 return;
 
             SetWindowPos(_windowHandle, IntPtr.Zero, value.Left, value.Top, value.Width, value.Height, SWP_NOACTIVATE | SWP_NOZORDER);
-        }
-    }
-
-    private ICollection<string> LoadResolutions()
-    {
-        var defaultResolutions = new[] { @"1024x782", @"1280x1024", @"1920x1080" };
-
-        return LoadUserList(@"resolutions.txt", defaultResolutions, item => TryParseSize(item, out _));
-    }
-
-    private static ICollection<AspectRatio> LoadAspectRatios()
-    {
-        var defaultAspectRatios = new[] { @"4:3", @"5:4", @"16:10", @"16:9" };
-
-        var aspectRatios = LoadUserList(@"aspectratios.txt", defaultAspectRatios, item => AspectRatio.TryParse(item, out _))
-            .Select(item => AspectRatio.TryParse(item, out var aspectRatio) ? aspectRatio : AspectRatio.Free)
-            .Where(item => !item.IsFree);
-
-        return new[] { AspectRatio.Free }.Concat(aspectRatios).ToArray();
-    }
-
-    private static ICollection<string> LoadUserList(string fileName, ICollection<string> defaultItems, Func<string, bool> isValid)
-    {
-        try
-        {
-            var userDataDirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"RegionToShare");
-            var filePath = Path.Combine(userDataDirPath, fileName);
-
-            Directory.CreateDirectory(userDataDirPath);
-
-            if (!File.Exists(filePath))
-            {
-                File.WriteAllLines(filePath, defaultItems);
-                return defaultItems;
-            }
-
-            var items = File.ReadAllLines(filePath)
-                .Where(isValid)
-                .ToArray();
-
-            return items.Any() ? items : defaultItems;
-        }
-        catch
-        {
-            return defaultItems;
         }
     }
 
@@ -393,6 +360,14 @@ public partial class MainWindow
             case nameof(Settings.FitWindowHotkey):
                 RegisterHotkeys();
                 break;
+
+            case nameof(Settings.Resolutions):
+                CustomList.Replace(Resolutions, Resolution.Load());
+                break;
+
+            case nameof(Settings.AspectRatios):
+                ReloadAspectRatios();
+                break;
         }
     }
 
@@ -527,26 +502,8 @@ public partial class MainWindow
         SetWindowPos(_separationLayerHandle, HWND_BOTTOM, rect.Left, rect.Top, rect.Width, rect.Height, flags);
     }
 
-    private bool TryParseSize(string value, out SIZE size)
+    private bool IsSizeValid(SIZE size)
     {
-        size = Size.Empty;
-
-        try
-        {
-            var parts = value.Split('x');
-
-            if (parts.Length != 2
-                || !int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var width)
-                || !int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var height))
-                return false;
-
-            size = new SIZE(width, height);
-
-            return size.Width >= MinWidth && size.Height >= MinHeight;
-        }
-        catch
-        {
-            return false;
-        }
+        return size.Width >= MinWidth && size.Height >= MinHeight;
     }
 }

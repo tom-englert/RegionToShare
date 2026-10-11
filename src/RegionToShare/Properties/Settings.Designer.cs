@@ -298,5 +298,29 @@ namespace RegionToShare.Properties {
                 this["ShowWindowButtons"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Resolutions {
+            get {
+                return ((string)(this["Resolutions"]));
+            }
+            set {
+                this["Resolutions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AspectRatios {
+            get {
+                return ((string)(this["AspectRatios"]));
+            }
+            set {
+                this["AspectRatios"] = value;
+            }
+        }
     }
 }

@@ -211,4 +211,16 @@
   <data name="Settings_ChooseColor" xml:space="preserve">
     <value>Farbe auswählen...</value>
   </data>
+  <data name="Settings_AspectRatios" xml:space="preserve">
+    <value>Seitenverhältnisse</value>
+  </data>
+  <data name="Settings_Lists" xml:space="preserve">
+    <value>Auflösungen und Seitenverhältnisse</value>
+  </data>
+  <data name="Settings_ListsHint" xml:space="preserve">
+    <value>Ein Eintrag pro Zeile, z. B. 1920x1080 oder 16:9. Leere die Liste, um die Standardwerte wiederherzustellen.</value>
+  </data>
+  <data name="Settings_Resolutions" xml:space="preserve">
+    <value>Auflösungen</value>
+  </data>
 </root>

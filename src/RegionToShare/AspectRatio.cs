@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.Windows;
+﻿using System.Windows;
+using RegionToShare.Properties;
 
 namespace RegionToShare;
 
@@ -22,28 +22,45 @@ public sealed class AspectRatio
 
     public bool IsFree => Value <= 0;
 
+    private static readonly string[] Defaults = ["4:3", "5:4", "16:10", "16:9"];
+
+    /// <summary>
+    /// Loads the user editable list, always starting with <see cref="Free"/>.
+    /// </summary>
+    public static IEnumerable<AspectRatio> Load()
+    {
+        var items = CustomList.Load(Settings.Default.AspectRatios, Defaults, Normalize);
+
+        return new[] { Free }.Concat(items.Select(item => TryParse(item, out var ratio) ? ratio : Free));
+    }
+
+    public static bool Save(string? text)
+    {
+        var newValue = CustomList.Serialize(CustomList.Parse(text, Normalize), Defaults);
+
+        if (string.Equals(newValue, Settings.Default.AspectRatios, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        Settings.Default.AspectRatios = newValue;
+        return true;
+    }
+
+    private static string? Normalize(string item) => TryParse(item, out var ratio) && !ratio.IsFree ? ratio.Name : null;
+
     public static bool TryParse(string? text, out AspectRatio ratio)
     {
         ratio = Free;
 
-        var parts = text?.Split(':');
-
-        if (parts is not { Length: 2 })
+        if (!CustomList.TryParse(text, ':', out var size))
             return false;
 
-        var part1 = parts[0].Trim();
-        var part2 = parts[1].Trim();
-        
-        if (!double.TryParse(part1, NumberStyles.Float, CultureInfo.InvariantCulture, out var width)
-            || !double.TryParse(part2, NumberStyles.Float, CultureInfo.InvariantCulture, out var height)
-            || width <= 0 || height <= 0)
-            return false;
+        var value = (double)size.Width / size.Height;
 
-        var value = width / height;
         if (double.IsInfinity(value) || double.IsNaN(value))
             return false;
 
-        ratio = new AspectRatio(part1 + ":" + part2, value);
+        ratio = new AspectRatio($"{size.Width}:{size.Height}", value);
+
         return true;
     }
 
@@ -84,5 +101,5 @@ public sealed class AspectRatio
 
     public int HeightFromWidth(int width) => IsFree ? 0 : (int)Math.Round(width / Value);
 
-    public override string ToString() => IsFree ? Properties.Resources.AspectRatio_Free : Name;
+    public override string ToString() => IsFree ? Resources.AspectRatio_Free : Name;
 }

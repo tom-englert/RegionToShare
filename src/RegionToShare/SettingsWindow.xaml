@@ -1,4 +1,4 @@
-<Window x:Class="RegionToShare.SettingsWindow"
+﻿<Window x:Class="RegionToShare.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:RegionToShare"
@@ -20,7 +20,7 @@
               Click="CloseButton_Click" />
     </Grid>
 
-    <TabControl DataContext="{x:Static properties:Settings.Default}" 
+    <TabControl DataContext="{x:Static properties:Settings.Default}"
                 Margin="10,0"
                 Loaded="TabControl_Loaded">
       <TabControl.Resources>
@@ -102,6 +102,20 @@
             </toms:SharedWidthHeaderedContentControl>
           </StackPanel>
         </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="{x:Static properties:Resources.Settings_Lists}">
+        <StackPanel Margin="10">
+          <TextBlock Style="{StaticResource Hint}" Text="{x:Static properties:Resources.Settings_ListsHint}" />
+          <GroupBox Header="{x:Static properties:Resources.Settings_Resolutions}">
+            <TextBox x:Name="ResolutionsBox" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto"
+                     LostFocus="Resolutions_LostFocus" />
+          </GroupBox>
+          <GroupBox Header="{x:Static properties:Resources.Settings_AspectRatios}">
+            <TextBox x:Name="AspectRatiosBox" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"
+                     LostFocus="AspectRatios_LostFocus" />
+          </GroupBox>
+        </StackPanel>
       </TabItem>
 
       <TabItem Header="{x:Static properties:Resources.Settings_Highlighter}">
@@ -216,6 +230,7 @@
           </StackPanel>
         </ScrollViewer>
       </TabItem>
+
     </TabControl>
   </DockPanel>
 </Window>
