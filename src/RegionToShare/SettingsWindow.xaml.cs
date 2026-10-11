@@ -78,7 +78,7 @@ public partial class SettingsWindow
         Settings.Default.Save();
     }
 
-    private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void Settings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Settings.Language))
         {
@@ -91,7 +91,7 @@ public partial class SettingsWindow
         IsRestartRequired = Settings.Default.Language != App.StartupLanguage;
     }
 
-    private void HotkeyBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    private void HotkeyBox_GotKeyboardFocus(object? sender, KeyboardFocusChangedEventArgs e)
     {
         // Registered hotkeys never reach the window, so they must be released while a new one is captured.
         _mainWindow.AreHotkeysSuspended = true;

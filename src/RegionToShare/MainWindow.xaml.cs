@@ -45,7 +45,7 @@ public partial class MainWindow
         Settings.PropertyChanged += Settings_PropertyChanged;
     }
 
-    public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+    public string? Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
 
     public ICollection<string> Resolutions { get; }
 
@@ -288,7 +288,7 @@ public partial class MainWindow
 
         var timer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, Dispatcher.CurrentDispatcher);
 
-        void TimerTick(object sender, EventArgs e)
+        void TimerTick(object? sender, EventArgs e)
         {
             if (_recordingWindow != null)
             {
@@ -382,7 +382,7 @@ public partial class MainWindow
         return false;
     }
 
-    private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void Settings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
@@ -396,7 +396,7 @@ public partial class MainWindow
         }
     }
 
-    private void SettingsButton_Click(object sender, RoutedEventArgs e)
+    private void SettingsButton_Click(object? sender, RoutedEventArgs e)
     {
         OpenSettings();
     }

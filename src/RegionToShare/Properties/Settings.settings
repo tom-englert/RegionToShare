@@ -12,7 +12,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ThemeColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">#4682B4</Value>
+      <Value Profile="(Default)">SteelBlue</Value>
     </Setting>
     <Setting Name="StartActivated" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -36,7 +36,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="HighlighterColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">#FFFF00</Value>
+      <Value Profile="(Default)">Yellow</Value>
     </Setting>
     <Setting Name="HighlighterOpacity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
@@ -51,10 +51,10 @@
       <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="HighlighterLeftClickColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">#FF0000</Value>
+      <Value Profile="(Default)">Red</Value>
     </Setting>
     <Setting Name="HighlighterRightClickColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">#0000FF</Value>
+      <Value Profile="(Default)">Blue</Value>
     </Setting>
     <Setting Name="HighlighterClickDuration" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">300</Value>

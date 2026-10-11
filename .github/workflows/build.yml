@@ -24,33 +24,29 @@ jobs:
           [Version]$current = $propertyGroup.Version
           $version = if ($env:GITHUB_EVENT_NAME -eq 'pull_request') { $current } else { [Version]::new($current.Major, $current.Minor, $buildNumber) }
           "VERSION=$version" >> $env:GITHUB_ENV
-          [xml]$manifest = Get-Content ".\src\Packaging\Package.appxmanifest"
+          [xml]$manifest = Get-Content ".\src\RegionToShare\Package.appxmanifest"
           $manifest.Package.Identity.Version = ([Version]::new($version.Major, $version.Minor, $version.Build, 0)).ToString()
-          $manifest.Save((Resolve-Path ".\src\Packaging\Package.appxmanifest"))
+          $manifest.Save((Resolve-Path ".\src\RegionToShare\Package.appxmanifest"))
 
-      - uses: NuGet/setup-nuget@v4
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
 
-      - uses: microsoft/setup-msbuild@v3
-
-      - name: Restore
-        run: nuget restore src\RegionToShare.sln
-
-      - name: Build
+      - name: Publish
         shell: pwsh
         run: |
           $appx = "$env:RUNNER_TEMP\AppxPackages"
-          $args = @("src\RegionToShare.sln", "/p:Platform=Any CPU", "/p:Configuration=$env:BUILD_CONFIGURATION",
-            "/p:AppxPackageDir=$appx\", "/p:AppxBundle=Always", "/p:UapAppxPackageBuildMode=StoreUpload",
-            "/p:AppxPackageSigningEnabled=false")
-          if ($env:VERSION) { $args += "/p:Version=$env:VERSION" }
-          msbuild @args
+          $args = @("publish", "src\RegionToShare\RegionToShare.csproj", "-c", $env:BUILD_CONFIGURATION,
+            "-p:GenerateAppxPackageOnBuild=true", "-p:AppxPackageDir=$appx\")
+          if ($env:VERSION) { $args += "-p:Version=$env:VERSION" }
+          dotnet @args
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           "APPX_DIR=$appx" >> $env:GITHUB_ENV
 
       - uses: actions/upload-artifact@v7
         with:
           name: ${{ env.PRODUCT_NAME }}
-          path: src/RegionToShare/bin/${{ env.BUILD_CONFIGURATION }}/net462/*.*
+          path: src/RegionToShare/bin/${{ env.BUILD_CONFIGURATION }}/net10.0-windows10.0.19041.0/win-x64/publish/RegionToShare.exe
 
       - uses: actions/upload-artifact@v7
         with:

@@ -12,7 +12,7 @@ namespace RegionToShare.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "18.11.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -61,7 +61,7 @@ namespace RegionToShare.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#4682B4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("SteelBlue")]
         public string ThemeColor {
             get {
                 return ((string)(this["ThemeColor"]));
@@ -157,7 +157,7 @@ namespace RegionToShare.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFFF00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Yellow")]
         public string HighlighterColor {
             get {
                 return ((string)(this["HighlighterColor"]));
@@ -217,7 +217,7 @@ namespace RegionToShare.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF0000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
         public string HighlighterLeftClickColor {
             get {
                 return ((string)(this["HighlighterLeftClickColor"]));
@@ -229,7 +229,7 @@ namespace RegionToShare.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#0000FF")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Blue")]
         public string HighlighterRightClickColor {
             get {
                 return ((string)(this["HighlighterRightClickColor"]));

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
@@ -216,7 +216,7 @@ public partial class RecordingWindow
 
         try
         {
-            Dispatcher.BeginInvoke(Timer_Tick);
+            Dispatcher.BeginInvoke(new Action(Timer_Tick));
         }
         catch
         {
