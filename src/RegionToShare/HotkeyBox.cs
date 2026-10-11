@@ -25,7 +25,7 @@ public class HotkeyBox : TextBox
         set => SetValue(HotkeyProperty, value);
     }
     public static readonly DependencyProperty HotkeyProperty = DependencyProperty.Register(nameof(Hotkey), typeof(string), typeof(HotkeyBox),
-        new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
             (d, _) => ((HotkeyBox)d).UpdateText()));
 
     public string? NoneText
@@ -34,7 +34,7 @@ public class HotkeyBox : TextBox
         set => SetValue(NoneTextProperty, value);
     }
     public static readonly DependencyProperty NoneTextProperty = DependencyProperty.Register(nameof(NoneText), typeof(string), typeof(HotkeyBox),
-        new FrameworkPropertyMetadata(default(string), (d, _) => ((HotkeyBox)d).UpdateText()));
+        new FrameworkPropertyMetadata(null, (d, _) => ((HotkeyBox)d).UpdateText()));
 
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
@@ -79,6 +79,6 @@ public class HotkeyBox : TextBox
     {
         var hotkey = RegionToShare.Hotkey.Parse(Hotkey);
 
-        Text = hotkey.IsNone ? NoneText : hotkey.ToDisplayString();
+        Text = (hotkey.IsNone ? NoneText : hotkey.ToDisplayString()) ?? "None";
     }
 }

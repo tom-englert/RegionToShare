@@ -29,16 +29,7 @@ public partial class ColorBox
         set => SetValue(ColorProperty, value);
     }
     public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(nameof(Color), typeof(string), typeof(ColorBox),
-        new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    private void ColorTextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-    {
-        // Show color names like "Red" as hex, too.
-        if (ColorBrushConverter.TryParseColor(Color, out var color))
-        {
-            Color = ColorBrushConverter.ToHex(color);
-        }
-    }
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     private void PickButton_Click(object sender, RoutedEventArgs e)
     {
@@ -69,5 +60,15 @@ public partial class ColorBox
         public Win32Window(IntPtr handle) => Handle = handle;
 
         public IntPtr Handle { get; }
+    }
+}
+
+public sealed class ColorValidationRule : System.Windows.Controls.ValidationRule
+{
+    public override System.Windows.Controls.ValidationResult Validate(object? value, System.Globalization.CultureInfo cultureInfo)
+    {
+        return ColorBrushConverter.TryParseColor(value as string, out _)
+            ? System.Windows.Controls.ValidationResult.ValidResult
+            : new System.Windows.Controls.ValidationResult(false, "Invalid color");
     }
 }

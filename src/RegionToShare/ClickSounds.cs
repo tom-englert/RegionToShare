@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.IO;
 using System.Media;
+using TomsToolbox.Essentials;
 using static RegionToShare.NativeMethods;
 
 namespace RegionToShare;
@@ -17,16 +18,23 @@ internal static class ClickSounds
 
     private const int SampleRate = 44100;
 
+    private static SoundPlayer? _current;
+
     private static readonly ConcurrentDictionary<string, SoundPlayer?> Players = new(StringComparer.OrdinalIgnoreCase);
 
     public static bool IsBuiltIn(string? sound) => sound is High or Low or Pop;
 
     public static void Play(string? sound, int volumePercent)
     {
-        if (string.IsNullOrEmpty(sound))
+        if (sound.IsNullOrEmpty())
             return;
 
-        var player = GetPlayer(sound!);
+        _ = Task.Run(() => PlayInternal(sound, volumePercent));
+    }
+
+    private static void PlayInternal(string sound, int volumePercent)
+    {
+        var player = GetPlayer(sound);
         if (player == null)
             return;
 
@@ -36,6 +44,8 @@ internal static class ClickSounds
 
         try
         {
+            // Stop a still playing sound, different players would overlap otherwise.
+            Interlocked.Exchange(ref _current, player)?.Stop();
             player.Play();
         }
         catch

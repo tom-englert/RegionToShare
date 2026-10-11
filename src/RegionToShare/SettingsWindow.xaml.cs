@@ -45,7 +45,7 @@ public partial class SettingsWindow
         set => SetValue(IsFitWindowHotkeyInUseProperty, value);
     }
     public static readonly DependencyProperty IsFitWindowHotkeyInUseProperty = DependencyProperty.Register(
-        nameof(IsFitWindowHotkeyInUse), typeof(bool), typeof(SettingsWindow), new PropertyMetadata(default(bool)));
+        nameof(IsFitWindowHotkeyInUse), typeof(bool), typeof(SettingsWindow));
 
     public bool IsRestartRequired
     {
@@ -53,7 +53,7 @@ public partial class SettingsWindow
         set => SetValue(IsRestartRequiredProperty, value);
     }
     public static readonly DependencyProperty IsRestartRequiredProperty = DependencyProperty.Register(
-        nameof(IsRestartRequired), typeof(bool), typeof(SettingsWindow), new PropertyMetadata(default(bool)));
+        nameof(IsRestartRequired), typeof(bool), typeof(SettingsWindow));
 
     public static void Open(MainWindow mainWindow)
     {

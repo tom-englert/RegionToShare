@@ -7,8 +7,15 @@
     <TextBox x:Name="ColorTextBox"
              Width="90" VerticalAlignment="Center"
              ToolTip="{x:Static properties:Resources.Settings_ColorHint}"
-             Text="{Binding Color, RelativeSource={RelativeSource AncestorType=local:ColorBox}, UpdateSourceTrigger=PropertyChanged}"
-             LostKeyboardFocus="ColorTextBox_LostKeyboardFocus" />
+             >
+      <TextBox.Text>
+        <Binding Path="Color" RelativeSource="{RelativeSource AncestorType=local:ColorBox}" UpdateSourceTrigger="PropertyChanged">
+          <Binding.ValidationRules>
+            <local:ColorValidationRule />
+          </Binding.ValidationRules>
+        </Binding>
+      </TextBox.Text>
+    </TextBox>
     <Button Margin="5,0,0,0" Padding="2" VerticalAlignment="Center"
             ToolTip="{x:Static properties:Resources.Settings_ChooseColor}"
             Click="PickButton_Click">

@@ -177,7 +177,7 @@ internal sealed class MouseHighlighter : IDisposable
 
     private void PlayClickSound(string? sound)
     {
-        _ = Task.Run(() => ClickSounds.Play(sound, _settings.HighlighterVolume));
+        ClickSounds.Play(sound, _settings.HighlighterVolume);
     }
 
     private void ClickTimer_Tick(object? sender, EventArgs e)
