@@ -21,16 +21,24 @@
         </LinearGradientBrush>
       </Border.BorderBrush>
       <Grid x:Name="ClientArea">
-        <Button Width="16" Height="16" 
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Top" 
-                Click="Button_Click"
-                Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ShowCloseButton, Converter={toms:BooleanToVisibilityConverter}}">
-          <Path Width="12" Height="12" 
-                Data="M2,2 L10,10 M2,10 L10,2" 
-                Stroke="Black" 
-                StrokeThickness="1" />
-        </Button>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top" Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ShowWindowButtons, Converter={toms:BooleanToVisibilityConverter}}">
+          <Button x:Name="MenuButton"
+                  Width="16" Height="16"
+                  Click="MenuButton_Click">
+            <Path Width="12" Height="12"
+                  Data="M2,4 L10,4 L6,9 Z"
+                  Fill="Black" />
+          </Button>
+          <Button Width="16" Height="16"
+                  Click="Button_Click">
+            <Path Width="12" Height="12"
+                  Data="M2,2 L10,10 M2,10 L10,2"
+                  Stroke="Black"
+                  StrokeThickness="1" />
+          </Button>
+        </StackPanel>
       </Grid>
     </Border>
   </Grid>

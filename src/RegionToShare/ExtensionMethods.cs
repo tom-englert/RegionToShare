@@ -37,6 +37,20 @@ namespace RegionToShare
             };
         }
 
+        /// <summary>
+        /// Handles WM_SIZING to keep the aspect ratio of the region inside a window.
+        /// </summary>
+        public static bool HandleSizing(this AspectRatio aspectRatio, IntPtr wParam, IntPtr lParam, Thickness inset)
+        {
+            if (aspectRatio.IsFree)
+                return false;
+
+            var rect = Marshal.PtrToStructure<RECT>(lParam);
+            aspectRatio.AdjustSizingRect(ref rect, wParam.ToInt32(), inset);
+            Marshal.StructureToPtr(rect, lParam, false);
+            return true;
+        }
+
         public static WINDOWPLACEMENT GetWindowPlacement(this IntPtr hWnd)
         {
             var value = WINDOWPLACEMENT.Default;

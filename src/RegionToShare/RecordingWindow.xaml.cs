@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
@@ -137,6 +138,14 @@ public partial class RecordingWindow
             case WM_NCHITTEST:
                 handled = true;
                 return (IntPtr)NcHitTest(windowHandle, lParam);
+
+            case WM_SIZING:
+                if (_mainWindow.AspectRatio.HandleSizing(wParam, lParam, NativeBorderSize))
+                {
+                    handled = true;
+                    return (IntPtr)1;
+                }
+                break;
         }
 
         return IntPtr.Zero;
@@ -226,6 +235,12 @@ public partial class RecordingWindow
 
             graphics.CopyFromScreen(nativeRect.Left, nativeRect.Top, 0, 0, new Size(nativeRect.Width, nativeRect.Height));
 
+            var highlighter = _mainWindow.MouseHighlighter;
+            if (highlighter.IsVisibleInShare && GetCursorPos(out var cursorPosition))
+            {
+                highlighter.DrawRing(graphics, cursorPosition.X - nativeRect.Left, cursorPosition.Y - nativeRect.Top);
+            }
+
             if (_drawShadowCursor)
             {
                 graphics.DrawCursor(nativeRect);
@@ -251,5 +266,35 @@ public partial class RecordingWindow
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         Close();
+    }
+
+    private void MenuButton_Click(object sender, RoutedEventArgs e)
+    {
+        var menu = new ContextMenu
+        {
+            PlacementTarget = MenuButton,
+            Placement = PlacementMode.Bottom
+        };
+
+        foreach (var aspectRatio in _mainWindow.AspectRatios)
+        {
+            var item = new MenuItem
+            {
+                Header = aspectRatio.ToString(),
+                IsCheckable = true,
+                IsChecked = aspectRatio == _mainWindow.AspectRatio
+            };
+
+            item.Click += (_, _) => _mainWindow.AspectRatio = aspectRatio;
+            menu.Items.Add(item);
+        }
+
+        var settingsItem = new MenuItem { Header = Properties.Resources.Menu_Settings };
+        settingsItem.Click += (_, _) => _mainWindow.OpenSettings();
+
+        menu.Items.Add(new Separator());
+        menu.Items.Add(settingsItem);
+
+        menu.IsOpen = true;
     }
 }

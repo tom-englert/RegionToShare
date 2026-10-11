@@ -22,6 +22,156 @@ public static class NativeMethods
     public const uint SWP_NOZORDER = 0x0004;
 
     public const int WM_NCHITTEST = 0x0084;
+    public const int WM_SIZING = 0x0214;
+
+    public const int WMSZ_LEFT = 1;
+    public const int WMSZ_RIGHT = 2;
+    public const int WMSZ_TOP = 3;
+    public const int WMSZ_TOPLEFT = 4;
+    public const int WMSZ_TOPRIGHT = 5;
+    public const int WMSZ_BOTTOM = 6;
+    public const int WMSZ_BOTTOMLEFT = 7;
+    public const int WMSZ_BOTTOMRIGHT = 8;
+
+    public const int WM_HOTKEY = 0x0312;
+
+    public const uint MOD_ALT = 0x0001;
+    public const uint MOD_CONTROL = 0x0002;
+    public const uint MOD_SHIFT = 0x0004;
+    public const uint MOD_WIN = 0x0008;
+    public const uint MOD_NOREPEAT = 0x4000;
+
+    public const int SW_RESTORE = 9;
+
+    public const int GWL_STYLE = -16;
+    public const int WS_CAPTION = 0x00C00000;
+    public const int WS_THICKFRAME = 0x00040000;
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetShellWindow();
+
+    [DllImport("user32.dll")]
+    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    public static extern int GetClassName(IntPtr hWnd, System.Text.StringBuilder lpClassName, int nMaxCount);
+
+    [DllImport("user32.dll")]
+    public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsWindowVisible(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsIconic(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsZoomed(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    public static readonly IntPtr HWND_TOPMOST = new(-1);
+
+    public const int WS_POPUP = unchecked((int)0x80000000);
+    public const int WS_EX_TOPMOST = 0x00000008;
+    public const int WS_EX_TRANSPARENT = 0x00000020;
+    public const int WS_EX_TOOLWINDOW = 0x00000080;
+    public const int WS_EX_LAYERED = 0x00080000;
+    public const int WS_EX_NOACTIVATE = 0x08000000;
+
+    public const int WH_MOUSE_LL = 14;
+    public const int WM_MOUSEMOVE = 0x0200;
+    public const int WM_LBUTTONDOWN = 0x0201;
+    public const int WM_LBUTTONUP = 0x0202;
+    public const int WM_RBUTTONDOWN = 0x0204;
+    public const int WM_RBUTTONUP = 0x0205;
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MSLLHOOKSTRUCT
+    {
+        public POINT pt;
+        public int mouseData;
+        public int flags;
+        public int time;
+        public IntPtr dwExtraInfo;
+    }
+
+    public delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr SetWindowsHookEx(int idHook, LowLevelMouseProc lpfn, IntPtr hMod, uint dwThreadId);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+    public static extern IntPtr GetModuleHandle(string? lpModuleName);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool GetCursorPos(out POINT lpPoint);
+
+    public const int ULW_ALPHA = 0x00000002;
+    public const byte AC_SRC_OVER = 0x00;
+    public const byte AC_SRC_ALPHA = 0x01;
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct BLENDFUNCTION
+    {
+        public byte BlendOp;
+        public byte BlendFlags;
+        public byte SourceConstantAlpha;
+        public byte AlphaFormat;
+    }
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool UpdateLayeredWindow(IntPtr hwnd, IntPtr hdcDst, ref POINT pptDst, ref SIZE psize, IntPtr hdcSrc, ref POINT pptSrc, int crKey, ref BLENDFUNCTION pblend, int dwFlags);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetDC(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+    [DllImport("gdi32.dll")]
+    public static extern IntPtr CreateCompatibleDC(IntPtr hDC);
+
+    [DllImport("gdi32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool DeleteDC(IntPtr hdc);
+
+    [DllImport("gdi32.dll")]
+    public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
+
+    public const uint WDA_EXCLUDEFROMCAPTURE = 0x00000011;
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SetWindowDisplayAffinity(IntPtr hWnd, uint dwAffinity);
+
+    [DllImport("winmm.dll")]
+    public static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
 
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
