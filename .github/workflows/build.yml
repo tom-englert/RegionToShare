@@ -20,10 +20,7 @@ jobs:
         run: |
           [xml]$props = Get-Content "src\Directory.Build.props"
           $propertyGroup = $props.Project.PropertyGroup | Select-Object -First 1
-          $buildNumber = [int]$env:GITHUB_RUN_NUMBER % [uint16]::MaxValue
-          [Version]$current = $propertyGroup.Version
-          $version = if ($env:GITHUB_EVENT_NAME -eq 'pull_request') { $current } else { [Version]::new($current.Major, $current.Minor, $buildNumber) }
-          "VERSION=$version" >> $env:GITHUB_ENV
+          [Version]$version = $propertyGroup.Version
           [xml]$manifest = Get-Content ".\src\RegionToShare\Package.appxmanifest"
           $manifest.Package.Identity.Version = ([Version]::new($version.Major, $version.Minor, $version.Build, 0)).ToString()
           $manifest.Save((Resolve-Path ".\src\RegionToShare\Package.appxmanifest"))
@@ -38,7 +35,6 @@ jobs:
           $appx = "$env:RUNNER_TEMP\AppxPackages"
           $args = @("publish", "src\RegionToShare\RegionToShare.csproj", "-c", $env:BUILD_CONFIGURATION,
             "-p:GenerateAppxPackageOnBuild=true", "-p:AppxPackageDir=$appx\", "-p:AppxPackageTestDir=$appx\")
-          if ($env:VERSION) { $args += "-p:Version=$env:VERSION" }
           dotnet @args
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           "APPX_DIR=$appx" >> $env:GITHUB_ENV
