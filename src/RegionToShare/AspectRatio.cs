@@ -22,7 +22,7 @@ public sealed class AspectRatio
 
     public bool IsFree => Value <= 0;
 
-    private static readonly string[] Defaults = ["4:3", "5:4", "16:10", "16:9"];
+    private static readonly string[] Defaults = ["4:3", "5:4", "16:9", "16:10"];
 
     /// <summary>
     /// Loads the user editable list, always starting with <see cref="Free"/>.
@@ -34,15 +34,14 @@ public sealed class AspectRatio
         return new[] { Free }.Concat(items.Select(item => TryParse(item, out var ratio) ? ratio : Free));
     }
 
-    public static bool Save(string? text)
+    public static void Save(string? text)
     {
         var newValue = CustomList.Serialize(CustomList.Parse(text, Normalize), Defaults);
 
         if (string.Equals(newValue, Settings.Default.AspectRatios, StringComparison.OrdinalIgnoreCase))
-            return false;
+            return;
 
         Settings.Default.AspectRatios = newValue;
-        return true;
     }
 
     private static string? Normalize(string item) => TryParse(item, out var ratio) && !ratio.IsFree ? ratio.Name : null;

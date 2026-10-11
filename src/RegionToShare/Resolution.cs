@@ -15,16 +15,14 @@ public static class Resolution
         return CustomList.Load(Settings.Default.Resolutions, Defaults, Normalize);
     }
 
-    public static bool Save(string? text)
+    public static void Save(string? text)
     {
         var newValue = CustomList.Serialize(CustomList.Parse(text, Normalize), Defaults);
 
         if (string.Equals(newValue, Settings.Default.Resolutions, StringComparison.OrdinalIgnoreCase))
-            return false;
+            return;
 
         Settings.Default.Resolutions = newValue;
-
-        return true;
     }
 
     public static bool TryParse(string? value, out SIZE size)

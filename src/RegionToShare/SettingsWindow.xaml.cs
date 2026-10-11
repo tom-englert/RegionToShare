@@ -137,7 +137,11 @@ public partial class SettingsWindow
 
     private void Resolutions_LostFocus(object sender, RoutedEventArgs e)
     {
-        if (!Resolution.Save(ResolutionsBox.Text)) 
+        var newValue = ResolutionsBox.Text;
+
+        Resolution.Save(newValue);
+
+        if (!string.IsNullOrWhiteSpace(newValue)) 
             return;
 
         ResolutionsBox.Text = CustomList.ToText(_mainWindow.Resolutions);
@@ -145,7 +149,11 @@ public partial class SettingsWindow
 
     private void AspectRatios_LostFocus(object sender, RoutedEventArgs e)
     {
-        if (!AspectRatio.Save(AspectRatiosBox.Text)) 
+        var newValue = AspectRatiosBox.Text;
+
+        AspectRatio.Save(newValue);
+
+        if (!string.IsNullOrWhiteSpace(newValue)) 
             return;
 
         AspectRatiosBox.Text = CustomList.ToText(_mainWindow.AspectRatios.Where(item => !item.IsFree).Select(item => item.Name));
