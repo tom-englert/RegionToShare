@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         WindowStyle="None" Background="Transparent" 
         AllowsTransparency="True" Topmost="True"
+        ShowInTaskbar="False"
         Title="Region to Share" Height="450" Width="800">
     <Grid>
     <Border BorderThickness="{x:Static local:RecordingWindow.BorderSize}">
