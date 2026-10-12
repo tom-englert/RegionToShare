@@ -19,8 +19,7 @@ jobs:
         shell: pwsh
         run: |
           [xml]$props = Get-Content "src\Directory.Build.props"
-          $propertyGroup = $props.Project.PropertyGroup | Select-Object -First 1
-          [Version]$version = $propertyGroup.Version
+          $version = [Version]($props.Project.PropertyGroup | Select-Object -First 1).Version
           [xml]$manifest = Get-Content ".\src\RegionToShare\Package.appxmanifest"
           $manifest.Package.Identity.Version = ([Version]::new($version.Major, $version.Minor, $version.Build, 0)).ToString()
           $manifest.Save((Resolve-Path ".\src\RegionToShare\Package.appxmanifest"))
@@ -49,3 +48,46 @@ jobs:
           name: Package
           path: ${{ env.APPX_DIR }}
           if-no-files-found: warn
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Verify tag matches version and extract release notes
+        shell: pwsh
+        run: |
+          [xml]$props = Get-Content "src/Directory.Build.props"
+          $version = [Version]($props.Project.PropertyGroup | Select-Object -First 1).Version
+          $tag = "$env:GITHUB_REF_NAME".TrimStart('v')
+          $short = "$($version.Major).$($version.Minor)"
+          if ($tag -ne $short -and $tag -ne $version.ToString()) {
+            Write-Error "Tag '$env:GITHUB_REF_NAME' does not match version '$version'"
+            exit 1
+          }
+          $notes = @()
+          $found = $false
+          foreach ($line in Get-Content ReleaseNotes.md) {
+            if ($line.Trim() -match '^\d+(\.\d+)*$') {
+              if ($found) { break }
+              if ($line.Trim() -eq $short -or $line.Trim() -eq $version.ToString()) { $found = $true }
+              continue
+            }
+            if ($found) { $notes += $line }
+          }
+          ($notes -join "`n").Trim() | Set-Content release-notes.txt
+
+      - uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          body_path: release-notes.txt
+          files: artifacts/**
