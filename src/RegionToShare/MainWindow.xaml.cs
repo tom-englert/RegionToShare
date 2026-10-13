@@ -29,6 +29,9 @@ public partial class MainWindow
 
     private const int FitWindowHotkeyId = 1;
 
+    private IntPtr _foregroundHook;
+    private WinEventDelegate? _foregroundHookProc;
+
     private POINT _debugOffset;
     private bool _isUpdatingExtend;
     private bool _areHotkeysSuspended;
@@ -168,7 +171,7 @@ public partial class MainWindow
         size += GlassFrameThickness;
         SetWindowPos(_windowHandle, IntPtr.Zero, 0, 0, size.Width, size.Height, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
 
-        // Refresh the displayed extend, even if the window size did not change.
+        // Refresh the displayed extent, even if the window size did not change.
         UpdateSizeAndPos();
     }
 
@@ -196,7 +199,7 @@ public partial class MainWindow
 
         _windowHandle = this.GetWindowHandle();
 
-        HwndSource.FromHwnd(_windowHandle)?.AddHook(WindowProc);
+        HwndSource.FromHwnd(_windowHandle)?.AddHook(MainWindowProc);
 
         RegisterHotkeys();
 
@@ -218,6 +221,11 @@ public partial class MainWindow
         separationLayerWindow.SourceInitialized += (_, _) =>
         {
             _separationLayerHandle = separationLayerWindow.GetWindowHandle();
+
+            HwndSource.FromHwnd(_separationLayerHandle)?.AddHook(SeparationLayerWindowProc);
+
+            _foregroundHookProc = (_, _, _, _, _, _, _) => EnsureZOrder();
+            _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, _foregroundHookProc, (uint)Environment.ProcessId, 0, WINEVENT_OUTOFCONTEXT);
 
             this.BeginInvoke(DispatcherPriority.ApplicationIdle, () =>
             {
@@ -430,6 +438,11 @@ public partial class MainWindow
         UnregisterHotKey(_windowHandle, FitWindowHotkeyId);
         MouseHighlighter.Dispose();
 
+        if (_foregroundHook != IntPtr.Zero)
+        {
+            UnhookWinEvent(_foregroundHook);
+        }
+
         var normalPosition = _windowHandle.GetWindowPlacement().NormalPosition - GlassFrameThickness;
         Settings.WindowPlacement = normalPosition.Serialize();
         Settings.Save();
@@ -458,15 +471,29 @@ public partial class MainWindow
         SetSeparationLayerPos(SWP_NOACTIVATE | SWP_NOZORDER);
     }
 
-    private IntPtr WindowProc(IntPtr windowHandle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    private IntPtr SeparationLayerWindowProc(IntPtr windowHandle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (msg == WM_WINDOWPOSCHANGED)
+        {
+            EnsureZOrder();
+        }
+
+        return IntPtr.Zero;
+    }
+
+    private IntPtr MainWindowProc(IntPtr windowHandle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         switch (msg)
         {
+            case WM_WINDOWPOSCHANGED:
+                EnsureZOrder();
+                break;
+
             case WM_SIZING:
                 if (AspectRatio.HandleSizing(wParam, lParam, GlassFrameThickness))
                 {
                     handled = true;
-                    return (IntPtr)1;
+                    return 1;
                 }
 
                 break;
@@ -480,18 +507,41 @@ public partial class MainWindow
         return IntPtr.Zero;
     }
 
+    private bool IsMainWindowBelowSeparationLayer()
+    {
+        for (var hwnd = NativeMethods.GetWindow(_separationLayerHandle, GW_HWNDNEXT); hwnd != IntPtr.Zero; hwnd = NativeMethods.GetWindow(hwnd, GW_HWNDNEXT))
+        {
+            if (hwnd == _windowHandle)
+                return true;
+        }
+
+        return false;
+    }
+
+    [Throttled(typeof(TomsToolbox.Wpf.Throttle), 500)]
+    private void EnsureZOrder()
+    {
+        if (_recordingWindow == null || _separationLayerHandle == IntPtr.Zero || _windowHandle == IntPtr.Zero)
+            return;
+
+        if (!IsMainWindowBelowSeparationLayer())
+        {
+            SendToBack();
+        }
+    }
+
     private void SubLayer_MouseDown(object sender, MouseButtonEventArgs e)
     {
         this.BeginInvoke(DispatcherPriority.Background, SendToBack);
     }
 
-    public void BringToFront()
+    private void BringToFront()
     {
         SetSeparationLayerPos(SWP_HIDEWINDOW);
         SetWindowPos(_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     }
 
-    public void SendToBack()
+    private void SendToBack()
     {
         SetSeparationLayerPos(SWP_NOACTIVATE | SWP_SHOWWINDOW);
         SetWindowPos(_windowHandle, _separationLayerHandle, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
