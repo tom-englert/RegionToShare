@@ -99,7 +99,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path release-assets | Out-Null
-          Copy-Item "artifacts/${{ env.PRODUCT_NAME }}/RegionToShare.exe" "release-assets/RegionToShare-x64.exe"
+          Copy-Item "artifacts/${{ env.PRODUCT_NAME }}/RegionToShare.exe" "release-assets/RegionToShare.exe"
           Copy-Item "artifacts/${{ env.PRODUCT_NAME }}-arm64/RegionToShare.exe" "release-assets/RegionToShare-arm64.exe"
           Compress-Archive -Path "artifacts/Package/*" -DestinationPath "release-assets/RegionToShare-Package.zip"
 
