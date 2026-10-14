@@ -95,9 +95,17 @@ jobs:
         with:
           path: artifacts
 
+      - name: Prepare release assets
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release-assets | Out-Null
+          Copy-Item "artifacts/${{ env.PRODUCT_NAME }}/RegionToShare.exe" "release-assets/RegionToShare-x64.exe"
+          Copy-Item "artifacts/${{ env.PRODUCT_NAME }}-arm64/RegionToShare.exe" "release-assets/RegionToShare-arm64.exe"
+          Compress-Archive -Path "artifacts/Package/*" -DestinationPath "release-assets/RegionToShare-Package.zip"
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
           body_path: release-notes.txt
-          files: artifacts/**
+          files: release-assets/*
