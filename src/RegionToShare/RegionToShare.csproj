@@ -6,14 +6,14 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsPackageType>MSIX</WindowsPackageType>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
-    <AppxBundle>Never</AppxBundle>
+    <AppxBundle>Auto</AppxBundle>
     <GenerateAppxPackageOnBuild>false</GenerateAppxPackageOnBuild>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <!--WFO0003 Only applies to Windows Forms -->
     <NoWarn>$(NoWarn);WFO0003</NoWarn>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
