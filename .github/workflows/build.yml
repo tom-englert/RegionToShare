@@ -28,27 +28,24 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Publish executables
+      - name: Publish arm64
         shell: pwsh
         run: |
-          foreach ($rid in @("win-x64", "win-arm64")) {
-            dotnet publish src\RegionToShare\RegionToShare.csproj -c $env:BUILD_CONFIGURATION -r $rid
-            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          }
+          dotnet publish src\RegionToShare\RegionToShare.csproj -c $env:BUILD_CONFIGURATION -r win-arm64
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Build MSIX bundle
+      - name: Publish x64 with package
         shell: pwsh
         run: |
           $appx = "$env:RUNNER_TEMP\AppxPackages"
-          $platforms = "x64|arm64"
-          $args = @("src\RegionToShare\RegionToShare.csproj", "-restore", "-p:Configuration=$env:BUILD_CONFIGURATION", "-p:GenerateAppxPackageOnBuild=true", "-p:AppxBundle=Always", "-p:AppxBundlePlatforms=$platforms", "-p:AppxPackageDir=$appx\")
-          msbuild @args
+          $args = @("publish", "src\RegionToShare\RegionToShare.csproj", "-c", $env:BUILD_CONFIGURATION, "-r", "win-x64", "-p:GenerateAppxPackageOnBuild=true", "-p:AppxPackageDir=$appx\", "-p:AppxPackageTestDir=$appx\")
+          dotnet @args
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           "APPX_DIR=$appx" >> $env:GITHUB_ENV
 
       - uses: actions/upload-artifact@v7
         with:
-          name: ${{ env.PRODUCT_NAME }}-x64
+          name: ${{ env.PRODUCT_NAME }}
           path: src/RegionToShare/bin/${{ env.BUILD_CONFIGURATION }}/net10.0-windows10.0.19041.0/win-x64/publish/RegionToShare.exe
 
       - uses: actions/upload-artifact@v7
@@ -58,8 +55,8 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: Bundle
-          path: ${{ env.APPX_DIR }}/**/*.msixbundle
+          name: Package
+          path: ${{ env.APPX_DIR }}
           if-no-files-found: warn
 
   release:

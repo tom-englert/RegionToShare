@@ -6,7 +6,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsPackageType>MSIX</WindowsPackageType>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
-    <AppxBundle>Auto</AppxBundle>
+    <AppxBundle>Never</AppxBundle>
     <GenerateAppxPackageOnBuild>false</GenerateAppxPackageOnBuild>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
