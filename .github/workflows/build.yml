@@ -38,7 +38,7 @@ jobs:
         shell: pwsh
         run: |
           $appx = "$env:RUNNER_TEMP\AppxPackages"
-          $args = @("publish", "src\RegionToShare\RegionToShare.csproj", "-c", $env:BUILD_CONFIGURATION, "-r", "win-x64", "-p:GenerateAppxPackageOnBuild=true", "-p:AppxPackageDir=$appx\", "-p:AppxPackageTestDir=$appx\")
+          $args = @("publish", "src\RegionToShare\RegionToShare.csproj", "-c", $env:BUILD_CONFIGURATION, "-r", "win-x64", "-p:GenerateAppxPackageOnBuild=true", "-p:AppxPackageDir=$appx\")
           dotnet @args
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           "APPX_DIR=$appx" >> $env:GITHUB_ENV
